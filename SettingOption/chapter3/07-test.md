@@ -65,17 +65,50 @@ curl로 손으로 확인하던 것을 코드로 자동 확인한다. `./gradlew 
 - `@MockitoBean ProductCompositeIntegration`: Integration을 **가짜(Mock)로 바꿔치기**한다. 그래서 핵심 서비스 3개를 띄우지 않고 composite 하나만 테스트한다.
 - `when(...getRecommendations(1)).thenReturn(singletonList(...))`처럼 가짜가 1개만 돌려주도록 정해 두었으므로, 테스트에서 추천·리뷰는 **1개**씩이다(curl에서는 3개).
 
-### Boot 4 수정점
+### 파일 준비
+`spring init`이 만든 테스트 파일(`contextLoads()`만 있음)을 교재 소스로 **통째로 덮어쓴 뒤** 세 군데를 고친다.
+```bash
+cd ~/msa
+T=microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/$T/ProductCompositeServiceApplicationTests.java $T/
+code $T/ProductCompositeServiceApplicationTests.java
+```
+> 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(위치 확인용)
+
+### ① static import (파일 맨 위, 3~8번 줄)
 ```java
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;    // ENTITY 대신
-import static org.springframework.http.MediaType.APPLICATION_JSON;          // 본문의 APPLICATION_JSON_UTF8은 Spring 7에서 삭제됨
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import static java.util.Collections.singletonList;
+import static org.mockito.Mockito.when;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;     // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+```
+- 내 파일에는 `UNPROCESSABLE_ENTITY` import가 아직 7번 줄에 남아 있다(쓰이지 않음). 지워도 된다.
+- `APPLICATION_JSON`은 교재 소스에 이미 이렇게 되어 있다. **본문의 `APPLICATION_JSON_UTF8`은 Spring 7에서 삭제된 상수**라 쓰면 안 된다.
+
+### ② 일반 import + 클래스 애너테이션 (13~26번 줄)
+```java
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;   // ★ 추가
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+...
+import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient          // Boot 4: 없으면 WebTestClient가 주입되지 않음
+@AutoConfigureWebTestClient                                                                // ★ 추가
 class ProductCompositeServiceApplicationTests {
 ```
 `@AutoConfigureWebTestClient`가 없으면 테스트 4개가 모두 `No qualifying bean of type 'org.springframework.test.web.reactive.server.WebTestClient'`로 실패한다. Boot 4에서 WebTestClient 설정이 별도 모듈(`spring-boot-webtestclient`)로 분리됐기 때문이다.
+
+### ③ `getProductInvalidInput()` 안 (마지막 테스트, 92번 줄)
+```java
+    client.get()
+      .uri("/product-composite/" + PRODUCT_ID_INVALID)
+      .accept(APPLICATION_JSON)
+      .exchange()
+      .expectStatus().isEqualTo(UNPROCESSABLE_CONTENT)        // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+      .expectHeader().contentType(APPLICATION_JSON)
+```
 
 ### 실행
 ```bash
@@ -96,6 +129,12 @@ class ProductCompositeServiceApplicationTests {
 
 ## 3. `test-em-all.bash` (전체 시스템 테스트)
 1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다.
+```bash
+cd ~/msa
+code test-em-all.bash                                                     # 방법 1 — 직접 작성
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash .          # 방법 2 — 복사
+chmod +x test-em-all.bash                                                 # 어느 방법이든 실행 권한 필요
+```
 교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash`)를 **그대로** 쓴다. 기본 포트가 7001이고, 상태 코드와 `message`만 비교하므로 Boot 4에서도 고칠 부분이 없다(422의 `error` 문구는 검사하지 않음).
 
 ### 구조
