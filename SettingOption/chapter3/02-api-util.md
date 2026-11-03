@@ -16,7 +16,7 @@
 ---
 
 ## 1. 루트 `settings.gradle` 수정
-파일: `~/msa/settings.gradle` (01에서 만든 파일). **맨 아래에 두 줄 추가.**
+`code settings.gradle` 들어가서 **맨 아래에** 두 줄 추가
 교재 본문에는 없고 소스에만 있다. 빠뜨리면 `Project with path ':api' could not be found` 오류가 난다.
 ```groovy
 include ':microservices:product-service'
@@ -62,10 +62,8 @@ msa/
 ---
 
 ## 3. `api/build.gradle` (새 파일, 전체)
-```bash
-cd ~/msa
-code api/build.gradle
-```
+`code api/build.gradle` 들어가서 아래 내용 전체 입력
+
 교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/api/build.gradle`)를 가져와 **Java 24 → 21, Boot 3.5.0 → 4.0.9**로 바꾸고 롬복 4줄을 추가했다.
 ```groovy
 plugins {
@@ -108,10 +106,8 @@ tasks.named('test') {
 - `implementation platform`은 `implementation`에만 적용된다. 롬복 버전도 정하려면 `compileOnly`와 `annotationProcessor`에도 platform을 넣는다.
 
 ## 4. `util/build.gradle` (새 파일, 전체)
-```bash
-cd ~/msa
-code util/build.gradle
-```
+`code util/build.gradle` 들어가서 아래 내용 전체 입력
+
 api/build.gradle을 복사한 뒤 **group 한 줄 변경 + `project(':api')` 한 줄 추가**.
 ```groovy
 plugins {
@@ -160,10 +156,8 @@ build.gradle을 저장한 뒤 VS Code에서 그 파일을 열고 `Shift+Alt+U`(J
 교재는 생성자 2개와 게터를 직접 쓰지만, 롬복 애너테이션 3개로 같은 코드를 만든다.
 
 ### `api/.../core/product/Product.java` (전체)
-```bash
-cd ~/msa
-code api/src/main/java/se/magnus/api/core/product/Product.java
-```
+`code api/src/main/java/se/magnus/api/core/product/Product.java` 들어가서 아래 내용 전체 입력
+
 ```java
 package se.magnus.api.core.product;
 
@@ -196,17 +190,12 @@ public class Product {
 | `composite/product/ReviewSummary.java` | 〃 | 교재 소스의 필드 순서대로 |
 | `composite/product/ServiceAddresses.java` | 〃 | 교재 소스의 필드 순서대로 |
 
-```bash
-cd ~/msa
-A=api/src/main/java/se/magnus/api
-code $A/core/recommendation/Recommendation.java
-code $A/core/review/Review.java
-code $A/composite/product/ProductAggregate.java
-code $A/composite/product/RecommendationSummary.java
-code $A/composite/product/ReviewSummary.java
-code $A/composite/product/ServiceAddresses.java
-```
-`A=...`는 긴 경로를 줄여 쓰려고 만든 변수다. 같은 터미널에서만 유지된다.
+- `code api/src/main/java/se/magnus/api/core/recommendation/Recommendation.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/core/review/Review.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/composite/product/ProductAggregate.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/composite/product/RecommendationSummary.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/composite/product/ReviewSummary.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/composite/product/ServiceAddresses.java` 들어가서 작성
 
 ---
 
@@ -214,10 +203,8 @@ code $A/composite/product/ServiceAddresses.java
 REST 매핑을 인터페이스에 붙이므로 구현 클래스에는 `@RestController`만 있으면 된다. `class`가 아니라 `interface`다.
 
 ### `api/.../core/product/ProductService.java` (전체)
-```bash
-cd ~/msa
-code api/src/main/java/se/magnus/api/core/product/ProductService.java
-```
+`code api/src/main/java/se/magnus/api/core/product/ProductService.java` 들어가서 아래 내용 전체 입력
+
 ```java
 package se.magnus.api.core.product;
 
@@ -234,15 +221,12 @@ public interface ProductService {
 ```
 
 ### 나머지 인터페이스 (교재 소스 그대로)
-방법 1 — 직접 작성: 파일을 열고 교재 소스를 보며 입력
-```bash
-cd ~/msa
-A=api/src/main/java/se/magnus/api
-code $A/core/recommendation/RecommendationService.java
-code $A/core/review/ReviewService.java
-code $A/composite/product/ProductCompositeService.java
-```
-방법 2 — 복사: 교재 소스 파일을 그대로 가져옴
+방법 1 — 직접 작성 (교재 소스를 보며 입력)
+- `code api/src/main/java/se/magnus/api/core/recommendation/RecommendationService.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/core/review/ReviewService.java` 들어가서 작성
+- `code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java` 들어가서 작성
+
+방법 2 — 복사 (교재 소스 파일을 그대로 가져옴)
 ```bash
 cd ~/msa
 B=$BOOK_HOME/Chapter03/2-basic-rest-services/api/src/main/java/se/magnus/api
@@ -256,11 +240,10 @@ cp $B/composite/product/ProductCompositeService.java api/src/main/java/se/magnus
 
 ## 7. `util/.../http/ServiceUtil.java` (새 파일, 교재 소스 그대로)
 본문에는 코드가 없고 "`$BOOK_HOME/Chapter03/2-basic-rest-services/util`에서 확인"하라고만 되어 있다.
+방법 1 — `code util/src/main/java/se/magnus/util/http/ServiceUtil.java` 들어가서 교재 소스를 보며 작성
+
+방법 2 — 복사
 ```bash
-cd ~/msa
-# 방법 1 — 직접 작성
-code util/src/main/java/se/magnus/util/http/ServiceUtil.java
-# 방법 2 — 복사
 cp $BOOK_HOME/Chapter03/2-basic-rest-services/util/src/main/java/se/magnus/util/http/ServiceUtil.java \
    util/src/main/java/se/magnus/util/http/ServiceUtil.java
 ```

@@ -1,7 +1,7 @@
 # 3장: 협업 마이크로서비스 집합 생성
 
 > **상태: 완료 (2026-11-02)** — 서비스 4개 빌드, JUnit 테스트 4개 통과, `test-em-all.bash` 전체 통과
-> 이전: [../setting/README.md](../setting/README.md) (환경 설정) / 다음: 4장
+> 이전: [../setting/README.md](../setting/README.md) (환경 설정) / 다음: [../chapter4/README.md](../chapter4/README.md)
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 3장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 (Spring 7, Jackson 3) / Gradle 9.8.2**

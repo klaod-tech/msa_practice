@@ -68,11 +68,9 @@ curl로 손으로 확인하던 것을 코드로 자동 확인한다. `./gradlew 
 ### 파일 준비
 `spring init`이 만든 테스트 파일(`contextLoads()`만 있음)을 교재 소스로 **통째로 덮어쓴 뒤** 세 군데를 고친다.
 ```bash
-cd ~/msa
-T=microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/$T/ProductCompositeServiceApplicationTests.java $T/
-code $T/ProductCompositeServiceApplicationTests.java
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/
 ```
+`code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java` 들어가서 아래 **세 군데 수정**
 > 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(위치 확인용)
 
 ### ① static import (파일 맨 위, 3~8번 줄)
@@ -129,11 +127,15 @@ class ProductCompositeServiceApplicationTests {
 
 ## 3. `test-em-all.bash` (전체 시스템 테스트)
 1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다.
+방법 1 — `code test-em-all.bash` 들어가서 교재 소스를 보며 작성
+
+방법 2 — 복사
 ```bash
-cd ~/msa
-code test-em-all.bash                                                     # 방법 1 — 직접 작성
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash .          # 방법 2 — 복사
-chmod +x test-em-all.bash                                                 # 어느 방법이든 실행 권한 필요
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash .
+```
+어느 방법이든 실행 권한을 준다.
+```bash
+chmod +x test-em-all.bash
 ```
 교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash`)를 **그대로** 쓴다. 기본 포트가 7001이고, 상태 코드와 `message`만 비교하므로 Boot 4에서도 고칠 부분이 없다(422의 `error` 문구는 검사하지 않음).
 

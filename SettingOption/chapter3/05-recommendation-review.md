@@ -14,7 +14,8 @@ product-service([03](03-product-service.md))와 **똑같은 패턴**이다. 예�
 ---
 
 ## 1. `microservices/recommendation-service/build.gradle` 수정
-product-service와 같은 **두 군데 추가**. group은 `spring init`이 이미 `...core.recommendation`으로 만들어 두었으므로 그대로 둔다.
+`code microservices/recommendation-service/build.gradle` 들어가서 **두 군데 추가** (review: `code microservices/review-service/build.gradle`)
+group은 `spring init`이 이미 `...core.recommendation`으로 만들어 두었으므로 그대로 둔다.
 ```groovy
 plugins {
 	id 'java'
@@ -53,8 +54,8 @@ tasks.named('test') {
 ```
 
 ## 2. 메인 클래스 수정
-위치: `microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java`
-(review: `.../core/review/ReviewServiceApplication.java`)
+`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java` 들어가서 **import 한 줄, 애너테이션 한 줄 추가**
+(review: `code microservices/review-service/src/main/java/se/magnus/microservices/core/review/ReviewServiceApplication.java`)
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -76,30 +77,29 @@ public class RecommendationServiceApplication {
 
 ## 3. `services/RecommendationServiceImpl.java` (새 파일, 교재 소스 그대로)
 ```bash
-cd ~/msa
-S=microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services
-mkdir -p $S
-code $S/RecommendationServiceImpl.java                                          # 방법 1 — 직접 작성
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/$S/RecommendationServiceImpl.java $S/   # 방법 2 — 복사
+mkdir -p microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services
+mkdir -p microservices/review-service/src/main/java/se/magnus/microservices/core/review/services
 ```
-review:
+방법 1 — 직접 작성 (교재 소스를 보며 입력)
+- `code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java` 들어가서 작성
+- `code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java` 들어가서 작성
+
+방법 2 — 복사
 ```bash
-cd ~/msa
-S=microservices/review-service/src/main/java/se/magnus/microservices/core/review/services
-mkdir -p $S
-code $S/ReviewServiceImpl.java                                                  # 방법 1
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/$S/ReviewServiceImpl.java $S/     # 방법 2
+B=$BOOK_HOME/Chapter03/2-basic-rest-services
+cp $B/microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/
+cp $B/microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/
 ```
-`S=...`는 긴 경로를 줄여 쓰려고 만든 변수다. 같은 터미널에서만 유지된다.
 
 ## 4. `application.properties` 삭제 → `application.yml` (새 파일, 전체)
 ```bash
-cd ~/msa
 rm microservices/recommendation-service/src/main/resources/application.properties
 cp microservices/product-service/src/main/resources/application.yml microservices/recommendation-service/src/main/resources/
-code microservices/recommendation-service/src/main/resources/application.yml
+rm microservices/review-service/src/main/resources/application.properties
+cp microservices/product-service/src/main/resources/application.yml microservices/review-service/src/main/resources/
 ```
-product의 yml을 복사한 뒤 **두 줄을 바꾼다.**
+`code microservices/recommendation-service/src/main/resources/application.yml` 들어가서 **두 줄 변경**
+`code microservices/review-service/src/main/resources/application.yml` 들어가서 **두 줄 변경** (review 값으로)
 ```yaml
 spring.application.name: recommendation-service     # ★ 변경 (product-service → recommendation-service / review: review-service)
 server.port: 7003                                    # ★ 변경 (7002 → 7003 / review: 7004)

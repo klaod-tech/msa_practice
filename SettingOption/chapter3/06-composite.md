@@ -26,7 +26,7 @@ product-composite-service/src/main/java/se/magnus/microservices/composite/produc
 ---
 
 ## 1. `microservices/product-composite-service/build.gradle` 수정
-다른 서비스와 같은 **두 군데 추가**.
+`code microservices/product-composite-service/build.gradle` 들어가서 **두 군데 추가**
 ```groovy
 plugins {
 	id 'java'
@@ -64,7 +64,8 @@ tasks.named('test') {
 처음에 `jar { enabled = false }`를 `dependencies { }` **안에** 넣었었다. 동작은 했지만 위치가 틀렸으므로 블록 밖으로 옮겼다.
 
 ## 2. 메인 클래스 `ProductCompositeServiceApplication.java` 수정
-**import 5줄, 애너테이션 1줄, RestTemplate 빈 메서드 1개 추가.** 빈 메서드는 `main()` 메서드 **아래, 클래스를 닫는 `}` 위**에 넣는다.
+`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplication.java` 들어가서 **import 6줄, 애너테이션 1줄, RestTemplate 빈 메서드 1개 추가**
+빈 메서드는 `main()` 메서드 **아래, 클래스를 닫는 `}` 위**에 넣는다.
 ```java
 package se.magnus.microservices.composite.product;
 
@@ -98,10 +99,9 @@ public class ProductCompositeServiceApplication {
 ## 3. `application.properties` 삭제 → `application.yml` (새 파일, 전체)
 교재 '프로퍼티' 절의 `server.port: 7001`로 시작하는 yml은 product-service가 아니라 **composite용**이다. 핵심 서비스 주소를 코드에 하드코딩하지 않고 설정에서 읽는다.
 ```bash
-cd ~/msa
 rm microservices/product-composite-service/src/main/resources/application.properties
-code microservices/product-composite-service/src/main/resources/application.yml
 ```
+`code microservices/product-composite-service/src/main/resources/application.yml` 들어가서 아래 내용 전체 입력
 ```yaml
 server.port: 7001
 spring.web.error.include-message: always                       # ★ 교재와 다름 (교재: server.error.include-message)
@@ -127,12 +127,10 @@ logging:
 
 ## 4. `services/ProductCompositeIntegration.java` (새 파일, 교재 소스 + 수정)
 ```bash
-cd ~/msa
-S=microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
-mkdir -p $S
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/$S/ProductCompositeIntegration.java $S/   # 교재 소스 복사 (직접 입력하려면 생략)
-code $S/ProductCompositeIntegration.java                                               # 열어서 아래 세 군데 수정
+mkdir -p microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/
 ```
+`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java` 들어가서 아래 **세 군데 수정** (직접 입력하려면 `cp` 없이 열어서 교재 소스를 보며 작성)
 `code`로 열린 탭은 반드시 `Ctrl+S`로 저장한다. 저장하지 않으면 디스크에 파일이 없어서, VS Code에 오류도 안 뜨고 Gradle도 이 파일을 모른다.
 복사한 뒤 **세 군데를 고친다.** Boot 4의 클래스패스에는 Jackson 3(`tools.jackson`)만 있고 Jackson 2(`com.fasterxml.jackson.databind`)는 없다.
 
@@ -199,11 +197,11 @@ Jackson 3의 `readValue()`는 `IOException`을 던지지 않는다. 교재대로
 고친 뒤에는 composite만 다시 빌드·실행하면 된다. 옛 composite를 먼저 꺼야 한다(포트 충돌) → [07](07-test.md)
 
 ## 6. `services/ProductCompositeServiceImpl.java` (새 파일, 교재 소스 그대로)
+방법 1 — `code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java` 들어가서 교재 소스를 보며 작성
+
+방법 2 — 복사
 ```bash
-cd ~/msa
-S=microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
-code $S/ProductCompositeServiceImpl.java                                               # 방법 1 — 직접 작성
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/$S/ProductCompositeServiceImpl.java $S/   # 방법 2 — 복사
+cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/
 ```
 핵심 서비스 결과를 `ProductAggregate`로 합치고 `serviceAddresses`에 4개 서비스의 주소를 담는다.
 api의 Recommendation·Review가 비어 있으면 이 파일에서 `getRecommendationId()`, `getReviewId()`에 `cannot find symbol` 오류가 난다.
