@@ -1,6 +1,7 @@
 # 07. 멀티 프로젝트 설정
 
 ## 루트 `settings.gradle`
+`code settings.gradle` 들어가서 아래 4줄 입력 (또는 아래 heredoc 명령을 터미널에 그대로 입력해도 같은 파일이 만들어진다)
 ```bash
 cat > settings.gradle <<'EOF'
 include ':microservices:product-service'

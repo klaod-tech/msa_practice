@@ -15,10 +15,9 @@ cd ~/msa
 ```
 
 ## `create-projects.bash` 작성
+`code create-projects.bash` 들어가서 아래 내용 전체 입력
+
 교재 스크립트는 Boot 3 / Java 17로 생성되므로 쓰지 않고, Boot 4.0.9 / Java 21로 직접 작성했다.
-```bash
-nano create-projects.bash
-```
 ```bash
 #!/usr/bin/env bash
 mkdir -p microservices
