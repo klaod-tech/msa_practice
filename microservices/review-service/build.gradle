@@ -15,6 +15,11 @@ java {
 	}
 }
 
+// ★ 추가 (ext 블록 전체)
+ext {
+	mapstructVersion = '1.6.3'
+}
+
 repositories {
 	mavenCentral()
 }
@@ -27,6 +32,22 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'  // ★ 추가
+	implementation 'com.mysql:mysql-connector-j'  // ★ 추가
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"  // ★ 추가
+
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+
+	compileOnly 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
+	annotationProcessor 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 추가 (교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함)
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'  // ★ 추가 (교재에는 없음, Boot 4에서 필요)
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'  // ★ 추가
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 추가 (교재: org.testcontainers:junit-jupiter)
+	testImplementation 'org.testcontainers:testcontainers-mysql'  // ★ 추가 (교재: org.testcontainers:mysql)
 }
 
 tasks.named('test') {
