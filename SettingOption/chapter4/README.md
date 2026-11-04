@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 4장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9**, Docker 29.0.1 (Docker Desktop + WSL2 Ubuntu 24.04)
-> 이전: [../chapter3/README.md](../chapter3/README.md) / 상태: **완료 (2026-11-03)** — 서비스 4개 도커 이미지화, 도커 컴포즈 구동, `./test-em-all.bash start stop` 통과
+> 이전: [../chapter3/README.md](../chapter3/README.md) / 다음: [../chapter5/README.md](../chapter5/README.md) / 상태: **완료 (2026-11-03)** — 서비스 4개 도커 이미지화, 도커 컴포즈 구동, `./test-em-all.bash start stop` 통과
 
 ## 문서 읽는 법
 - 명령 블록은 위에서부터 그대로 입력하면 된다.
