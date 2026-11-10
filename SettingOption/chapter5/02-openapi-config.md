@@ -9,7 +9,10 @@ product-composite-service에서 springdoc-openapi를 활성화하려면 두 파�
 ---
 
 ## 1. ProductCompositeServiceApplication.java (전체)
-`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplication.java` 들어가서 전체를 아래로 교체
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplication.java
+```
+전체를 아래로 교체
 
 교재 5장 소스 + 4장에서 Boot 4 때문에 바꾼 RestTemplate 빈(JsonMapper 버전)을 합친 것이다.
 ```java
@@ -96,7 +99,10 @@ public class ProductCompositeServiceApplication {
 ---
 
 ## 2. application.yml (전체)
-`code microservices/product-composite-service/src/main/resources/application.yml` 들어가서 전체를 아래로 교체
+```bash
+code microservices/product-composite-service/src/main/resources/application.yml
+```
+전체를 아래로 교체
 ```yaml
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html

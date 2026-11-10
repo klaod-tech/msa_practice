@@ -3,7 +3,10 @@
 교재 "ProductCompositeService 인터페이스에 API 관련 문서 추가". 파일 3개를 바꾼다.
 
 ## 1. ProductCompositeService.java (전체, 교재 그대로)
-`code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java` 들어가서 전체를 아래로 교체
+```bash
+code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java
+```
+전체를 아래로 교체
 ```java
 package se.magnus.api.composite.product;
 
@@ -48,7 +51,10 @@ public interface ProductCompositeService {
 - springdoc은 애너테이션 말고도 `@GetMapping`, `@PathVariable`을 보고 **경로·HTTP 메서드·입력 인수**를, 반환 타입(`ProductAggregate`)을 보고 **성공 응답 JSON 구조**를 알아낸다.
 
 ## 2. BadRequestException.java (새 파일, 교재 그대로)
-`code api/src/main/java/se/magnus/api/exceptions/BadRequestException.java` 들어가서 아래 내용 전체 입력
+```bash
+code api/src/main/java/se/magnus/api/exceptions/BadRequestException.java
+```
+아래 내용 전체 입력
 ```java
 package se.magnus.api.exceptions;
 
@@ -71,7 +77,10 @@ public class BadRequestException extends RuntimeException {
 다른 예외 클래스(InvalidInputException, NotFoundException)와 같은 모양이다. 부모 생성자를 호출하므로 롬복을 쓰지 않는다(3장 04 참고).
 
 ## 3. GlobalControllerExceptionHandler.java (전체)
-`code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java` 들어가서 전체를 아래로 교체
+```bash
+code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java
+```
+전체를 아래로 교체
 ```java
 package se.magnus.util.http;
 

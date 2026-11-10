@@ -18,7 +18,10 @@ cd ~/msa                                          # 교재: cd $BOOK_HOME/Chapte
 ---
 
 ## 2. test-em-all.bash (전체)
-`code test-em-all.bash` 들어가서 기존 내용을 모두 지우고 아래 내용 전체 입력
+```bash
+code test-em-all.bash
+```
+기존 내용을 모두 지우고 아래 내용 전체 입력
 
 **교재 5장 내용 그대로**다(Boot 4 때문에 바꿀 곳 없음). 4장 버전과 다른 곳은 `Type mismatch` 테스트와 `stop` 블록 사이의 **Swagger/OpenAPI 테스트 11줄**뿐이다. 실행 권한은 4장 그대로라 `chmod`는 다시 안 해도 된다.
 ```bash

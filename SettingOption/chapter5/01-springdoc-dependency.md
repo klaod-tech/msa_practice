@@ -5,7 +5,10 @@
 `implementation` 줄은 **application.yml이 아니라 build.gradle**에 넣는다(Gradle 의존성 문법). 넣는 곳은 **서로 다른 build.gradle 두 개**다.
 
 ## 1. api 프로젝트
-`code api/build.gradle` 들어가서 `dependencies` 안의 webflux 줄 아래에 한 줄 추가
+```bash
+code api/build.gradle
+```
+`dependencies` 안의 webflux 줄 아래에 한 줄 추가
 ```groovy
 dependencies {
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
@@ -20,7 +23,10 @@ dependencies {
 ```
 
 ## 2. product-composite-service
-`code microservices/product-composite-service/build.gradle` 들어가서 `dependencies` 안의 webflux 줄 아래에 한 줄 추가
+```bash
+code microservices/product-composite-service/build.gradle
+```
+`dependencies` 안의 webflux 줄 아래에 한 줄 추가
 ```groovy
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
