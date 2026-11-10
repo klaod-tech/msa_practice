@@ -70,7 +70,10 @@ curl로 손으로 확인하던 것을 코드로 자동 확인한다. `./gradlew 
 ```bash
 cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/
 ```
-`code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java` 들어가서 아래 **세 군데 수정**
+```bash
+code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java
+```
+아래 **세 군데 수정**
 > 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(위치 확인용)
 
 ### ① static import (파일 맨 위, 3~8번 줄)
@@ -127,7 +130,10 @@ class ProductCompositeServiceApplicationTests {
 
 ## 3. `test-em-all.bash` (전체 시스템 테스트)
 1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다.
-방법 1 — `code test-em-all.bash` 들어가서 교재 소스를 보며 작성
+방법 1 — 아래 파일을 열어서 교재 소스를 보며 작성
+```bash
+code test-em-all.bash
+```
 
 방법 2 — 복사
 ```bash

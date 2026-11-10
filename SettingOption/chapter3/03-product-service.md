@@ -3,7 +3,10 @@
 > 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(넣을 위치 확인용)
 
 ## 1. `microservices/product-service/build.gradle` 수정
-`code microservices/product-service/build.gradle` 들어가서 **두 군데 추가**
+```bash
+code microservices/product-service/build.gradle
+```
+**두 군데 추가**
 ① `plugins { }` 블록과 `group` 사이에 `jar { }` 블록
 ② `dependencies { }` 블록의 **마지막 줄(`testRuntimeOnly ...`) 아래, 닫는 `}` 위**에 두 줄
 ```groovy
@@ -48,7 +51,10 @@ tasks.named('test') {
 - `jar { }`를 `dependencies { }` **안에** 넣지 않는다. 의존성이 아니라 jar 작업 설정이다.
 
 ## 2. 메인 클래스 `ProductServiceApplication.java` 수정
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/ProductServiceApplication.java` 들어가서 **import 한 줄, 애너테이션 한 줄 추가**
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/ProductServiceApplication.java
+```
+**import 한 줄, 애너테이션 한 줄 추가**
 ```java
 package se.magnus.microservices.core.product;
 
@@ -72,8 +78,9 @@ public class ProductServiceApplication {
 위치: `microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/`
 ```bash
 mkdir -p microservices/product-service/src/main/java/se/magnus/microservices/core/product/services
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java
 ```
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java` 들어가서 아래 내용 전체 입력
+아래 내용 전체 입력
 
 이 단계(오류 처리 전)의 전체 내용. 예외 `if`문은 [04](04-error-handling.md)에서 추가한다.
 ```java
@@ -108,7 +115,10 @@ public class ProductServiceImpl implements ProductService {
 ```bash
 rm microservices/product-service/src/main/resources/application.properties
 ```
-`code microservices/product-service/src/main/resources/application.yml` 들어가서 아래 내용 전체 입력
+```bash
+code microservices/product-service/src/main/resources/application.yml
+```
+아래 내용 전체 입력
 ```yaml
 spring.application.name: product-service
 

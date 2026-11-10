@@ -27,9 +27,12 @@ curl /product/13
 mkdir -p api/src/main/java/se/magnus/api/exceptions
 ```
 방법 1 — 직접 작성 (교재 소스를 보며 입력)
-- `code api/src/main/java/se/magnus/api/exceptions/InvalidInputException.java` 들어가서 작성
-- `code api/src/main/java/se/magnus/api/exceptions/NotFoundException.java` 들어가서 작성
-- `code util/src/main/java/se/magnus/util/http/HttpErrorInfo.java` 들어가서 작성
+```bash
+code api/src/main/java/se/magnus/api/exceptions/InvalidInputException.java
+code api/src/main/java/se/magnus/api/exceptions/NotFoundException.java
+code util/src/main/java/se/magnus/util/http/HttpErrorInfo.java
+```
+열린 파일마다 작성
 방법 2 — 복사
 ```bash
 B=$BOOK_HOME/Chapter03/2-basic-rest-services
@@ -60,7 +63,10 @@ HttpErrorInfo에 클래스 단위로 `@Getter`, `@AllArgsConstructor`를 붙였�
 ---
 
 ## 4. `util/.../http/GlobalControllerExceptionHandler.java` (새 파일, 전체)
-`code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java` 들어가서 아래 내용 전체 입력
+```bash
+code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java
+```
+아래 내용 전체 입력
 (복사하려면 `cp $BOOK_HOME/Chapter03/2-basic-rest-services/util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java util/src/main/java/se/magnus/util/http/` 후 열어서 수정)
 
 교재 소스를 복사(또는 입력)한 뒤 **`UNPROCESSABLE_ENTITY`를 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바꾼다**(Spring 7.0.10에서 ENTITY는 deprecated).
@@ -118,7 +124,10 @@ class GlobalControllerExceptionHandler {
 ---
 
 ## 5. `ProductServiceImpl.java` 수정 (기존 파일)
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java` 들어가서 **두 군데 추가** ([03](03-product-service.md)에서 만든 파일)
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java
+```
+**두 군데 추가** ([03](03-product-service.md)에서 만든 파일)
 ① import: `ProductService` import 아래, `ServiceUtil` import 위에 두 줄
 ② `getProduct()` 안: **`return` 위에** 두 줄 (`return` 뒤에 넣으면 실행되지 않음)
 ```java

@@ -26,7 +26,10 @@ product-composite-service/src/main/java/se/magnus/microservices/composite/produc
 ---
 
 ## 1. `microservices/product-composite-service/build.gradle` 수정
-`code microservices/product-composite-service/build.gradle` 들어가서 **두 군데 추가**
+```bash
+code microservices/product-composite-service/build.gradle
+```
+**두 군데 추가**
 ```groovy
 plugins {
 	id 'java'
@@ -64,7 +67,10 @@ tasks.named('test') {
 처음에 `jar { enabled = false }`를 `dependencies { }` **안에** 넣었었다. 동작은 했지만 위치가 틀렸으므로 블록 밖으로 옮겼다.
 
 ## 2. 메인 클래스 `ProductCompositeServiceApplication.java` 수정
-`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplication.java` 들어가서 **import 6줄, 애너테이션 1줄, RestTemplate 빈 메서드 1개 추가**
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplication.java
+```
+**import 6줄, 애너테이션 1줄, RestTemplate 빈 메서드 1개 추가**
 빈 메서드는 `main()` 메서드 **아래, 클래스를 닫는 `}` 위**에 넣는다.
 ```java
 package se.magnus.microservices.composite.product;
@@ -101,7 +107,10 @@ public class ProductCompositeServiceApplication {
 ```bash
 rm microservices/product-composite-service/src/main/resources/application.properties
 ```
-`code microservices/product-composite-service/src/main/resources/application.yml` 들어가서 아래 내용 전체 입력
+```bash
+code microservices/product-composite-service/src/main/resources/application.yml
+```
+아래 내용 전체 입력
 ```yaml
 server.port: 7001
 spring.web.error.include-message: always                       # ★ 교재와 다름 (교재: server.error.include-message)
@@ -130,7 +139,10 @@ logging:
 mkdir -p microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
 cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/
 ```
-`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java` 들어가서 아래 **세 군데 수정** (직접 입력하려면 `cp` 없이 열어서 교재 소스를 보며 작성)
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java
+```
+아래 **세 군데 수정** (직접 입력하려면 `cp` 없이 열어서 교재 소스를 보며 작성)
 `code`로 열린 탭은 반드시 `Ctrl+S`로 저장한다. 저장하지 않으면 디스크에 파일이 없어서, VS Code에 오류도 안 뜨고 Gradle도 이 파일을 모른다.
 복사한 뒤 **세 군데를 고친다.** Boot 4의 클래스패스에는 Jackson 3(`tools.jackson`)만 있고 Jackson 2(`com.fasterxml.jackson.databind`)는 없다.
 
@@ -197,7 +209,10 @@ Jackson 3의 `readValue()`는 `IOException`을 던지지 않는다. 교재대로
 고친 뒤에는 composite만 다시 빌드·실행하면 된다. 옛 composite를 먼저 꺼야 한다(포트 충돌) → [07](07-test.md)
 
 ## 6. `services/ProductCompositeServiceImpl.java` (새 파일, 교재 소스 그대로)
-방법 1 — `code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java` 들어가서 교재 소스를 보며 작성
+방법 1 — 아래 파일을 열어서 교재 소스를 보며 작성
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java
+```
 
 방법 2 — 복사
 ```bash

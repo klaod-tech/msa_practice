@@ -14,7 +14,10 @@ product-service([03](03-product-service.md))와 **똑같은 패턴**이다. 예�
 ---
 
 ## 1. `microservices/recommendation-service/build.gradle` 수정
-`code microservices/recommendation-service/build.gradle` 들어가서 **두 군데 추가** (review: `code microservices/review-service/build.gradle`)
+```bash
+code microservices/recommendation-service/build.gradle
+```
+**두 군데 추가** (review: `code microservices/review-service/build.gradle`)
 group은 `spring init`이 이미 `...core.recommendation`으로 만들어 두었으므로 그대로 둔다.
 ```groovy
 plugins {
@@ -54,7 +57,10 @@ tasks.named('test') {
 ```
 
 ## 2. 메인 클래스 수정
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java` 들어가서 **import 한 줄, 애너테이션 한 줄 추가**
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java
+```
+**import 한 줄, 애너테이션 한 줄 추가**
 (review: `code microservices/review-service/src/main/java/se/magnus/microservices/core/review/ReviewServiceApplication.java`)
 ```java
 package se.magnus.microservices.core.recommendation;
@@ -81,8 +87,11 @@ mkdir -p microservices/recommendation-service/src/main/java/se/magnus/microservi
 mkdir -p microservices/review-service/src/main/java/se/magnus/microservices/core/review/services
 ```
 방법 1 — 직접 작성 (교재 소스를 보며 입력)
-- `code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java` 들어가서 작성
-- `code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java` 들어가서 작성
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java
+```
+열린 파일마다 작성
 
 방법 2 — 복사
 ```bash
@@ -98,8 +107,14 @@ cp microservices/product-service/src/main/resources/application.yml microservice
 rm microservices/review-service/src/main/resources/application.properties
 cp microservices/product-service/src/main/resources/application.yml microservices/review-service/src/main/resources/
 ```
-`code microservices/recommendation-service/src/main/resources/application.yml` 들어가서 **두 줄 변경**
-`code microservices/review-service/src/main/resources/application.yml` 들어가서 **두 줄 변경** (review 값으로)
+```bash
+code microservices/recommendation-service/src/main/resources/application.yml
+```
+**두 줄 변경**
+```bash
+code microservices/review-service/src/main/resources/application.yml
+```
+**두 줄 변경** (review 값으로)
 ```yaml
 spring.application.name: recommendation-service     # ★ 변경 (product-service → recommendation-service / review: review-service)
 server.port: 7003                                    # ★ 변경 (7002 → 7003 / review: 7004)
