@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 7장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4** (Spring Cloud Stream 5.0.4, Reactor, Jackson 3)
-> 이전: [../chapter6/README.md](../chapter6/README.md) / 상태: **진행 중**
+> 이전: [../chapter6/README.md](../chapter6/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -64,4 +64,4 @@
 - 6장 커밋(`779c3c7`)을 복사한 곳에 이 문서의 파일을 그대로 넣고 **모든 프로젝트의 main/test 컴파일**을 통과했다.
 - 도커 없이 도는 테스트를 실행해 통과했다: `ReactorTests` 2개, composite 테스트 8개(`MessagingTests` 3, `IsSameEventTests` 1, `ProductCompositeServiceApplicationTests` 4), `MapperTests` 3개.
 - Spring Cloud Stream이 쓰는 JSON 변환기로 `Event`를 왕복 변환해 봤다. `allow-final-fields-as-mutators`가 없으면 모든 필드가 `null`, 있으면 정상이다.
-- Testcontainers를 쓰는 핵심 서비스 테스트(Persistence, ApplicationTests)와 docker compose 구동(RabbitMQ, 파티션, Kafka)은 실습 과정이라 직접 돌리지 않았다. 실패하면 troubleshooting.md에 추가한다.
+- 실습(2026-11-10): Testcontainers를 쓰는 핵심 서비스 테스트(Persistence, ApplicationTests), docker compose 구동과 `test-em-all.bash`를 RabbitMQ, 파티션, Kafka 세 구성 모두에서 끝까지 통과했다.
