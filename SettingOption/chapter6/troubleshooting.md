@@ -36,3 +36,12 @@ Get-Service MySQL80 | Select-Object Name,Status,StartType
       - "3307:3306"   # ★ 변경 (전: "3306:3306")
 ```
 오른쪽 3306은 컨테이너 안쪽 포트라 그대로 둔다. review 서비스는 도커 네트워크 안에서 `mysql:3306`으로 붙고, `docker compose exec mysql ...`도 컨테이너 안에서 실행되므로 영향이 없다.
+
+## mongodb/mysql이 healthy가 늦거나 `unhealthy`가 됨
+`docker compose ps`에서 `(health: starting)`이 오래 가거나 `(unhealthy)`가 되고, product/recommendation/review가 시작하지 않는다.
+**원인:** healthcheck의 `timeout`이 교재대로 `2s`면, 검사 명령(특히 mongodb의 `mongosh`)이 시작하는 데만 2초를 넘겨 DB가 정상이어도 실패로 판정된다. 60번 연속 실패하면 `unhealthy`.
+**해결:** `code docker-compose.yml` 들어가서 mongodb, mysql의 healthcheck 두 곳 모두 바꾼다.
+```yaml
+      timeout: 10s   # ★ 변경 (교재: 2s)
+```
+고친 뒤 `docker compose up -d`(설정이 바뀐 DB 컨테이너만 다시 만들어진다).

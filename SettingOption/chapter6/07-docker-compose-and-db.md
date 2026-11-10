@@ -51,7 +51,7 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 5s
-      timeout: 2s
+      timeout: 10s   # ★ 변경 (교재: 2s)
       retries: 60
 
   # ★ 추가 (mysql 서비스 전체)
@@ -68,7 +68,7 @@ services:
     healthcheck:
       test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
       interval: 5s
-      timeout: 2s
+      timeout: 10s   # ★ 변경 (교재: 2s)
       retries: 60
 ```
 
@@ -77,6 +77,7 @@ services:
 | `mongodb`, `mysql` 서비스 | DB 컨테이너 2개. **이 서비스 이름이 05 yml docker 프로필의 호스트 이름**(`spring.mongodb.host: mongodb`, `jdbc:mysql://mysql/...`)이 된다 |
 | `ports: 27017`, `3306` | 내 PC에서도 DB에 붙을 수 있게 연다(도구로 들여다보기용). 서비스끼리는 포트 공개 없이도 통신된다 |
 | `healthcheck` | DB가 **요청을 받을 준비가 됐는지** 5초마다 확인한다 |
+| `timeout: 10s` | 검사 명령 한 번이 끝나야 하는 최대 시간. 교재의 2s는 `mongosh`(Node.js 셸) 시작만으로도 넘기기 쉬워서(특히 WSL2) 실패로 판정되고, 60번 연속 실패하면 `unhealthy`가 되어 서비스가 안 뜬다. 10s로 늘려도 검사가 빨리 끝나면 바로 통과하므로 느려지지 않는다 |
 | `depends_on ... condition: service_healthy` | DB가 healthy가 된 **뒤에** 서비스를 띄운다. 그냥 `depends_on`만 쓰면 컨테이너가 "시작"만 하면 바로 띄워서, DB가 아직 준비 안 돼 연결에 실패할 수 있다 |
 | `MYSQL_DATABASE=review-db`, `MYSQL_USER=user`, `MYSQL_PASSWORD=pwd` | MySQL이 처음 뜰 때 DB와 계정을 만든다. 05 review yml의 값과 맞아야 한다 |
 

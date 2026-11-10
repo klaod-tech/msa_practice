@@ -44,7 +44,7 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 5s
-      timeout: 2s
+      timeout: 10s
       retries: 60
 
   # ★ 추가 (mysql 서비스 전체)
@@ -61,5 +61,5 @@ services:
     healthcheck:
       test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
       interval: 5s
-      timeout: 2s
+      timeout: 10s
       retries: 60
