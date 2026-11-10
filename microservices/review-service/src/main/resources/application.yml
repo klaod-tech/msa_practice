@@ -1,28 +1,95 @@
 spring.application.name: review-service
+
 server.port: 7004
-spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
+spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 
 # Strongly recommend to set this property to "none" in a production environment!
-spring.jpa.hibernate.ddl-auto: update  # ★ 추가
+spring.jpa.hibernate.ddl-auto: update
 
-spring.datasource:  # ★ 추가
-  url: jdbc:mysql://localhost/review-db  # ★ 추가
-  username: user  # ★ 추가
-  password: pwd  # ★ 추가
+spring.datasource:
+  url: jdbc:mysql://localhost/review-db
+  username: user
+  password: pwd
 
-spring.datasource.hikari.initializationFailTimeout: 60000  # ★ 추가
+spring.datasource.hikari.initializationFailTimeout: 60000
+
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 추가 (교재에는 없음, Jackson 3: Event의 final 필드 역직렬화)
+
+spring.cloud.function.definition: messageProcessor  # ★ 추가 (여기부터 spring.rabbitmq까지)
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings.messageProcessor-in-0:
+    destination: reviews
+    group: reviewsGroup
+
+spring.cloud.stream.bindings.messageProcessor-in-0.consumer:
+  maxAttempts: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.messageProcessor-in-0.consumer:
+  autoBindDlq: true
+  republishToDlq: true
+
+spring.cloud.stream.kafka.bindings.messageProcessor-in-0.consumer:
+  enableDlq: true
+
+spring.cloud.stream.kafka.binder:
+  brokers: 127.0.0.1
+  defaultBrokerPort: 9092
+
+spring.rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: guest
+  password: guest
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
-    org.hibernate.SQL: DEBUG  # ★ 추가
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # ★ 추가
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management.endpoint.health.show-details: "ALWAYS"  # ★ 추가
+management.endpoints.web.exposure.include: "*"  # ★ 추가
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.datasource:  # ★ 추가
-  url: jdbc:mysql://mysql/review-db  # ★ 추가
+spring.datasource.url: jdbc:mysql://mysql/review-db  # ★ 변경 (전: spring.datasource: 아래 url 두 줄 → 한 줄로)
+
+spring.rabbitmq.host: rabbitmq  # ★ 추가
+
+spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+
+# ★ 추가 (여기부터 파일 끝까지)
+---
+spring.config.activate.on-profile: streaming_partitioned
+
+spring.cloud.stream.bindings.messageProcessor-in-0.consumer:
+  partitioned: true
+  instanceCount: 2
+
+---
+spring.config.activate.on-profile: streaming_instance_0
+
+spring.cloud.stream.bindings.messageProcessor-in-0.consumer.instanceIndex: 0
+
+---
+spring.config.activate.on-profile: streaming_instance_1
+
+spring.cloud.stream.bindings.messageProcessor-in-0.consumer.instanceIndex: 1
+
+---
+spring.config.activate.on-profile: kafka
+
+management.health.rabbit.enabled: false
+spring.cloud.stream.defaultBinder: kafka
+spring.kafka.bootstrap-servers: kafka:9092
+spring.cloud.stream.kafka.binder.replication-factor: 1

@@ -13,6 +13,10 @@ java {
 	}
 }
 
+ext {
+	springCloudVersion = '2025.1.4'  // (교재: 2025.0.0)
+}
+
 repositories {
 	mavenCentral()
 }
@@ -26,7 +30,17 @@ dependencies {
 	implementation project(':api')
 	implementation project(':util')
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.3'
+	implementation 'org.springframework.boot:spring-boot-starter-webclient'  // ★ 추가 (교재에는 없음, Boot 4: WebClient.Builder 제공)
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
+	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'  // ★ 추가
 	  
+}
+
+dependencyManagement {  // ★ 추가 (블록 전체)
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {

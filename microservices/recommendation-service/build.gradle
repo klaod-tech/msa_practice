@@ -15,9 +15,9 @@ java {
 	}
 }
 
-// ★ 추가 (ext 블록 전체)
 ext {
 	mapstructVersion = '1.6.3'
+	springCloudVersion = '2025.1.4'  // ★ 추가 (교재: 2025.0.0)
 }
 
 repositories {
@@ -32,21 +32,29 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'  // ★ 추가
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"  // ★ 추가
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'  // ★ 변경 (전: spring-boot-starter-data-mongodb)
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
-	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-	compileOnly 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 추가 (교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함)
+	compileOnly 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
+	annotationProcessor 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // 교재에는 없음 (6장부터)
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'  // ★ 추가 (교재에는 없음, Boot 4에서 필요)
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'  // ★ 추가
-	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 추가 (교재: org.testcontainers:junit-jupiter)
-	testImplementation 'org.testcontainers:testcontainers-mongodb'  // ★ 추가 (교재: org.testcontainers:mongodb)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive-test'  // ★ 변경 (전: spring-boot-starter-data-mongodb-test)
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // 교재와 다름 (교재: org.testcontainers:junit-jupiter, 6장부터)
+	testImplementation 'org.testcontainers:testcontainers-mongodb'  // 교재와 다름 (교재: org.testcontainers:mongodb, 6장부터)
+}
+
+dependencyManagement {  // ★ 추가 (블록 전체)
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 tasks.named('test') {

@@ -25,6 +25,7 @@ dependencies {
     implementation project(':api')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.platform:junit-platform-launcher'  // ★ 추가 (ReactorTests 실행에 필요)
     compileOnly platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     compileOnly 'org.projectlombok:lombok'

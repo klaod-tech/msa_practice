@@ -1,23 +1,28 @@
 package se.magnus.microservices.core.recommendation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static reactor.core.publisher.Mono.just;
+import static se.magnus.api.event.Event.Type.CREATE;
+import static se.magnus.api.event.Event.Type.DELETE;
 
+import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // ★ Boot 4 (교재에는 없음)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.recommendation.Recommendation;
+import se.magnus.api.event.Event;
+import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationRepository;
 
+@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // ★ Boot 4 (교재에는 없음)
 class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
   @Autowired
@@ -26,21 +31,26 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
   @Autowired
   private RecommendationRepository repository;
 
+  @Autowired
+  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
+  @Qualifier("messageProcessor")
+  private Consumer<Event<Integer, Recommendation>> messageProcessor;
+
   @BeforeEach
   void setupDb() {
-    repository.deleteAll();
+    repository.deleteAll().block();
   }
-  
+
   @Test
   void getRecommendationsByProductId() {
 
     int productId = 1;
 
-    postAndVerifyRecommendation(productId, 1, OK);
-    postAndVerifyRecommendation(productId, 2, OK);
-    postAndVerifyRecommendation(productId, 3, OK);
+    sendCreateRecommendationEvent(productId, 1);
+    sendCreateRecommendationEvent(productId, 2);
+    sendCreateRecommendationEvent(productId, 3);
 
-    assertEquals(3, repository.findByProductId(productId).size());
+    assertEquals(3, (long)repository.findByProductId(productId).count().block());
 
     getAndVerifyRecommendationsByProductId(productId, OK)
       .jsonPath("$.length()").isEqualTo(3)
@@ -54,17 +64,17 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
-    postAndVerifyRecommendation(productId, recommendationId, OK)
-      .jsonPath("$.productId").isEqualTo(productId)
-      .jsonPath("$.recommendationId").isEqualTo(recommendationId);
+    sendCreateRecommendationEvent(productId, recommendationId);
 
-    assertEquals(1, repository.count());
+    assertEquals(1, (long)repository.count().block());
 
-    postAndVerifyRecommendation(productId, recommendationId, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
-      .jsonPath("$.path").isEqualTo("/recommendation")
-      .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Recommendation Id:1");
+    InvalidInputException thrown = assertThrows(
+      InvalidInputException.class,
+      () -> sendCreateRecommendationEvent(productId, recommendationId),
+      "Expected a InvalidInputException here!");
+    assertEquals("Duplicate key, Product Id: 1, Recommendation Id:1", thrown.getMessage());
 
-    assertEquals(1, repository.count());
+    assertEquals(1, (long)repository.count().block());
   }
 
   @Test
@@ -73,13 +83,13 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
-    postAndVerifyRecommendation(productId, recommendationId, OK);
-    assertEquals(1, repository.findByProductId(productId).size());
+    sendCreateRecommendationEvent(productId, recommendationId);
+    assertEquals(1, (long)repository.findByProductId(productId).count().block());
 
-    deleteAndVerifyRecommendationsByProductId(productId, OK);
-    assertEquals(0, repository.findByProductId(productId).size());
+    sendDeleteRecommendationEvent(productId);
+    assertEquals(0, (long)repository.findByProductId(productId).count().block());
 
-    deleteAndVerifyRecommendationsByProductId(productId, OK);
+    sendDeleteRecommendationEvent(productId);
   }
 
   @Test
@@ -110,7 +120,7 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
       .jsonPath("$.path").isEqualTo("/recommendation")
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -129,25 +139,14 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
       .expectBody();
   }
 
-  private WebTestClient.BodyContentSpec postAndVerifyRecommendation(int productId, int recommendationId, HttpStatus expectedStatus) {
+  private void sendCreateRecommendationEvent(int productId, int recommendationId) {
     Recommendation recommendation = new Recommendation(productId, recommendationId, "Author " + recommendationId, recommendationId, "Content " + recommendationId, "SA");
-    return client.post()
-      .uri("/recommendation")
-      .body(just(recommendation), Recommendation.class)
-      .accept(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isEqualTo(expectedStatus)
-      .expectHeader().contentType(APPLICATION_JSON)
-      .expectBody();
+    Event<Integer, Recommendation> event = new Event<>(CREATE, productId, recommendation);
+    messageProcessor.accept(event);
   }
 
-  private WebTestClient.BodyContentSpec deleteAndVerifyRecommendationsByProductId(int productId, HttpStatus expectedStatus) {
-    return client.delete()
-      .uri("/recommendation?productId=" + productId)
-      .accept(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isEqualTo(expectedStatus)
-      .expectBody();
+  private void sendDeleteRecommendationEvent(int productId) {
+    Event<Integer, Recommendation> event = new Event<>(DELETE, productId, null);
+    messageProcessor.accept(event);
   }
-    
 }

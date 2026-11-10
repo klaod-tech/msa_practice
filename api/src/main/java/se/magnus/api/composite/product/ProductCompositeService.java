@@ -4,12 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping, PathVariable → *)
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;  // ★ 추가
 
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
-  // ★ 추가 (POST: 생성)
   /**
    * Sample usage, see below.
    *
@@ -26,10 +27,11 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
+  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가 (202: 받았고 처리는 나중에)
   @PostMapping(
     value    = "/product-composite",
     consumes = "application/json")
-  void createProduct(@RequestBody ProductAggregate body);
+  Mono<Void> createProduct(@RequestBody ProductAggregate body);  // ★ 변경 (전: void)
 
   /**
    * Sample usage: "curl $HOST:$PORT/product-composite/1".
@@ -49,9 +51,8 @@ public interface ProductCompositeService {
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
-  ProductAggregate getProduct(@PathVariable int productId);
+  Mono<ProductAggregate> getProduct(@PathVariable int productId);  // ★ 변경 (전: ProductAggregate)
 
-  // ★ 추가 (DELETE: 삭제)
   /**
    * Sample usage: "curl -X DELETE $HOST:$PORT/product-composite/1".
    *
@@ -64,6 +65,7 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
+  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가
   @DeleteMapping(value = "/product-composite/{productId}")
-  void deleteProduct(@PathVariable int productId);
+  Mono<Void> deleteProduct(@PathVariable int productId);  // ★ 변경 (전: void)
 }

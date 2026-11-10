@@ -1,33 +1,44 @@
 package se.magnus.microservices.core.product;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static reactor.core.publisher.Mono.just;
+import static se.magnus.api.event.Event.Type.CREATE;
+import static se.magnus.api.event.Event.Type.DELETE;
 
+import java.util.function.Consumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // ★ Boot 4 (교재에는 없음)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.product.Product;
+import se.magnus.api.event.Event;
+import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.microservices.core.product.persistence.ProductRepository;
 
+@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // ★ Boot 4 (교재에는 없음)
 class ProductServiceApplicationTests extends MongoDbTestBase {
 
-  @Autowired private WebTestClient client;
+  @Autowired
+  private WebTestClient client;
 
-  @Autowired private ProductRepository repository;
+  @Autowired
+  private ProductRepository repository;
+
+  @Autowired
+  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
+  @Qualifier("messageProcessor")
+  private Consumer<Event<Integer, Product>> messageProcessor;
 
   @BeforeEach
   void setupDb() {
-    repository.deleteAll();
+    repository.deleteAll().block();
   }
 
   @Test
@@ -35,11 +46,16 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
-    postAndVerifyProduct(productId, OK);
+    assertNull(repository.findByProductId(productId).block());
+    assertEquals(0, (long)repository.count().block());
 
-    assertTrue(repository.findByProductId(productId).isPresent());
+    sendCreateProductEvent(productId);
 
-    getAndVerifyProduct(productId, OK).jsonPath("$.productId").isEqualTo(productId);
+    assertNotNull(repository.findByProductId(productId).block());
+    assertEquals(1, (long)repository.count().block());
+
+    getAndVerifyProduct(productId, OK)
+      .jsonPath("$.productId").isEqualTo(productId);
   }
 
   @Test
@@ -47,13 +63,17 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
-    postAndVerifyProduct(productId, OK);
+    assertNull(repository.findByProductId(productId).block());
 
-    assertTrue(repository.findByProductId(productId).isPresent());
+    sendCreateProductEvent(productId);
 
-    postAndVerifyProduct(productId, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
-      .jsonPath("$.path").isEqualTo("/product")
-      .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: " + productId);
+    assertNotNull(repository.findByProductId(productId).block());
+
+    InvalidInputException thrown = assertThrows(
+      InvalidInputException.class,
+      () -> sendCreateProductEvent(productId),
+      "Expected a InvalidInputException here!");
+    assertEquals("Duplicate key, Product Id: " + productId, thrown.getMessage());
   }
 
   @Test
@@ -61,13 +81,13 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
-    postAndVerifyProduct(productId, OK);
-    assertTrue(repository.findByProductId(productId).isPresent());
+    sendCreateProductEvent(productId);
+    assertNotNull(repository.findByProductId(productId).block());
 
-    deleteAndVerifyProduct(productId, OK);
-    assertFalse(repository.findByProductId(productId).isPresent());
+    sendDeleteProductEvent(productId);
+    assertNull(repository.findByProductId(productId).block());
 
-    deleteAndVerifyProduct(productId, OK);
+    sendDeleteProductEvent(productId);
   }
 
   @Test
@@ -92,7 +112,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
       .jsonPath("$.path").isEqualTo("/product/" + productIdInvalid)
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -111,24 +131,14 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
       .expectBody();
   }
 
-  private WebTestClient.BodyContentSpec postAndVerifyProduct(int productId, HttpStatus expectedStatus) {
+  private void sendCreateProductEvent(int productId) {
     Product product = new Product(productId, "Name " + productId, productId, "SA");
-    return client.post()
-      .uri("/product")
-      .body(just(product), Product.class)
-      .accept(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isEqualTo(expectedStatus)
-      .expectHeader().contentType(APPLICATION_JSON)
-      .expectBody();
+    Event<Integer, Product> event = new Event<>(CREATE, productId, product);
+    messageProcessor.accept(event);
   }
 
-  private WebTestClient.BodyContentSpec deleteAndVerifyProduct(int productId, HttpStatus expectedStatus) {
-    return client.delete()
-      .uri("/product/" + productId)
-      .accept(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isEqualTo(expectedStatus)
-      .expectBody();
+  private void sendDeleteProductEvent(int productId) {
+    Event<Integer, Product> event = new Event<>(DELETE, productId, null);
+    messageProcessor.accept(event);
   }
 }
