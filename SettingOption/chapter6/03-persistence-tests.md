@@ -8,8 +8,9 @@
 테스트 출력이 너무 많지 않게 로그 수준을 INFO로 맞춘다.
 ```bash
 mkdir -p microservices/product-service/src/test/resources
+code microservices/product-service/src/test/resources/logback-test.xml
 ```
-`code microservices/product-service/src/test/resources/logback-test.xml` 들어가서 붙여넣기
+붙여넣기
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
@@ -30,7 +31,10 @@ cp microservices/product-service/src/test/resources/logback-test.xml microservic
 ```
 
 ## 2. product-service
-`code microservices/product-service/src/test/java/se/magnus/microservices/core/product/MongoDbTestBase.java` 들어가서 붙여넣기
+```bash
+code microservices/product-service/src/test/java/se/magnus/microservices/core/product/MongoDbTestBase.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.product;
 
@@ -49,7 +53,10 @@ public abstract class MongoDbTestBase {
 }
 ```
 
-`code microservices/product-service/src/test/java/se/magnus/microservices/core/product/PersistenceTests.java` 들어가서 붙여넣기
+```bash
+code microservices/product-service/src/test/java/se/magnus/microservices/core/product/PersistenceTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.product;
 
@@ -193,7 +200,10 @@ class PersistenceTests extends MongoDbTestBase {
 ```
 
 ## 3. recommendation-service
-`code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/MongoDbTestBase.java` 들어가서 붙여넣기 (product와 `package` 줄만 다르다)
+```bash
+code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/MongoDbTestBase.java
+```
+붙여넣기 (product와 `package` 줄만 다르다)
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -212,7 +222,10 @@ public abstract class MongoDbTestBase {
 }
 ```
 
-`code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/PersistenceTests.java` 들어가서 붙여넣기
+```bash
+code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/PersistenceTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -330,7 +343,10 @@ class PersistenceTests extends MongoDbTestBase {
 ```
 
 ## 4. review-service
-`code microservices/review-service/src/test/java/se/magnus/microservices/core/review/MySqlTestBase.java` 들어가서 붙여넣기
+```bash
+code microservices/review-service/src/test/java/se/magnus/microservices/core/review/MySqlTestBase.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.review;
 
@@ -351,7 +367,10 @@ public abstract class MySqlTestBase {
 }
 ```
 
-`code microservices/review-service/src/test/java/se/magnus/microservices/core/review/PersistenceTests.java` 들어가서 붙여넣기
+```bash
+code microservices/review-service/src/test/java/se/magnus/microservices/core/review/PersistenceTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.review;
 

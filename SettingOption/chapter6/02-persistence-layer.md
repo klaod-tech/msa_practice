@@ -8,8 +8,9 @@ API 클래스(`Product` 등)를 그대로 저장하지 않고 엔티티를 따�
 ## 1. product-service (MongoDB)
 ```bash
 mkdir -p microservices/product-service/src/main/java/se/magnus/microservices/core/product/persistence
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/persistence/ProductEntity.java
 ```
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/persistence/ProductEntity.java` 들어가서 붙여넣기
+붙여넣기
 ```java
 package se.magnus.microservices.core.product.persistence;
 
@@ -45,7 +46,10 @@ public class ProductEntity {
 }
 ```
 
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/persistence/ProductRepository.java` 들어가서 붙여넣기
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/persistence/ProductRepository.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.product.persistence;
 
@@ -61,8 +65,9 @@ public interface ProductRepository extends PagingAndSortingRepository<ProductEnt
 ## 2. recommendation-service (MongoDB)
 ```bash
 mkdir -p microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/persistence
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/persistence/RecommendationEntity.java
 ```
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/persistence/RecommendationEntity.java` 들어가서 붙여넣기
+붙여넣기
 ```java
 package se.magnus.microservices.core.recommendation.persistence;
 
@@ -103,7 +108,10 @@ public class RecommendationEntity {
 }
 ```
 
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/persistence/RecommendationRepository.java` 들어가서 붙여넣기
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/persistence/RecommendationRepository.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.recommendation.persistence;
 
@@ -118,8 +126,9 @@ public interface RecommendationRepository extends CrudRepository<RecommendationE
 ## 3. review-service (MySQL, JPA)
 ```bash
 mkdir -p microservices/review-service/src/main/java/se/magnus/microservices/core/review/persistence
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/persistence/ReviewEntity.java
 ```
-`code microservices/review-service/src/main/java/se/magnus/microservices/core/review/persistence/ReviewEntity.java` 들어가서 붙여넣기
+붙여넣기
 ```java
 package se.magnus.microservices.core.review.persistence;
 
@@ -157,7 +166,10 @@ public class ReviewEntity {
 }
 ```
 
-`code microservices/review-service/src/main/java/se/magnus/microservices/core/review/persistence/ReviewRepository.java` 들어가서 붙여넣기
+```bash
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/persistence/ReviewRepository.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.review.persistence;
 

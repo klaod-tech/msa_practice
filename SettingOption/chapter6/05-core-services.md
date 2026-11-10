@@ -14,7 +14,10 @@
 ## 1. API 인터페이스에 생성/삭제 추가
 5장까지는 고정 값을 돌려주는 조회(GET)만 있었다. 이제 DB에 넣고 지울 수 있게 **POST(생성)**, **DELETE(삭제)** 를 추가한다.
 
-`code api/src/main/java/se/magnus/api/core/product/ProductService.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/product/ProductService.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.product;
 
@@ -61,7 +64,10 @@ public interface ProductService {
 }
 ```
 
-`code api/src/main/java/se/magnus/api/core/recommendation/RecommendationService.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/recommendation/RecommendationService.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.recommendation;
 
@@ -110,7 +116,10 @@ public interface RecommendationService {
 }
 ```
 
-`code api/src/main/java/se/magnus/api/core/review/ReviewService.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/review/ReviewService.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.review;
 
@@ -163,7 +172,10 @@ public interface ReviewService {
 ## 2. 서비스 구현 (전체 교체)
 고정 값 대신 **리포지토리로 DB를 읽고 쓰고**, 매퍼로 엔티티 ↔ API를 바꾼다.
 
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java` 들어가서 전체 교체
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductServiceImpl.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.product.services;
 
@@ -236,7 +248,10 @@ public class ProductServiceImpl implements ProductService {
 }
 ```
 
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java` 들어가서 전체 교체
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationServiceImpl.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.recommendation.services;
 
@@ -307,7 +322,10 @@ public class RecommendationServiceImpl implements RecommendationService {
 }
 ```
 
-`code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java` 들어가서 전체 교체
+```bash
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewServiceImpl.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.review.services;
 
@@ -383,7 +401,10 @@ public class ReviewServiceImpl implements ReviewService {
 - 5장의 "productId 13이면 404" 같은 **가짜 규칙은 없어졌다**. 이제는 DB에 없으면 404다.
 
 ## 3. Application 클래스 (전체 교체)
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/ProductServiceApplication.java` 들어가서 전체 교체
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/ProductServiceApplication.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.product;
 
@@ -434,7 +455,10 @@ public class ProductServiceApplication {
 }
 ```
 
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java` 들어가서 전체 교체
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplication.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -485,7 +509,10 @@ public class RecommendationServiceApplication {
 }
 ```
 
-`code microservices/review-service/src/main/java/se/magnus/microservices/core/review/ReviewServiceApplication.java` 들어가서 전체 교체
+```bash
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/ReviewServiceApplication.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.review;
 
@@ -515,7 +542,10 @@ public class ReviewServiceApplication {
 - `initIndicesAfterStartup` (MongoDB만): 02에서 붙인 `@Indexed(unique = true)`, `@CompoundIndex`를 **시작할 때 실제 인덱스로 만든다**. Spring Data MongoDB는 자동 인덱스 생성이 기본으로 꺼져 있어서, 이게 없으면 중복 데이터가 그냥 들어간다. (JPA는 `ddl-auto: update`가 테이블과 인덱스를 만든다)
 
 ## 4. application.yml (전체 교체)
-`code microservices/product-service/src/main/resources/application.yml` 들어가서 전체 교체
+```bash
+code microservices/product-service/src/main/resources/application.yml
+```
+전체 교체
 ```yaml
 spring.application.name: product-service
 
@@ -541,7 +571,10 @@ server.port: 8080
 spring.mongodb.host: mongodb  # ★ 추가 (교재: spring.data.mongodb.host)
 ```
 
-`code microservices/recommendation-service/src/main/resources/application.yml` 들어가서 전체 교체
+```bash
+code microservices/recommendation-service/src/main/resources/application.yml
+```
+전체 교체
 ```yaml
 spring.application.name: recommendation-service
 
@@ -567,7 +600,10 @@ server.port: 8080
 spring.mongodb.host: mongodb  # ★ 추가 (교재: spring.data.mongodb.host)
 ```
 
-`code microservices/review-service/src/main/resources/application.yml` 들어가서 전체 교체
+```bash
+code microservices/review-service/src/main/resources/application.yml
+```
+전체 교체
 ```yaml
 spring.application.name: review-service
 server.port: 7004
@@ -616,7 +652,10 @@ find ~/.gradle/caches -name "spring-boot-mongodb-4.0.9.jar" | head -1 | xargs -I
 ## 5. 서비스 테스트 (전체 교체)
 5장까지의 `contextLoads` 테스트를 교재 6장 테스트로 바꾼다. 03의 `MongoDbTestBase` / `MySqlTestBase`를 상속하므로 **Docker가 켜져 있어야** 한다.
 
-`code microservices/product-service/src/test/java/se/magnus/microservices/core/product/ProductServiceApplicationTests.java` 들어가서 전체 교체
+```bash
+code microservices/product-service/src/test/java/se/magnus/microservices/core/product/ProductServiceApplicationTests.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.product;
 
@@ -754,7 +793,10 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 }
 ```
 
-`code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplicationTests.java` 들어가서 전체 교체
+```bash
+code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/RecommendationServiceApplicationTests.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -911,7 +953,10 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 }
 ```
 
-`code microservices/review-service/src/test/java/se/magnus/microservices/core/review/ReviewServiceApplicationTests.java` 들어가서 전체 교체
+```bash
+code microservices/review-service/src/test/java/se/magnus/microservices/core/review/ReviewServiceApplicationTests.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.core.review;
 

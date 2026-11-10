@@ -14,7 +14,10 @@ POST /product-composite  {productId, name, weight, recommendations[], reviews[]}
 ## 1. 요약 클래스에 content 추가
 GET 응답에도 추천/리뷰의 본문(`content`)이 나오도록, 그리고 POST로 받을 때 본문을 받을 수 있도록 필드를 하나 추가한다. Lombok `@AllArgsConstructor`가 생성자를 알아서 늘려 준다.
 
-`code api/src/main/java/se/magnus/api/composite/product/RecommendationSummary.java` 들어가서 `rate` 줄 아래에 한 줄 추가
+```bash
+code api/src/main/java/se/magnus/api/composite/product/RecommendationSummary.java
+```
+`rate` 줄 아래에 한 줄 추가
 ```java
 package se.magnus.api.composite.product;
 
@@ -35,7 +38,10 @@ public class RecommendationSummary {
 }
 ```
 
-`code api/src/main/java/se/magnus/api/composite/product/ReviewSummary.java` 들어가서 `subject` 줄 아래에 한 줄 추가
+```bash
+code api/src/main/java/se/magnus/api/composite/product/ReviewSummary.java
+```
+`subject` 줄 아래에 한 줄 추가
 ```java
 package se.magnus.api.composite.product;
 
@@ -61,7 +67,10 @@ public class ReviewSummary {
 - 이 클래스들은 `final` 그대로다. POST로 받을 때(JSON → 객체) final 필드를 채울 수 있는 건 composite yml의 `allow-final-fields-as-mutators: true` 덕분이다(3장에서 넣은 줄).
 
 ## 2. composite API 인터페이스
-`code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.composite.product;
 
@@ -137,7 +146,10 @@ public interface ProductCompositeService {
 ## 3. ProductCompositeIntegration (전체 교체)
 핵심 서비스 3개를 호출하는 클래스. create/delete 메서드 6개가 추가되고, 오류 처리를 `handleHttpClientException`으로 묶었다.
 
-`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java` 들어가서 전체 교체
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.composite.product.services;
 
@@ -372,7 +384,10 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 - **교재 파일을 통째로 복사하면 안 된다.** 교재는 Jackson 2(`com.fasterxml...`)와 `UNPROCESSABLE_ENTITY`를 쓴다. 특히 Jackson 2 import는 컴파일은 되지만(다른 라이브러리가 끌고 온 jar가 있음) Boot 4에는 Jackson 2 `ObjectMapper` 빈이 없어서 **시작할 때 실패**한다.
 
 ## 4. ProductCompositeServiceImpl (전체 교체)
-`code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java` 들어가서 전체 교체
+```bash
+code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.composite.product.services;
 
@@ -510,7 +525,10 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 ## 5. application.yml (전체 교체)
 `api.product-composite` 아래에 Swagger 설명 문구(create/delete)가 추가되고, get 문구가 바뀌었다(5장의 "productId 113이면…" 같은 가짜 규칙 설명이 빠짐).
 
-`code microservices/product-composite-service/src/main/resources/application.yml` 들어가서 전체 교체
+```bash
+code microservices/product-composite-service/src/main/resources/application.yml
+```
+전체 교체
 ```yaml
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
@@ -615,7 +633,10 @@ app:
 ```
 
 ## 6. 테스트 (전체 교체)
-`code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java` 들어가서 전체 교체
+```bash
+code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java
+```
+전체 교체
 ```java
 package se.magnus.microservices.composite.product;
 

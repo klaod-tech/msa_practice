@@ -30,7 +30,10 @@ Get-Service MySQL80 | Select-Object Name,Status,StartType
 ```
 `Stopped` / `Manual`이면 된다. 데이터는 지워지지 않고, 필요할 때 `net start MySQL80`으로 켠다(그때는 먼저 `docker compose down`). 위 `netstat` 줄이 아무것도 안 나오면 `docker compose up -d`.
 
-**다른 방법(Windows MySQL을 계속 써야 할 때):** `code docker-compose.yml` 들어가서 mysql의 왼쪽(내 PC 쪽) 포트만 바꾼다.
+**다른 방법(Windows MySQL을 계속 써야 할 때):** 아래 파일을 열어서 mysql의 왼쪽(내 PC 쪽) 포트만 바꾼다.
+```bash
+code docker-compose.yml
+```
 ```yaml
     ports:
       - "3307:3306"   # ★ 변경 (전: "3306:3306")
@@ -40,7 +43,10 @@ Get-Service MySQL80 | Select-Object Name,Status,StartType
 ## mongodb/mysql이 healthy가 늦거나 `unhealthy`가 됨
 `docker compose ps`에서 `(health: starting)`이 오래 가거나 `(unhealthy)`가 되고, product/recommendation/review가 시작하지 않는다.
 **원인:** healthcheck의 `timeout`이 교재대로 `2s`면, 검사 명령(특히 mongodb의 `mongosh`)이 시작하는 데만 2초를 넘겨 DB가 정상이어도 실패로 판정된다. 60번 연속 실패하면 `unhealthy`.
-**해결:** `code docker-compose.yml` 들어가서 mongodb, mysql의 healthcheck 두 곳 모두 바꾼다.
+**해결:** 아래 파일을 열어서 mongodb, mysql의 healthcheck 두 곳 모두 바꾼다.
+```bash
+code docker-compose.yml
+```
 ```yaml
       timeout: 10s   # ★ 변경 (교재: 2s)
 ```

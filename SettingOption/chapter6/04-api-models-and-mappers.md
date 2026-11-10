@@ -8,7 +8,10 @@
 교재는 setter 메서드를 직접 적지만, 우리는 Lombok을 쓰고 있으므로 **`@Setter` 한 줄**로 같은 setter가 만들어진다.
 
 ## 1. API 모델 3개
-`code api/src/main/java/se/magnus/api/core/product/Product.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/product/Product.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.product;
 
@@ -30,7 +33,10 @@ public class Product {
 }
 ```
 
-`code api/src/main/java/se/magnus/api/core/recommendation/Recommendation.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/recommendation/Recommendation.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.recommendation;
 
@@ -54,7 +60,10 @@ public class Recommendation {
 }
 ```
 
-`code api/src/main/java/se/magnus/api/core/review/Review.java` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code api/src/main/java/se/magnus/api/core/review/Review.java
+```
+아래처럼 맞추기 (전체 파일)
 ```java
 package se.magnus.api.core.review;
 
@@ -84,7 +93,10 @@ public class Review {
 ## 2. 매퍼 (새 파일 3개)
 MapStruct는 인터페이스만 적으면 **컴파일할 때 구현 클래스(`ProductMapperImpl`)를 자동 생성**한다. 이름이 같은 필드는 알아서 복사하고, 다른 것만 `@Mapping`으로 알려 준다.
 
-`code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductMapper.java` 들어가서 붙여넣기
+```bash
+code microservices/product-service/src/main/java/se/magnus/microservices/core/product/services/ProductMapper.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.product.services;
 
@@ -109,7 +121,10 @@ public interface ProductMapper {
 }
 ```
 
-`code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationMapper.java` 들어가서 붙여넣기
+```bash
+code microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services/RecommendationMapper.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.recommendation.services;
 
@@ -142,7 +157,10 @@ public interface RecommendationMapper {
 }
 ```
 
-`code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewMapper.java` 들어가서 붙여넣기
+```bash
+code microservices/review-service/src/main/java/se/magnus/microservices/core/review/services/ReviewMapper.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.review.services;
 
@@ -181,7 +199,10 @@ public interface ReviewMapper {
 | `componentModel = "spring"` | 생성된 구현 클래스가 스프링 빈이 되어, 서비스에 생성자로 주입할 수 있다 |
 
 ## 3. 매퍼 테스트 (새 파일 3개)
-`code microservices/product-service/src/test/java/se/magnus/microservices/core/product/MapperTests.java` 들어가서 붙여넣기
+```bash
+code microservices/product-service/src/test/java/se/magnus/microservices/core/product/MapperTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.product;
 
@@ -222,7 +243,10 @@ class MapperTests {
 }
 ```
 
-`code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/MapperTests.java` 들어가서 붙여넣기
+```bash
+code microservices/recommendation-service/src/test/java/se/magnus/microservices/core/recommendation/MapperTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.recommendation;
 
@@ -299,7 +323,10 @@ class MapperTests {
 }
 ```
 
-`code microservices/review-service/src/test/java/se/magnus/microservices/core/review/MapperTests.java` 들어가서 붙여넣기
+```bash
+code microservices/review-service/src/test/java/se/magnus/microservices/core/review/MapperTests.java
+```
+붙여넣기
 ```java
 package se.magnus.microservices.core.review;
 

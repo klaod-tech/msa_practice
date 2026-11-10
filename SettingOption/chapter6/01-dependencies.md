@@ -10,7 +10,10 @@ DB를 쓰는 건 **핵심 서비스 3개**다. composite와 api, util은 이번 
 | review | MySQL | Spring Data JPA, MySQL 드라이버, MapStruct, Testcontainers(MySQL) |
 
 ## 1. product-service
-`code microservices/product-service/build.gradle` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code microservices/product-service/build.gradle
+```
+아래처럼 맞추기 (전체 파일)
 ```groovy
 plugins {
 	id 'java'
@@ -71,7 +74,10 @@ tasks.named('test') {
 ```
 
 ## 2. recommendation-service
-`code microservices/recommendation-service/build.gradle` 들어가서 아래처럼 맞추기 (전체 파일, product와 `group`만 다르다)
+```bash
+code microservices/recommendation-service/build.gradle
+```
+아래처럼 맞추기 (전체 파일, product와 `group`만 다르다)
 ```groovy
 plugins {
 	id 'java'
@@ -130,7 +136,10 @@ tasks.named('test') {
 ```
 
 ## 3. review-service
-`code microservices/review-service/build.gradle` 들어가서 아래처럼 맞추기 (전체 파일)
+```bash
+code microservices/review-service/build.gradle
+```
+아래처럼 맞추기 (전체 파일)
 ```groovy
 plugins {
 	id 'java'

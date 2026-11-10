@@ -2,11 +2,11 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 6장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9** (Spring Data MongoDB 5, Hibernate 7, Testcontainers 2.0.5), MapStruct 1.6.3
-> 이전: [../chapter5/README.md](../chapter5/README.md) / 상태: **진행 중**
+> 이전: [../chapter5/README.md](../chapter5/README.md) / 다음: [../chapter7/README.md](../chapter7/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
-- 파일 단계는 "`code 경로` 들어가서 ~" 한 줄로 시작한다.
+- 파일 단계는 `code 경로` 코드 블록으로 시작한다(오른쪽 복사 버튼 → 터미널에 붙여넣기). 새 파일은 `mkdir -p`와 같은 블록이라 한 번에 실행된다.
 - `★ 추가` / `★ 변경` = 5장 코드 대비 바뀌는 줄, `(교재: ...)` = Boot 4 때문에 교재 6장과 다르게 쓰는 부분.
 
 ## 무엇을 하나

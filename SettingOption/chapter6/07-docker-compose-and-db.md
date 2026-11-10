@@ -3,7 +3,10 @@
 > 표기: `★ 추가` / `★ 변경` = 5장 대비. 이 단계의 파일은 **교재 6장과 똑같다**(Boot 4 때문에 바뀌는 것 없음).
 
 ## 1. docker-compose.yml (전체)
-`code docker-compose.yml` 들어가서 기존 내용을 모두 지우고 아래 내용 전체 입력
+```bash
+code docker-compose.yml
+```
+기존 내용을 모두 지우고 아래 내용 전체 입력
 ```yaml
 services:
   product:
@@ -84,7 +87,10 @@ services:
 MongoDB는 DB를 미리 만들 필요가 없다. 처음 저장할 때 `product-db`, `recommendation-db`가 자동으로 생긴다.
 
 ## 2. test-em-all.bash (전체)
-`code test-em-all.bash` 들어가서 기존 내용을 모두 지우고 아래 내용 전체 입력
+```bash
+code test-em-all.bash
+```
+기존 내용을 모두 지우고 아래 내용 전체 입력
 ```bash
 #!/usr/bin/env bash
 #
