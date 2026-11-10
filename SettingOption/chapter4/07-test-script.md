@@ -20,7 +20,10 @@
 ---
 
 ## A. 완성 파일 (전체 붙여 넣기)
-`code test-em-all.bash` 들어가서 기존 내용을 모두 지우고 아래 내용 전체 입력
+```bash
+code test-em-all.bash
+```
+기존 내용을 모두 지우고 아래 내용 전체 입력
 ```bash
 #!/usr/bin/env bash
 #
@@ -163,7 +166,10 @@ echo "End, all tests OK:" `date`
 ---
 
 ## B. 3장 버전에서 바뀐 곳 (한눈에 보기)
-`code test-em-all.bash` 들어가서 `★` 표시한 줄만 고친다 (A로 했으면 읽기만 하면 된다).
+```bash
+code test-em-all.bash
+```
+`★` 표시한 줄만 고친다 (A로 했으면 읽기만 하면 된다).
 표시 없는 줄은 3장 버전과 같다. `#` 뒤는 bash 주석이라 이대로 붙여 넣어도 동작한다.
 ```bash
 #!/usr/bin/env bash

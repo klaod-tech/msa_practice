@@ -9,7 +9,10 @@ product-service부터 시작한다. 교재 소스: `$BOOK_HOME/Chapter04/microse
 
 ## 1. application.yml에 docker 프로파일 추가
 
-`code microservices/product-service/src/main/resources/application.yml` 들어가서 **맨 끝에** 4줄 추가
+```bash
+code microservices/product-service/src/main/resources/application.yml
+```
+**맨 끝에** 4줄 추가
 
 ```yaml
 logging:
@@ -32,7 +35,10 @@ server.port: 8080                                # ★ 추가
 
 ## 2. Dockerfile 작성
 
-`code microservices/product-service/Dockerfile` 들어가서 아래 내용 전체 입력 (새 파일, 확장자 없음)
+```bash
+code microservices/product-service/Dockerfile
+```
+아래 내용 전체 입력 (새 파일, 확장자 없음)
 
 교재 본문에 먼저 나오는 `FROM openjdk:24` 4줄짜리는 **원리 설명용 예시**라 쓰지 않는다. Docker Hub의 `openjdk` 공식 이미지는 더 이상 관리되지 않는다(deprecated). 교재 소스(`$BOOK_HOME/Chapter04/microservices/product-service/Dockerfile`)의 2단계 버전을 쓰고 ★ 표시한 곳을 바꾼다.
 

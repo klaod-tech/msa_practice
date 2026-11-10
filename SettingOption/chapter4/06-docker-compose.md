@@ -35,8 +35,14 @@ cp microservices/product-service/Dockerfile microservices/product-composite-serv
 
 > 기본 형태가 궁금하면 참고: `code microservices/product-service/src/main/resources/application.yml` (맨 끝 4줄이 03에서 넣은 docker 프로파일)
 
-`code microservices/recommendation-service/src/main/resources/application.yml` 들어가서 **맨 끝에** 4줄 추가
-`code microservices/review-service/src/main/resources/application.yml` 들어가서 **맨 끝에** 4줄 추가
+```bash
+code microservices/recommendation-service/src/main/resources/application.yml
+```
+**맨 끝에** 4줄 추가
+```bash
+code microservices/review-service/src/main/resources/application.yml
+```
+**맨 끝에** 4줄 추가
 ```yaml
 logging:
   level:
@@ -57,7 +63,10 @@ server.port: 8080                                # ★ 추가
 > 기본 형태가 궁금하면 참고: `code microservices/product-service/src/main/resources/application.yml` (docker 프로파일 형식)
 > `app:` 구조는 같은 composite 파일 위쪽의 로컬용 `app:` 블록과 같고 값만 다르다.
 
-`code microservices/product-composite-service/src/main/resources/application.yml` 들어가서 **맨 끝에** 추가
+```bash
+code microservices/product-composite-service/src/main/resources/application.yml
+```
+**맨 끝에** 추가
 ```yaml
 app:
   product-service:
@@ -102,7 +111,10 @@ app:                                             # ★ 추가
 
 ## 4. docker-compose.yml (새 파일, 루트)
 위치는 `~/msa/docker-compose.yml`(레포 루트, `settings.gradle`과 같은 위치)이다. `microservices` 안이 아니다.
-`code docker-compose.yml` 들어가서 아래 내용 전체 입력
+```bash
+code docker-compose.yml
+```
+아래 내용 전체 입력
 
 **교재 내용 그대로**다. Java·Boot 버전과 상관없는 설정이고, 폴더 이름과 서비스 이름이 교재와 같아서 바꿀 곳이 없다.
 ```yaml
