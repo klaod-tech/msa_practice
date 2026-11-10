@@ -1,13 +1,28 @@
 spring.application.name: review-service
 server.port: 7004
-spring.web.error.include-message: always
+spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
+
+# Strongly recommend to set this property to "none" in a production environment!
+spring.jpa.hibernate.ddl-auto: update  # ★ 추가
+
+spring.datasource:  # ★ 추가
+  url: jdbc:mysql://localhost/review-db  # ★ 추가
+  username: user  # ★ 추가
+  password: pwd  # ★ 추가
+
+spring.datasource.hikari.initializationFailTimeout: 60000  # ★ 추가
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
+    org.hibernate.SQL: DEBUG  # ★ 추가
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # ★ 추가
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring.datasource:  # ★ 추가
+  url: jdbc:mysql://mysql/review-db  # ★ 추가

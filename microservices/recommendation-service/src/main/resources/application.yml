@@ -1,13 +1,22 @@
 spring.application.name: recommendation-service
+
 server.port: 7003
-spring.web.error.include-message: always
+spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
+
+spring.mongodb:  # ★ 추가 (교재: spring.data.mongodb:)
+  host: localhost  # ★ 추가
+  port: 27017  # ★ 추가
+  database: recommendation-db  # ★ 추가
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG  # ★ 추가
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
+
+spring.mongodb.host: mongodb  # ★ 추가 (교재: spring.data.mongodb.host)

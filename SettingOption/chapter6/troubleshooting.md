@@ -13,3 +13,26 @@ RecommendationMapper.java:21: error: Unknown property "id" in result type Recomm
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 ```
 고친 뒤 `Shift+Alt+U`, 그리고 `./gradlew :microservices:<서비스>:clean :microservices:<서비스>:test --tests MapperTests`.
+
+## `docker compose up` 실패: `ports are not available: exposing port TCP 0.0.0.0:3306`
+```
+Error response from daemon: ports are not available: exposing port TCP 0.0.0.0:3306 -> 127.0.0.1:0: /forwards/expose returned unexpected status: 500
+```
+**원인:** Windows에 설치된 MySQL(`MySQL80` 서비스)이 3306을 이미 쓰고 있다. Docker Desktop은 포트를 Windows 쪽에 열기 때문에 WSL에서 `ss`로 보면 안 나온다. Windows 쪽에서 확인한다.
+```bash
+/mnt/c/Windows/System32/netstat.exe -ano | grep ':3306'
+```
+**해결:** Windows MySQL을 안 쓰면 끄고 자동 시작도 끈다. **관리자 권한 PowerShell**에서 실행한다(WSL 터미널에서는 `net`, `Set-Service`가 없다고 나온다).
+```powershell
+net stop MySQL80
+Set-Service -Name MySQL80 -StartupType Manual
+Get-Service MySQL80 | Select-Object Name,Status,StartType
+```
+`Stopped` / `Manual`이면 된다. 데이터는 지워지지 않고, 필요할 때 `net start MySQL80`으로 켠다(그때는 먼저 `docker compose down`). 위 `netstat` 줄이 아무것도 안 나오면 `docker compose up -d`.
+
+**다른 방법(Windows MySQL을 계속 써야 할 때):** `code docker-compose.yml` 들어가서 mysql의 왼쪽(내 PC 쪽) 포트만 바꾼다.
+```yaml
+    ports:
+      - "3307:3306"   # ★ 변경 (전: "3306:3306")
+```
+오른쪽 3306은 컨테이너 안쪽 포트라 그대로 둔다. review 서비스는 도커 네트워크 안에서 `mysql:3306`으로 붙고, `docker compose exec mysql ...`도 컨테이너 안에서 실행되므로 영향이 없다.
