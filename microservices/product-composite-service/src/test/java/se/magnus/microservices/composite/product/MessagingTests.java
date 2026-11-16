@@ -36,7 +36,9 @@ import se.magnus.api.event.Event;
 
 @SpringBootTest(
   webEnvironment = RANDOM_PORT,
-  properties = {"spring.main.allow-bean-definition-overriding=true"})
+  properties = {
+    "spring.main.allow-bean-definition-overriding=true",
+    "eureka.client.enabled=false"})  // ★ 추가 (eureka 줄)
 @Import({TestChannelBinderConfiguration.class})
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class MessagingTests {

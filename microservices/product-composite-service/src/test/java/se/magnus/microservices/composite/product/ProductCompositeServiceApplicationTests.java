@@ -23,7 +23,7 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"eureka.client.enabled=false"})  // ★ 변경: Eureka 서버 없이 테스트
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class ProductCompositeServiceApplicationTests {
 

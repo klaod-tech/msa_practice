@@ -24,7 +24,8 @@ import se.magnus.microservices.core.review.persistence.ReviewRepository;
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
   "spring.cloud.stream.defaultBinder=rabbit",
-  "logging.level.se.magnus=DEBUG"})
+  "logging.level.se.magnus=DEBUG",
+  "eureka.client.enabled=false"})  // ★ 추가 (eureka 줄)
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
   @Autowired
@@ -34,7 +35,6 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
   private ReviewRepository repository;
 
   @Autowired
-  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
   @Qualifier("messageProcessor")
   private Consumer<Event<Integer, Review>> messageProcessor;
 

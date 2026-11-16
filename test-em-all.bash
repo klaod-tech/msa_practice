@@ -78,7 +78,6 @@ function waitForService() {
   echo "DONE, continues..."
 }
 
-# ★ 추가 (testCompositeCreated, waitForMessageProcessing 함수 두 개)
 function testCompositeCreated() {
 
     # Expect that the Product Composite for productId $PROD_ID_REVS_RECS has been created with three recommendations and three reviews
@@ -127,7 +126,6 @@ function recreateComposite() {
   local productId=$1
   local composite=$2
 
-  # ★ 변경 (전: assertCurl 200, POST는 응답 코드 확인 없음) → 이제 202 Accepted
   assertCurl 202 "curl -X DELETE http://$HOST:$PORT/product-composite/${productId} -s"
   assertEqual 202 $(curl -X POST -s http://$HOST:$PORT/product-composite -H "Content-Type: application/json" --data "$composite" -w "%{http_code}")
 }
@@ -184,11 +182,14 @@ then
   docker compose up -d
 fi
 
-# ★ 변경 (전: waitForService curl -X DELETE http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND)
 waitForService curl http://$HOST:$PORT/actuator/health
+
+# ★ 추가: Eureka에 접근되고 서비스 4개가 모두 등록됐는지
+# Verify access to Eureka and that all four microservices are registered in Eureka
+assertCurl 200 "curl -H "accept:application/json" $HOST:8761/eureka/apps -s"
+assertEqual 4 $(echo $RESPONSE | jq ".applications.application | length")
 setupTestdata
 
-# ★ 추가 (이벤트가 처리될 때까지 기다림)
 waitForMessageProcessing
 
 # Verify that a normal request works, expect three recommendations and three reviews

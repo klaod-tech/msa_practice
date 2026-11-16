@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;  // ★ 추가
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.reactive.function.client.WebClient;  // ★ 추가
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -57,8 +59,6 @@ public class ProductCompositeServiceApplication {
         .url(apiExternalDocUrl));
   }
 
-  // ★ 추가 (생성자와 publishEventScheduler 빈: 이벤트 게시를 별도 스레드 풀에서 실행)
-  // ★ 삭제: RestTemplate 빈 (WebClient로 바뀜)
   private final Integer threadPoolSize;
   private final Integer taskQueueSize;
 
@@ -74,6 +74,13 @@ public class ProductCompositeServiceApplication {
   public Scheduler publishEventScheduler() {
     LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
     return Schedulers.newBoundedElastic(threadPoolSize, taskQueueSize, "publish-pool");
+  }
+
+  // ★ 추가: http://product 같은 서비스 이름을 Eureka에서 찾아 실제 주소로 바꿔 주는 WebClient.Builder
+  @Bean
+  @LoadBalanced
+  public WebClient.Builder loadBalancedWebClientBuilder() {
+    return WebClient.builder();
   }
 
   public static void main(String[] args) {

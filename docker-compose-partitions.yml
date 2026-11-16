@@ -115,3 +115,10 @@ services:
       interval: 5s
       timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)
       retries: 60
+
+  # ★ 추가 (eureka 서비스 전체)
+  eureka:
+    build: spring-cloud/eureka-server
+    mem_limit: 512m
+    ports:
+      - "8761:8761"

@@ -66,18 +66,22 @@ server.port: 7001
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 3장부터 유지)
 
-app:
-  product-service:
-    host: localhost
-    port: 7002
-  recommendation-service:
-    host: localhost
-    port: 7003
-  review-service:
-    host: localhost
-    port: 7004
+# ★ 삭제: app.product-service/recommendation-service/review-service (host, port) → Eureka로 찾음
+spring.application.name: product-composite  # ★ 추가
 
-spring.cloud.stream:  # ★ 추가 (여기부터 management까지)
+app.eureka-server: localhost  # ★ 추가 (여기부터 eureka 블록까지)
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-server}:8761/eureka/
+    initialInstanceInfoReplicationIntervalSeconds: 5
+    registryFetchIntervalSeconds: 5
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 5
+
+spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
   bindings:
@@ -117,22 +121,13 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-app:
-  product-service:
-    host: product
-    port: 8080
-  recommendation-service:
-    host: recommendation
-    port: 8080
-  review-service:
-    host: review
-    port: 8080
+# ★ 삭제: app.*-service (host, port)
+app.eureka-server: eureka  # ★ 추가
 
-spring.rabbitmq.host: rabbitmq  # ★ 추가
+spring.rabbitmq.host: rabbitmq
 
-spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+spring.cloud.stream.kafka.binder.brokers: kafka
 
-# ★ 추가 (여기부터 파일 끝까지)
 ---
 spring.config.activate.on-profile: streaming_partitioned
 
