@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 9장 (8장은 스프링 클라우드 소개라 코드 없음)
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4** (Spring Cloud Netflix Eureka, Spring Cloud LoadBalancer)
-> 이전: [../chapter7/README.md](../chapter7/README.md) / 상태: **진행 중**
+> 이전: [../chapter7/README.md](../chapter7/README.md) / 다음: [../chapter10/README.md](../chapter10/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -42,4 +42,4 @@
 - 7장 커밋(`11acccf`)을 복사한 곳에 이 문서의 파일을 그대로 넣고 **모든 프로젝트의 main/test 컴파일**을 통과했다.
 - 도커 없이 도는 테스트 통과: eureka-server 3개, composite 8개, ReactorTests 2개.
 - 다른 포트(18761, 17001, 17002)로 Eureka 서버와 composite jar를 직접 띄워 확인했다: composite가 Eureka에 `PRODUCT-COMPOSITE`로 등록됨, `product`로 등록된 인스턴스가 있으면 `http://product/...` 호출이 그 인스턴스의 실제 주소로 바뀌어 감, 없으면 `503 Service Unavailable`.
-- Testcontainers를 쓰는 핵심 서비스 테스트와 docker compose 구동(04)은 실습 과정이라 직접 돌리지 않았다. 실패하면 troubleshooting.md에 추가한다.
+- 실습(2026-11-16): 핵심 서비스 Testcontainers 테스트, docker compose 구동, `test-em-all.bash`, Eureka 웹 화면과 `--scale review=3` 로드 밸런싱 확인까지 끝냈다.
