@@ -3,6 +3,9 @@ springdoc:
   api-docs.path: /openapi/v3/api-docs
   packagesToScan: se.magnus.microservices.composite.product
   pathsToMatch: /**
+  cache.disabled: true  # ★ 추가
+
+server.forward-headers-strategy: framework  # ★ 추가 (게이트웨이가 붙인 X-Forwarded-* 헤더를 반영)
 
 api:
 
@@ -66,10 +69,9 @@ server.port: 7001
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 3장부터 유지)
 
-# ★ 삭제: app.product-service/recommendation-service/review-service (host, port) → Eureka로 찾음
-spring.application.name: product-composite  # ★ 추가
+spring.application.name: product-composite
 
-app.eureka-server: localhost  # ★ 추가 (여기부터 eureka 블록까지)
+app.eureka-server: localhost
 
 eureka:
   client:
@@ -121,8 +123,7 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-# ★ 삭제: app.*-service (host, port)
-app.eureka-server: eureka  # ★ 추가
+app.eureka-server: eureka
 
 spring.rabbitmq.host: rabbitmq
 

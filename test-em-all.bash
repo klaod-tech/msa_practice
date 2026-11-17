@@ -184,10 +184,10 @@ fi
 
 waitForService curl http://$HOST:$PORT/actuator/health
 
-# ★ 추가: Eureka에 접근되고 서비스 4개가 모두 등록됐는지
 # Verify access to Eureka and that all four microservices are registered in Eureka
-assertCurl 200 "curl -H "accept:application/json" $HOST:8761/eureka/apps -s"
-assertEqual 4 $(echo $RESPONSE | jq ".applications.application | length")
+# ★ 변경 (전: $HOST:8761/eureka/apps, 4개) → gateway를 거쳐 /eureka/api/apps, gateway까지 5개
+assertCurl 200 "curl -H "accept:application/json" $HOST:$PORT/eureka/api/apps -s"
+assertEqual 5 $(echo $RESPONSE | jq ".applications.application | length")
 setupTestdata
 
 waitForMessageProcessing

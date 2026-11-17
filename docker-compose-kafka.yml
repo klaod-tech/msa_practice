@@ -68,8 +68,7 @@ services:
   product-composite:
     build: microservices/product-composite-service
     mem_limit: 512m
-    ports:
-      - "8080:8080"
+    # ★ 삭제: ports 8080:8080 (이제 gateway를 거쳐서만 들어온다)
     environment:
       - SPRING_PROFILES_ACTIVE=docker,streaming_partitioned,kafka
     depends_on:
@@ -127,9 +126,21 @@ services:
     environment:
       - ZOOKEEPER_CLIENT_PORT=2181
 
-  # ★ 추가 (eureka 서비스 전체)
   eureka:
     build: spring-cloud/eureka-server
     mem_limit: 512m
+    # ★ 삭제: ports 8761:8761 (웹 화면/API는 gateway의 /eureka/... 로)
+
+  # ★ 추가 (gateway 서비스 전체): 외부에 열린 유일한 입구
+  gateway:
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    build: spring-cloud/gateway
+    mem_limit: 512m
     ports:
-      - "8761:8761"
+      - "8080:8080"
+
+  # ★ 추가 (httpbin 서비스 전체) 교재와 다름: 교재는 외부 사이트 httpstat.us (지금 응답 없음)
+  httpbin:
+    image: mccutchen/go-httpbin:2.25.0
+    mem_limit: 128m

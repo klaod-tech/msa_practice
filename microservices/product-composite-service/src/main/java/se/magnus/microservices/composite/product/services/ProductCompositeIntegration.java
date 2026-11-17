@@ -10,7 +10,6 @@ import tools.jackson.databind.ObjectMapper;  // 교재와 다름 (교재: com.fa
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.health.contributor.Health;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.Message;
@@ -40,7 +39,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   private final WebClient webClient;
   private final ObjectMapper mapper;
 
-  // ★ 추가: host:port 대신 Eureka 서비스 이름 (spring.application.name)
   private static final String PRODUCT_SERVICE_URL = "http://product";
   private static final String RECOMMENDATION_SERVICE_URL = "http://recommendation";
   private static final String REVIEW_SERVICE_URL = "http://review";
@@ -52,17 +50,15 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   public ProductCompositeIntegration(
     @Qualifier("publishEventScheduler") Scheduler publishEventScheduler,
 
-    WebClient.Builder webClientBuilder,  // ★ 변경: 이제 @LoadBalanced 빌더가 들어온다
+    WebClient.Builder webClientBuilder,
     ObjectMapper mapper,
     StreamBridge streamBridge
-    // ★ 삭제: @Value("${app.xxx-service.host/port}") 파라미터 6개
   ) {
 
     this.publishEventScheduler = publishEventScheduler;
     this.webClient = webClientBuilder.build();
     this.mapper = mapper;
     this.streamBridge = streamBridge;
-    // ★ 삭제: productServiceUrl 등 3줄
   }
 
   @Override
@@ -143,26 +139,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
       .subscribeOn(publishEventScheduler).then();
   }
 
-  public Mono<Health> getProductHealth() {
-    return getHealth(PRODUCT_SERVICE_URL);
-  }
-
-  public Mono<Health> getRecommendationHealth() {
-    return getHealth(RECOMMENDATION_SERVICE_URL);
-  }
-
-  public Mono<Health> getReviewHealth() {
-    return getHealth(REVIEW_SERVICE_URL);
-  }
-
-  private Mono<Health> getHealth(String url) {
-    url += "/actuator/health";
-    LOG.debug("Will call the Health API on URL: {}", url);
-    return webClient.get().uri(url).retrieve().bodyToMono(String.class)
-      .map(s -> new Health.Builder().up().build())
-      .onErrorResume(ex -> Mono.just(new Health.Builder().down(ex).build()))
-      .log(LOG.getName(), FINE);
-  }
+  // ★ 삭제: getProductHealth/getRecommendationHealth/getReviewHealth/getHealth (헬스 체크는 gateway로 옮김)
 
   private void sendMessage(String bindingName, Event event) {
     LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
