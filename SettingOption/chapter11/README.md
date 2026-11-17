@@ -27,6 +27,7 @@
 | 3 | [03-gateway-https-security.md](03-gateway-https-security.md) | 게이트웨이 HTTPS(인증서), JWT 검증, 인가 서버 라우트 | gateway `build` |
 | 4 | [04-composite-security.md](04-composite-security.md) | composite의 scope별 권한, Swagger OAuth 설정, 테스트 | composite `build` |
 | 5 | [05-docker-compose-and-test.md](05-docker-compose-and-test.md) | compose(auth-server, 8443), test-em-all, 토큰 받아 호출, 401/403 | `End, all tests OK` |
+| 6 | [06-auth0.md](06-auth0.md) | (선택) Auth0 테넌트 준비: env.bash, setup-tenant.bash | 스크립트 마지막 `export ...` 출력 |
 | - | [troubleshooting.md](troubleshooting.md) | 막혔던 것 모음 | |
 
 ## 교재와 다르게 하는 것
@@ -39,7 +40,7 @@
 | 게이트웨이 인증서 `edge.p12` | 교재 소스에 있는 파일 | `keytool` 명령으로 직접 만든다(비밀번호 `password`, 별칭 `localhost`는 교재와 같음) | 03 |
 | auth-server healthcheck `timeout` | `2s` | `10s` (6장 트러블슈팅) | 05 |
 | 헤더 라우팅 대상 | httpstat.us | httpbin 컨테이너 (10장부터) | 03 |
-| Auth0(외부 OpenID 제공자) 절 | 교재에 있음 | 다루지 않음 (외부 계정이 필요한 선택 실습) | - |
+| Auth0 `.gitignore` | `ml.*`만 제외 | **`env.bash`를 제외** (비밀값이 커밋되지 않게) | 06 |
 
 ## 검증한 것 / 안 한 것
 - 10장 문서의 파일을 저장소(9장 커밋)에 적용해 10장 상태를 다시 만들고(컴파일, 테스트 통과), 그 위에 이 문서의 파일을 넣어 **모든 프로젝트의 main/test 컴파일**을 통과했다.
