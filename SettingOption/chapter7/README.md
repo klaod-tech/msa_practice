@@ -34,6 +34,7 @@
 
 | 순서 | 문서 | 내용 | 확인 |
 |---|---|---|---|
+| 0 | [00-background.md](00-background.md) | 6장과 달라지는 점(논블로킹, 이벤트), 메시징 용어 (먼저 읽기) | 읽기 |
 | 1 | [01-dependencies.md](01-dependencies.md) | build.gradle 5개 (Spring Cloud BOM, 리액티브 MongoDB, Stream, WebClient) | 의존성 조회 |
 | 2 | [02-reactor-basics.md](02-reactor-basics.md) | 프로젝트 리액터 맛보기 (`ReactorTests`) | `--tests ReactorTests` |
 | 3 | [03-reactive-persistence.md](03-reactive-persistence.md) | 리액티브 리포지토리, 엔티티 toString, Application 인덱스, PersistenceTests | (04 끝나고) |

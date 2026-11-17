@@ -24,6 +24,7 @@
 
 | 순서 | 문서 | 내용 | 교재 |
 |---|---|---|---|
+| 0 | [00-background.md](00-background.md) | 3장 전체 그림, 문서별로 생기는 것, 용어 (먼저 읽기) | |
 | 1 | [01-skeleton.md](01-skeleton.md) | 기본 골격 마이크로서비스 4개 생성 | 3장 앞부분 |
 | 2 | [02-api-util.md](02-api-util.md) | api·util 라이브러리 프로젝트 추가 | API 구현 준비 |
 | 3 | [03-product-service.md](03-product-service.md) | product-service 구현 + 단독 실행 | 68~70쪽 |

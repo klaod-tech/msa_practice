@@ -16,6 +16,7 @@ product-composite-service가 외부에 노출하는 API(`/product-composite/{pro
 
 | 순서 | 문서 | 내용 |
 |---|---|---|
+| 0 | [00-background.md](00-background.md) | 4장과 달라지는 점(OpenAPI, Swagger UI), 용어 (먼저 읽기) |
 | 1 | [01-springdoc-dependency.md](01-springdoc-dependency.md) | api, composite build.gradle에 springdoc 의존성 추가 |
 | 2 | [02-openapi-config.md](02-openapi-config.md) | Application 클래스 OpenAPI 빈, application.yml (springdoc, api 문구) |
 | 3 | [03-api-annotations.md](03-api-annotations.md) | 인터페이스 @Tag/@Operation/@ApiResponses, BadRequestException, 400 핸들러 |

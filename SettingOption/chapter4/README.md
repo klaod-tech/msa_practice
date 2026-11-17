@@ -12,6 +12,7 @@
 
 | 순서 | 문서 | 내용 | 교재 |
 |---|---|---|---|
+| 0 | [00-background.md](00-background.md) | 3장과 달라지는 점(도커, 프로필, 포트), 용어 (먼저 읽기) | |
 | 1 | [01-docker-setup.md](01-docker-setup.md) | 도커 기본 세팅: Ubuntu(WSL)와 Docker Desktop 연동, 첫 도커 명령, Docker Desktop 화면 | 93~94쪽 |
 | 2 | [02-java-in-docker.md](02-java-in-docker.md) | 컨테이너 안 자바의 CPU·메모리 제한 인식, 메모리 부족 테스트 | 95쪽~ |
 | 3 | [03-dockerfile.md](03-dockerfile.md) | docker 프로파일, Dockerfile 작성(Boot 4 대응) | 99쪽~ |

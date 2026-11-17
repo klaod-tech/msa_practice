@@ -33,6 +33,7 @@ composite는 영속성 계층 대신 **통합 계층**(`ProductCompositeIntegrat
 
 | 순서 | 문서 | 내용 | 확인 |
 |---|---|---|---|
+| 0 | [00-background.md](00-background.md) | 5장과 달라지는 점(DB, 계층, POST/DELETE), 용어 (먼저 읽기) | 읽기 |
 | 1 | [01-dependencies.md](01-dependencies.md) | 핵심 서비스 build.gradle 3개 (MongoDB/JPA, MapStruct, Testcontainers) | 컴파일 |
 | 2 | [02-persistence-layer.md](02-persistence-layer.md) | 엔티티, 리포지토리 | 컴파일 |
 | 3 | [03-persistence-tests.md](03-persistence-tests.md) | Testcontainers 영속성 테스트 | `--tests PersistenceTests` (도커 필요) |
