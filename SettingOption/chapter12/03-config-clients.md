@@ -896,7 +896,6 @@ class PersistenceTests extends MongoDbTestBase {
       .verifyComplete();
   }
 
-
   @Test
   void create() {
     ProductEntity newEntity = new ProductEntity(2, "n", 2);
@@ -949,19 +948,14 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     ProductEntity entity1 = repository.findById(savedEntity.getId()).block();
     ProductEntity entity2 = repository.findById(savedEntity.getId()).block();
 
-    // Update the entity using the first entity object
     entity1.setName("n1");
     repository.save(entity1).block();
 
-    //  Update the entity using the second entity object.
-    // This should fail since the second entity now holds a old version number, i.e. a Optimistic Lock Error
     StepVerifier.create(repository.save(entity2)).expectError(OptimisticLockingFailureException.class).verify();
 
-    // Get the updated entity from the database and verify its new sate
     StepVerifier.create(repository.findById(savedEntity.getId()))
       .expectNextMatches(foundEntity ->
         foundEntity.getVersion() == 1
@@ -1181,7 +1175,6 @@ class PersistenceTests extends MongoDbTestBase {
     assertEqualsRecommendation(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -1229,22 +1222,17 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     RecommendationEntity entity1 = repository.findById(savedEntity.getId()).block();
     RecommendationEntity entity2 = repository.findById(savedEntity.getId()).block();
 
-    // Update the entity using the first entity object
     entity1.setAuthor("a1");
     repository.save(entity1).block();
 
-    //  Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setAuthor("a2");
       repository.save(entity2).block();
     });
 
-    // Get the updated entity from the database and verify its new sate
     RecommendationEntity updatedEntity = repository.findById(savedEntity.getId()).block();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("a1", updatedEntity.getAuthor());
@@ -1473,7 +1461,6 @@ class PersistenceTests extends MySqlTestBase {
     assertEqualsReview(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -1522,22 +1509,17 @@ class PersistenceTests extends MySqlTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     ReviewEntity entity1 = repository.findById(savedEntity.getId()).get();
     ReviewEntity entity2 = repository.findById(savedEntity.getId()).get();
 
-    // Update the entity using the first entity object
     entity1.setAuthor("a1");
     repository.save(entity1);
 
-    // Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setAuthor("a2");
       repository.save(entity2);
     });
 
-    // Get the updated entity from the database and verify its new sate
     ReviewEntity updatedEntity = repository.findById(savedEntity.getId()).get();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("a1", updatedEntity.getAuthor());
@@ -1745,14 +1727,12 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one expected new product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedEvent =
       new Event<>(CREATE, composite.getProductId(), new Product(composite.getProductId(), composite.getName(), composite.getWeight(), null));
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedEvent)));
 
-    // Assert no recommendation and review events
     assertEquals(0, recommendationMessages.size());
     assertEquals(0, reviewMessages.size());
   }
@@ -1769,14 +1749,12 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one create product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedProductEvent =
       new Event<>(CREATE, composite.getProductId(), new Product(composite.getProductId(), composite.getName(), composite.getWeight(), null));
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedProductEvent)));
 
-    // Assert one create recommendation event queued up
     assertEquals(1, recommendationMessages.size());
 
     RecommendationSummary rec = composite.getRecommendations().get(0);
@@ -1785,7 +1763,6 @@ class MessagingTests {
         new Recommendation(composite.getProductId(), rec.getRecommendationId(), rec.getAuthor(), rec.getRate(), rec.getContent(), null));
     assertThat(recommendationMessages.get(0), is(sameEventExceptCreatedAt(expectedRecommendationEvent)));
 
-    // Assert one create review event queued up
     assertEquals(1, reviewMessages.size());
 
     ReviewSummary rev = composite.getReviews().get(0);
@@ -1802,19 +1779,16 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one delete product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedProductEvent = new Event<>(DELETE, 1, null);
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedProductEvent)));
 
-    // Assert one delete recommendation event queued up
     assertEquals(1, recommendationMessages.size());
 
     Event<Integer, Recommendation> expectedRecommendationEvent = new Event<>(DELETE, 1, null);
     assertThat(recommendationMessages.get(0), is(sameEventExceptCreatedAt(expectedRecommendationEvent)));
 
-    // Assert one delete review event queued up
     assertEquals(1, reviewMessages.size());
 
     Event<Integer, Review> expectedReviewEvent = new Event<>(DELETE, 1, null);
@@ -1846,8 +1820,6 @@ class MessagingTests {
     try {
       return target.receive(0, bindingName);
     } catch (NullPointerException npe) {
-      // If the messageQueues member variable in the target object contains no queues when the receive method is called, it will cause a NPE to be thrown.
-      // So we catch the NPE here and return null to indicate that no messages were found.
       LOG.error("getMessage() received a NPE with binding = {}", bindingName);
       return null;
     }

@@ -227,7 +227,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     LOG.debug("Will call the getRecommendations API on URL: {}", url);
 
-    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Recommendation.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 
@@ -254,7 +253,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     LOG.debug("Will call the getReviews API on URL: {}", url);
 
-    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Review.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 
@@ -264,7 +262,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     return Mono.fromRunnable(() -> sendMessage("reviews-out-0", new Event<>(DELETE, productId, null)))
       .subscribeOn(publishEventScheduler).then();
   }
-
 
   private void sendMessage(String bindingName, Event event) {
     LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
@@ -439,24 +436,20 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
     logAuthorizationInfo(sc);
 
-    // 1. Setup product info
     int productId = product.getProductId();
     String name = product.getName();
     int weight = product.getWeight();
 
-    // 2. Copy summary recommendation info, if available
     List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
        recommendations.stream()
         .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
         .collect(Collectors.toList());
 
-    // 3. Copy summary review info, if available
     List<ReviewSummary> reviewSummaries = (reviews == null)  ? null :
       reviews.stream()
         .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
         .collect(Collectors.toList());
 
-    // 4. Create info regarding the involved microservices addresses
     String productAddress = product.getServiceAddress();
     String reviewAddress = (reviews != null && reviews.size() > 0) ? reviews.get(0).getServiceAddress() : "";
     String recommendationAddress = (recommendations != null && recommendations.size() > 0) ? recommendations.get(0).getServiceAddress() : "";
@@ -668,31 +661,26 @@ api:
     get-composite-product:
       description: Returns a composite view of the specified product id
       notes: |
-        # Normal response
         If the requested product id is found the method will return information regarding:
         1. Product information
         1. Reviews
         1. Recommendations
         1. Service Addresses\n(technical information regarding the addresses of the microservices that created the response)
 
-        # Expected partial and error responses
         1. If no product information is found, a **404 - Not Found** error will be returned
         1. In no recommendations or reviews are found for a product, a partial response will be returned
 
     create-composite-product:
       description: Creates a composite product
       notes: |
-        # Normal response
         The composite product information posted to the API will be split up and stored as separate product-info, recommendation and review entities.
 
-        # Expected error responses
         1. If a product with the same productId as specified in the posted information already exists,
            an **422 - Unprocessable Entity** error with a "duplicate key" error message will be returned
 
     delete-composite-product:
       description: Deletes a product composite
       notes: |
-        # Normal response
         Entities for product information, recommendations and reviews related to the specified productId will be deleted.
         The implementation of the delete method is idempotent, i.e. it can be called several times with the same response.
 

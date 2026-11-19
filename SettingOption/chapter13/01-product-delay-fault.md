@@ -30,12 +30,6 @@ public interface ProductService {
 
   Mono<Product> createProduct(Product body);
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/product/1".
-   *
-   * @param productId Id of the product
-   * @return the product, if found, else null
-   */
   @GetMapping(
     value = "/product/{productId}",
     produces = "application/json")
@@ -70,15 +64,6 @@ import reactor.core.publisher.Mono;
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
-  /**
-   * Sample usage, see below.
-   *
-   * curl -X POST $HOST:$PORT/product-composite \
-   *   -H "Content-Type: application/json" --data \
-   *   '{"productId":123,"name":"product 123","weight":123}'
-   *
-   * @param body A JSON representation of the new composite product
-   */
   @Operation(
     summary = "${api.product-composite.create-composite-product.description}",
     description = "${api.product-composite.create-composite-product.notes}")
@@ -92,12 +77,6 @@ public interface ProductCompositeService {
     consumes = "application/json")
   Mono<Void> createProduct(@RequestBody ProductAggregate body);
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/product-composite/1".
-   *
-   * @param productId Id of the product
-   * @return the composite product info, if found, else null
-   */
   @Operation(
     summary = "${api.product-composite.get-composite-product.description}",
     description = "${api.product-composite.get-composite-product.notes}")
@@ -116,11 +95,6 @@ public interface ProductCompositeService {
     @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent  // ★ 추가
   );
 
-  /**
-   * Sample usage: "curl -X DELETE $HOST:$PORT/product-composite/1".
-   *
-   * @param productId Id of the product
-   */
   @Operation(
     summary = "${api.product-composite.delete-composite-product.description}",
     description = "${api.product-composite.delete-composite-product.notes}")
