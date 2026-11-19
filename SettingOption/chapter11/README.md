@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 11장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Security 7.0 / Spring Cloud 2025.1.4**
-> 이전: [../chapter10/README.md](../chapter10/README.md) / 상태: **완료**
+> 이전: [../chapter10/README.md](../chapter10/README.md) / 다음: [../chapter12/README.md](../chapter12/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
