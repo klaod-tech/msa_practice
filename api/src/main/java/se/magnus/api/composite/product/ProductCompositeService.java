@@ -3,13 +3,13 @@ package se.magnus.api.composite.product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;  // ★ 추가
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-@SecurityRequirement(name = "security_auth")  // ★ 추가: Swagger UI에서 이 API는 OAuth 토큰 필요
+@SecurityRequirement(name = "security_auth")
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
@@ -53,7 +53,11 @@ public interface ProductCompositeService {
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
-  Mono<ProductAggregate> getProduct(@PathVariable int productId);
+  Mono<ProductAggregate> getProduct(  // ★ 변경 (전: getProduct(@PathVariable int productId))
+    @PathVariable int productId,
+    @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,  // ★ 추가
+    @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent  // ★ 추가
+  );
 
   /**
    * Sample usage: "curl -X DELETE $HOST:$PORT/product-composite/1".

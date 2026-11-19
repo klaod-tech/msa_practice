@@ -2,6 +2,8 @@ package se.magnus.microservices.core.product.services;
 
 import static java.util.logging.Level.FINE;
 
+import java.time.Duration;  // ★ 추가
+import java.util.Random;  // ★ 추가
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -33,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Mono<Product> createProduct(Product body) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Mono<Product> createProduct(Product body) {
 
     if (body.getProductId() < 1) {
       throw new InvalidInputException("Invalid productId: " + body.getProductId());
@@ -51,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Mono<Product> getProduct(int productId) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Mono<Product> getProduct(int productId, int delay, int faultPercent) {  // ★ 변경 (delay, faultPercent 추가)
 
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
@@ -60,6 +62,8 @@ public class ProductServiceImpl implements ProductService {
     LOG.info("Will get product info for id={}", productId);
 
     return repository.findByProductId(productId)
+      .map(e -> throwErrorIfBadLuck(e, faultPercent))  // ★ 추가
+      .delayElement(Duration.ofSeconds(delay))  // ★ 추가
       .switchIfEmpty(Mono.error(new NotFoundException("No product found for productId: " + productId)))
       .log(LOG.getName(), FINE)
       .map(e -> mapper.entityToApi(e))
@@ -67,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Mono<Void> deleteProduct(int productId) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Mono<Void> deleteProduct(int productId) {
 
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
@@ -80,5 +84,35 @@ public class ProductServiceImpl implements ProductService {
   private Product setServiceAddress(Product e) {
     e.setServiceAddress(serviceUtil.getServiceAddress());
     return e;
+  }
+
+  // ★ 추가 (아래 두 메서드와 필드): faultPercent 확률로 일부러 오류
+  private ProductEntity throwErrorIfBadLuck(ProductEntity entity, int faultPercent) {
+
+    if (faultPercent == 0) {
+      return entity;
+    }
+
+    int randomThreshold = getRandomNumber(1, 100);
+
+    if (faultPercent < randomThreshold) {
+      LOG.debug("We got lucky, no error occurred, {} < {}", faultPercent, randomThreshold);
+    } else {
+      LOG.info("Bad luck, an error occurred, {} >= {}", faultPercent, randomThreshold);
+      throw new RuntimeException("Something went wrong...");
+    }
+
+    return entity;
+  }
+
+  private final Random randomNumberGenerator = new Random();
+
+  private int getRandomNumber(int min, int max) {
+
+    if (max < min) {
+      throw new IllegalArgumentException("Max must be greater than min");
+    }
+
+    return randomNumberGenerator.nextInt((max - min) + 1) + min;
   }
 }

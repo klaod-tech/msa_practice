@@ -15,6 +15,7 @@ java {
 
 ext {
 	springCloudVersion = '2025.1.4'  // (교재: 2025.0.0)
+	resilience4jVersion = '2.4.0'  // ★ 추가 (교재: 2.3.0)
 }
 
 repositories {
@@ -33,14 +34,16 @@ dependencies {
 	implementation project(':util')
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.3'
 	implementation 'org.springframework.boot:spring-boot-starter-webclient'
+	implementation "io.github.resilience4j:resilience4j-spring-boot4:${resilience4jVersion}"  // ★ 추가 (교재: resilience4j-spring-boot3)
+	implementation "io.github.resilience4j:resilience4j-reactor:${resilience4jVersion}"  // ★ 추가
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-config-client'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'  // ★ 추가
-	implementation 'org.springframework.boot:spring-boot-starter-aspectj'  // ★ 추가 (교재: spring-boot-starter-aop, Boot 4에서 이름 바뀜)
-	implementation 'org.springframework.retry:spring-retry'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-config-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+	implementation 'org.springframework.boot:spring-boot-starter-aspectj'
+	implementation 'org.springframework.retry:spring-retry'
 	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 	  
 }
@@ -48,6 +51,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+		mavenBom "io.github.resilience4j:resilience4j-bom:${resilience4jVersion}"  // ★ 추가
 	}
 }
 

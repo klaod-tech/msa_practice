@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-// ★ 추가 (import 5줄 + java.net.URL): 요청에 담긴 JWT 정보를 로그로 보기 위해
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
@@ -27,7 +26,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
 
-  private final SecurityContext nullSecCtx = new SecurityContextImpl();  // ★ 추가
+  private final SecurityContext nullSecCtx = new SecurityContextImpl();
 
   private final ServiceUtil serviceUtil;
   private final ProductCompositeIntegration integration;
@@ -44,7 +43,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
       List<Mono> monoList = new ArrayList<>();
 
-      monoList.add(getLogAuthorizationInfoMono());  // ★ 추가
+      monoList.add(getLogAuthorizationInfoMono());
 
       LOG.info("Will create a new composite entity for product.id: {}", body.getProductId());
 
@@ -79,14 +78,14 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
   @Override
   @SuppressWarnings("unchecked")
-  public Mono<ProductAggregate> getProduct(int productId) {
+  public Mono<ProductAggregate> getProduct(int productId, int delay, int faultPercent) {  // ★ 변경 (delay, faultPercent 추가)
 
     LOG.info("Will get composite product info for product.id={}", productId);
     return Mono.zip(
       values -> createProductAggregate(
         (SecurityContext) values[0], (Product) values[1], (List<Recommendation>) values[2], (List<Review>) values[3], serviceUtil.getServiceAddress()),
-      getSecurityContextMono(),  // ★ 추가 (values[0]이 SecurityContext, 나머지가 한 칸씩 밀림)
-      integration.getProduct(productId),
+      getSecurityContextMono(),
+      integration.getProduct(productId, delay, faultPercent),  // ★ 변경
       integration.getRecommendations(productId).collectList(),
       integration.getReviews(productId).collectList())
       .doOnError(ex -> LOG.warn("getCompositeProduct failed: {}", ex.toString()))
@@ -100,7 +99,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
       LOG.info("Will delete a product aggregate for product.id: {}", productId);
 
       return Mono.zip(r -> "",
-        getLogAuthorizationInfoMono(),  // ★ 추가
+        getLogAuthorizationInfoMono(),
         integration.deleteProduct(productId),
         integration.deleteRecommendations(productId),
         integration.deleteReviews(productId))
@@ -116,26 +115,22 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   private ProductAggregate createProductAggregate(
     SecurityContext sc, Product product, List<Recommendation> recommendations, List<Review> reviews, String serviceAddress) {
 
-    logAuthorizationInfo(sc);  // ★ 추가 (파라미터 SecurityContext sc도 추가)
+    logAuthorizationInfo(sc);
 
-    // 1. Setup product info
     int productId = product.getProductId();
     String name = product.getName();
     int weight = product.getWeight();
 
-    // 2. Copy summary recommendation info, if available
     List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
        recommendations.stream()
         .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
         .collect(Collectors.toList());
 
-    // 3. Copy summary review info, if available
     List<ReviewSummary> reviewSummaries = (reviews == null)  ? null :
       reviews.stream()
         .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
         .collect(Collectors.toList());
 
-    // 4. Create info regarding the involved microservices addresses
     String productAddress = product.getServiceAddress();
     String reviewAddress = (reviews != null && reviews.size() > 0) ? reviews.get(0).getServiceAddress() : "";
     String recommendationAddress = (recommendations != null && recommendations.size() > 0) ? recommendations.get(0).getServiceAddress() : "";
@@ -144,7 +139,6 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     return new ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses);
   }
 
-  // ★ 추가 (아래 메서드 4개): JWT의 subject, scope, 만료, 발급자를 DEBUG 로그로
   private Mono<SecurityContext> getLogAuthorizationInfoMono() {
     return getSecurityContextMono().doOnNext(sc -> logAuthorizationInfo(sc));
   }
