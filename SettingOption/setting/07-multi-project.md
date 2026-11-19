@@ -1,7 +1,18 @@
 # 07. 멀티 프로젝트 설정
 
 ## 루트 `settings.gradle`
-`code settings.gradle` 들어가서 아래 4줄 입력 (또는 아래 heredoc 명령을 터미널에 그대로 입력해도 같은 파일이 만들어진다)
+```bash
+code settings.gradle
+```
+붙여넣기 (새 파일)
+```groovy
+include ':microservices:product-service'
+include ':microservices:review-service'
+include ':microservices:recommendation-service'
+include ':microservices:product-composite-service'
+```
+
+(다른 방법) 에디터 대신 터미널에서 바로 같은 파일을 만들 수도 있다.
 ```bash
 cat > settings.gradle <<'EOF'
 include ':microservices:product-service'
@@ -10,8 +21,7 @@ include ':microservices:recommendation-service'
 include ':microservices:product-composite-service'
 EOF
 ```
-- heredoc 문법으로 터미널에서 바로 파일을 만든다. 에디터로 직접 써도 결과는 같다.
-- `>`는 파일을 덮어쓴다. 기존 내용 뒤에 붙이려면 `>>`를 쓴다.
+- heredoc 문법이다. `>`는 파일을 덮어쓴다. 기존 내용 뒤에 붙이려면 `>>`를 쓴다.
 - `include`는 **루트 `settings.gradle`에만** 넣는다. 각 서비스 안의 `settings.gradle`(`rootProject.name = '...'`)은 `spring init`이 만든 것이다. 루트에서 빌드하면 Gradle이 무시하므로 그대로 둬도 된다.
 - 이후 api, util 프로젝트를 추가하면 여기에 `include ':api'`, `include ':util'`도 넣는다 → [../chapter3/02-api-util.md](../chapter3/02-api-util.md)
 

@@ -7,6 +7,8 @@
 
 ## 진행 순서
 
+> **환경 설정이 이미 되어 있으면(`~/msa`만 새로 만드는 경우) 6번 [06-create-projects.md](06-create-projects.md)부터 시작한다.** 1~5는 건너뛰고, 9번 GitHub는 기존 레포에 push하지 않는다.
+
 | 순서 | 문서 | 내용 | 교재 |
 |---|---|---|---|
 | 1 | [01-windows.md](01-windows.md) | WSL2 + Ubuntu, Docker Desktop, VS Code | 22장 |

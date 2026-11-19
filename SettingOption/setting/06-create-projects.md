@@ -15,7 +15,10 @@ cd ~/msa
 ```
 
 ## `create-projects.bash` 작성
-`code create-projects.bash` 들어가서 아래 내용 전체 입력
+```bash
+code create-projects.bash
+```
+붙여넣기 (새 파일)
 
 교재 스크립트는 Boot 3 / Java 17로 생성되므로 쓰지 않고, Boot 4.0.9 / Java 21로 직접 작성했다.
 ```bash

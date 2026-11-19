@@ -1,5 +1,9 @@
 # 01. Windows 쪽 준비
 
+> **환경 설정이 이미 되어 있으면 [06-create-projects.md](06-create-projects.md)부터 시작한다.**
+> WSL/Ubuntu, Docker Desktop, VS Code, Java 21, Spring CLI, jq, 교재 소스(`~/spring-microservice`)가 이미 설치돼 있고 `~/msa` 폴더만 새로 만드는 경우다. 01~05는 건너뛴다.
+> 09(GitHub)는 기존 레포(`msa_practice`)에 push하지 않는다. 새 폴더는 기록이 달라서 push가 거절되고, 강제로 밀면 기존 기록과 문서가 덮어써진다.
+
 > 이 부분은 명령 기록이 남아 있지 않다. 지금 상태로 확인된 결과만 적는다.
 
 ## WSL2 + Ubuntu 24.04
