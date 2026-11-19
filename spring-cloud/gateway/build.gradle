@@ -27,6 +27,8 @@ jar {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-security'  // ★ 추가
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'  // ★ 추가 (교재: spring-security-oauth2-resource-server, spring-security-oauth2-jose 두 줄 → Boot 4는 이 스타터가 있어야 JWT 검증 자동 설정이 켜짐)
 	implementation 'org.springframework.cloud:spring-cloud-starter-gateway-server-webflux'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

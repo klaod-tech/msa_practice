@@ -3,9 +3,21 @@ springdoc:
   api-docs.path: /openapi/v3/api-docs
   packagesToScan: se.magnus.microservices.composite.product
   pathsToMatch: /**
-  cache.disabled: true  # ★ 추가
+  cache.disabled: true
 
-server.forward-headers-strategy: framework  # ★ 추가 (게이트웨이가 붙인 X-Forwarded-* 헤더를 반영)
+  # ★ 추가 (swagger-ui, oAuthFlow): Swagger UI에서 OAuth 로그인 후 호출
+  swagger-ui:
+    oauth2-redirect-url: /swagger-ui/oauth2-redirect.html
+    oauth:
+      clientId: writer
+      clientSecret: secret-writer
+      useBasicAuthenticationWithAccessCodeGrant: true
+      usePkceWithAuthorizationCodeGrant: true
+  oAuthFlow:
+    authorizationUrl: https://localhost:8443/oauth2/authorize
+    tokenUrl: https://localhost:8443/oauth2/token
+
+server.forward-headers-strategy: framework
 
 api:
 
@@ -71,12 +83,17 @@ spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (
 
 spring.application.name: product-composite
 
-app.eureka-server: localhost
+# ★ 변경 (전: app.eureka-server 한 줄)
+app:
+  eureka-username: u
+  eureka-password: p
+  eureka-server: localhost
+  auth-server: localhost
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
+      defaultZone: "http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/"  # ★ 변경 (계정 추가)
     initialInstanceInfoReplicationIntervalSeconds: 5
     registryFetchIntervalSeconds: 5
   instance:
@@ -110,10 +127,13 @@ spring.rabbitmq:
   username: guest
   password: guest
 
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://${app.auth-server}:9999  # ★ 추가
+
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE  # ★ 추가
 
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -123,7 +143,10 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-app.eureka-server: eureka
+# ★ 변경 (전: app.eureka-server 한 줄)
+app:
+  eureka-server: eureka
+  auth-server: auth-server
 
 spring.rabbitmq.host: rabbitmq
 

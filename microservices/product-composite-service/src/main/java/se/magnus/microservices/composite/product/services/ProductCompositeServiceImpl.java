@@ -2,11 +2,18 @@ package se.magnus.microservices.composite.product.services;
 
 import static java.util.logging.Level.FINE;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+// ★ 추가 (import 5줄 + java.net.URL): 요청에 담긴 JWT 정보를 로그로 보기 위해
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import se.magnus.api.composite.product.*;
@@ -20,6 +27,8 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
 
+  private final SecurityContext nullSecCtx = new SecurityContextImpl();  // ★ 추가
+
   private final ServiceUtil serviceUtil;
   private final ProductCompositeIntegration integration;
 
@@ -29,11 +38,13 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   }
 
   @Override
-  public Mono<Void> createProduct(ProductAggregate body) {  // ★ 변경: 결과 Mono들을 모아 Mono.zip으로 합침
+  public Mono<Void> createProduct(ProductAggregate body) {
 
     try {
 
       List<Mono> monoList = new ArrayList<>();
+
+      monoList.add(getLogAuthorizationInfoMono());  // ★ 추가
 
       LOG.info("Will create a new composite entity for product.id: {}", body.getProductId());
 
@@ -68,11 +79,13 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
   @Override
   @SuppressWarnings("unchecked")
-  public Mono<ProductAggregate> getProduct(int productId) {  // ★ 변경: 세 서비스를 동시에 부르고 Mono.zip으로 합침
+  public Mono<ProductAggregate> getProduct(int productId) {
 
     LOG.info("Will get composite product info for product.id={}", productId);
     return Mono.zip(
-      values -> createProductAggregate((Product) values[0], (List<Recommendation>) values[1], (List<Review>) values[2], serviceUtil.getServiceAddress()),
+      values -> createProductAggregate(
+        (SecurityContext) values[0], (Product) values[1], (List<Recommendation>) values[2], (List<Review>) values[3], serviceUtil.getServiceAddress()),
+      getSecurityContextMono(),  // ★ 추가 (values[0]이 SecurityContext, 나머지가 한 칸씩 밀림)
       integration.getProduct(productId),
       integration.getRecommendations(productId).collectList(),
       integration.getReviews(productId).collectList())
@@ -81,14 +94,13 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   }
 
   @Override
-  public Mono<Void> deleteProduct(int productId) {  // ★ 변경: 삭제 이벤트 3개를 Mono.zip으로 합침
-
+  public Mono<Void> deleteProduct(int productId) {
     try {
 
       LOG.info("Will delete a product aggregate for product.id: {}", productId);
 
-      return Mono.zip(
-        r -> "",
+      return Mono.zip(r -> "",
+        getLogAuthorizationInfoMono(),  // ★ 추가
         integration.deleteProduct(productId),
         integration.deleteRecommendations(productId),
         integration.deleteReviews(productId))
@@ -101,7 +113,10 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     }
   }
 
-  private ProductAggregate createProductAggregate(Product product, List<Recommendation> recommendations, List<Review> reviews, String serviceAddress) {
+  private ProductAggregate createProductAggregate(
+    SecurityContext sc, Product product, List<Recommendation> recommendations, List<Review> reviews, String serviceAddress) {
+
+    logAuthorizationInfo(sc);  // ★ 추가 (파라미터 SecurityContext sc도 추가)
 
     // 1. Setup product info
     int productId = product.getProductId();
@@ -127,5 +142,39 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     ServiceAddresses serviceAddresses = new ServiceAddresses(serviceAddress, productAddress, reviewAddress, recommendationAddress);
 
     return new ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses);
+  }
+
+  // ★ 추가 (아래 메서드 4개): JWT의 subject, scope, 만료, 발급자를 DEBUG 로그로
+  private Mono<SecurityContext> getLogAuthorizationInfoMono() {
+    return getSecurityContextMono().doOnNext(sc -> logAuthorizationInfo(sc));
+  }
+
+  private Mono<SecurityContext> getSecurityContextMono() {
+    return ReactiveSecurityContextHolder.getContext().defaultIfEmpty(nullSecCtx);
+  }
+
+  private void logAuthorizationInfo(SecurityContext sc) {
+    if (sc != null && sc.getAuthentication() != null && sc.getAuthentication() instanceof JwtAuthenticationToken) {
+      Jwt jwtToken = ((JwtAuthenticationToken)sc.getAuthentication()).getToken();
+      logAuthorizationInfo(jwtToken);
+    } else {
+      LOG.warn("No JWT based Authentication supplied, running tests are we?");
+    }
+  }
+
+  private void logAuthorizationInfo(Jwt jwt) {
+    if (jwt == null) {
+      LOG.warn("No JWT supplied, running tests are we?");
+    } else {
+      if (LOG.isDebugEnabled()) {
+        URL issuer = jwt.getIssuer();
+        List<String> audience = jwt.getAudience();
+        Object subject = jwt.getClaims().get("sub");
+        Object scopes = jwt.getClaims().get("scope");
+        Object expires = jwt.getClaims().get("exp");
+
+        LOG.debug("Authorization info: Subject: {}, scopes: {}, expires {}: issuer: {}, audience: {}", subject, scopes, expires, issuer, audience);
+      }
+    }
   }
 }

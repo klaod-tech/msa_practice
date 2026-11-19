@@ -3,11 +3,13 @@ package se.magnus.api.composite.product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;  // ★ 추가
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;  // ★ 추가
+import reactor.core.publisher.Mono;
 
+@SecurityRequirement(name = "security_auth")  // ★ 추가: Swagger UI에서 이 API는 OAuth 토큰 필요
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
@@ -27,11 +29,11 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
-  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가 (202: 받았고 처리는 나중에)
+  @ResponseStatus(HttpStatus.ACCEPTED)
   @PostMapping(
     value    = "/product-composite",
     consumes = "application/json")
-  Mono<Void> createProduct(@RequestBody ProductAggregate body);  // ★ 변경 (전: void)
+  Mono<Void> createProduct(@RequestBody ProductAggregate body);
 
   /**
    * Sample usage: "curl $HOST:$PORT/product-composite/1".
@@ -51,7 +53,7 @@ public interface ProductCompositeService {
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
-  Mono<ProductAggregate> getProduct(@PathVariable int productId);  // ★ 변경 (전: ProductAggregate)
+  Mono<ProductAggregate> getProduct(@PathVariable int productId);
 
   /**
    * Sample usage: "curl -X DELETE $HOST:$PORT/product-composite/1".
@@ -65,7 +67,7 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
-  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가
+  @ResponseStatus(HttpStatus.ACCEPTED)
   @DeleteMapping(value = "/product-composite/{productId}")
-  Mono<Void> deleteProduct(@PathVariable int productId);  // ★ 변경 (전: void)
+  Mono<Void> deleteProduct(@PathVariable int productId);
 }

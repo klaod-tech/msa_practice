@@ -35,12 +35,13 @@ services:
   product-composite:
     build: microservices/product-composite-service
     mem_limit: 512m
-    # ★ 삭제: ports 8080:8080 (이제 gateway를 거쳐서만 들어온다)
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       rabbitmq:
         condition: service_healthy
+      auth-server:  # ★ 추가
+        condition: service_healthy  # ★ 추가
 
   mongodb:
     image: mongo:8.0.5
@@ -85,18 +86,30 @@ services:
   eureka:
     build: spring-cloud/eureka-server
     mem_limit: 512m
-    # ★ 삭제: ports 8761:8761 (웹 화면/API는 gateway의 /eureka/... 로)
 
-  # ★ 추가 (gateway 서비스 전체): 외부에 열린 유일한 입구
   gateway:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     build: spring-cloud/gateway
     mem_limit: 512m
     ports:
-      - "8080:8080"
+      - "8443:8443"  # ★ 변경 (전: 8080:8080) HTTPS
+    depends_on:  # ★ 추가
+      auth-server:  # ★ 추가
+        condition: service_healthy  # ★ 추가
 
-  # ★ 추가 (httpbin 서비스 전체) 교재와 다름: 교재는 외부 사이트 httpstat.us (지금 응답 없음)
   httpbin:
     image: mccutchen/go-httpbin:2.25.0
     mem_limit: 128m
+
+  # ★ 추가 (auth-server 서비스 전체): OAuth 2.0 인가 서버
+  auth-server:
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    build: spring-cloud/authorization-server
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "wget", "-O -", "-q", "http://localhost:9999/actuator/health"]
+      interval: 5s
+      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)
+      retries: 60

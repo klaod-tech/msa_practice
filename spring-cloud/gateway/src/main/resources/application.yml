@@ -1,4 +1,4 @@
-server.port: 8080
+server.port: 8443  # ★ 변경 (전: 8080) HTTPS
 
 spring.application.name: gateway
 
@@ -7,12 +7,28 @@ spring.application.name: gateway
 # For more information, see https://spring.io/security/cve-2025-41235
 spring.cloud.gateway.server.webflux.trusted-proxies: ".*"
 
-app.eureka-server: localhost
+# ★ 추가 (ssl 두 블록): HTTPS용 인증서(keystore/edge.p12)
+spring.ssl.bundle.jks.gateway:
+  key:
+    alias: localhost
+  keystore:
+    type: PKCS12
+    location: classpath:keystore/edge.p12
+    password: password
+
+server.ssl.bundle: gateway
+
+# ★ 변경 (전: app.eureka-server 한 줄): Eureka 계정, 인가 서버 주소 추가
+app:
+  eureka-username: u
+  eureka-password: p
+  eureka-server: localhost
+  auth-server: localhost
 
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${app.eureka-server}:8761/eureka/
+      defaultZone: "http://${app.eureka-username}:${app.eureka-password}@${app.eureka-server}:8761/eureka/"  # ★ 변경 (계정 추가)
     initialInstanceInfoReplicationIntervalSeconds: 5
     registryFetchIntervalSeconds: 5
   instance:
@@ -25,6 +41,22 @@ spring.cloud.gateway.server.webflux.routes:
   uri: lb://product-composite
   predicates:
   - Path=/product-composite/**
+
+# ★ 추가 (oauth2-server, oauth2-login, oauth2-error 라우트 3개): 인가 서버로 보냄
+- id: oauth2-server
+  uri: lb://auth-server
+  predicates:
+  - Path=/oauth2/**
+
+- id: oauth2-login
+  uri: lb://auth-server
+  predicates:
+  - Path=/login/**
+
+- id: oauth2-error
+  uri: lb://auth-server
+  predicates:
+  - Path=/error/**
 
 - id: product-composite-swagger-ui
   uri: lb://product-composite
@@ -73,6 +105,8 @@ spring.cloud.gateway.server.webflux.routes:
   filters:
   - SetPath=/status/501  # 교재와 다름 (교재: /501)
 
+spring.security.oauth2.resourceserver.jwt.issuer-uri: http://${app.auth-server}:9999  # ★ 추가: 토큰 검증용 인가 서버 주소
+
 management.endpoint.gateway.enabled: true
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
@@ -82,8 +116,12 @@ logging:
     root: INFO
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
     org.springframework.cloud.gateway: TRACE
+    org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE  # ★ 추가
 
 ---
 spring.config.activate.on-profile: docker
 
-app.eureka-server: eureka
+# ★ 변경 (전: app.eureka-server 한 줄)
+app:
+  eureka-server: eureka
+  auth-server: auth-server

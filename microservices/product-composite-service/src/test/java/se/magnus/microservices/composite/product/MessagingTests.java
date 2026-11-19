@@ -34,11 +34,14 @@ import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
 import se.magnus.api.event.Event;
 
+// ★ 변경: classes, issuer-uri 줄 추가
 @SpringBootTest(
   webEnvironment = RANDOM_PORT,
+  classes = {TestSecurityConfig.class},
   properties = {
+    "spring.security.oauth2.resourceserver.jwt.issuer-uri=",
     "spring.main.allow-bean-definition-overriding=true",
-    "eureka.client.enabled=false"})  // ★ 추가 (eureka 줄)
+    "eureka.client.enabled=false"})
 @Import({TestChannelBinderConfiguration.class})
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class MessagingTests {

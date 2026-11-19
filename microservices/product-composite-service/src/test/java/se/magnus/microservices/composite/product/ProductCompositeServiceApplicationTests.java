@@ -23,7 +23,14 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"eureka.client.enabled=false"})  // ★ 변경: Eureka 서버 없이 테스트
+// ★ 변경: 테스트용 보안 설정(TestSecurityConfig)을 쓰고, 인가 서버 주소를 비움
+@SpringBootTest(
+  webEnvironment = RANDOM_PORT,
+  classes = {TestSecurityConfig.class},
+  properties = {
+    "spring.security.oauth2.resourceserver.jwt.issuer-uri=",
+    "spring.main.allow-bean-definition-overriding=true",
+    "eureka.client.enabled=false"})
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class ProductCompositeServiceApplicationTests {
 

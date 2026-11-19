@@ -1,6 +1,11 @@
 server:
   port: 8761
 
+# ★ 추가 (app 블록): HTTP 기본 인증 계정
+app:
+  eureka-username: u
+  eureka-password: p
+
 eureka:
   instance:
     hostname: localhost
