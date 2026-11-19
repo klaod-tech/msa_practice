@@ -5,7 +5,7 @@
 #   HOST=localhost PORT=7001 ./test-em-all.bash
 #
 : ${HOST=localhost}
-: ${PORT=8443}  # ★ 변경 (전: 8080) 게이트웨이 HTTPS
+: ${PORT=8443}
 : ${PROD_ID_REVS_RECS=1}
 : ${PROD_ID_NOT_FOUND=13}
 : ${PROD_ID_NO_RECS=113}
@@ -182,18 +182,23 @@ then
   docker compose up -d
 fi
 
-# ★ 변경 (이 파일의 모든 호출): http → https, curl에 -k(자체 서명 인증서 허용)와 $AUTH(토큰) 추가
 waitForService curl -k https://$HOST:$PORT/actuator/health
 
-# ★ 추가 (3줄): writer 클라이언트로 토큰을 받아 이후 모든 호출에 Bearer로 붙인다
 ACCESS_TOKEN=$(curl -k https://writer:secret-writer@$HOST:$PORT/oauth2/token -d grant_type=client_credentials -d scope="product:read product:write" -s | jq .access_token -r)
 echo ACCESS_TOKEN=$ACCESS_TOKEN
 AUTH="-H \"Authorization: Bearer $ACCESS_TOKEN\""
 
 # Verify access to Eureka and that all four microservices are registered in Eureka
-# ★ 변경: https + Eureka 계정(u:p), 앱 6개(auth-server 추가)
 assertCurl 200 "curl -H "accept:application/json" -k https://u:p@$HOST:$PORT/eureka/api/apps -s"
 assertEqual 6 $(echo $RESPONSE | jq ".applications.application | length")
+
+# ★ 추가 (6줄): 설정 서버 접근, 암호화/복호화 확인
+assertCurl 200 "curl -H "accept:application/json" -k https://dev-usr:dev-pwd@$HOST:$PORT/config/product/docker -s"
+TEST_VALUE="hello-world"
+ENCRYPTED_VALUE=$(curl -k https://dev-usr:dev-pwd@$HOST:$PORT/config/encrypt --data-urlencode "$TEST_VALUE" -s)
+DECRYPTED_VALUE=$(curl -k https://dev-usr:dev-pwd@$HOST:$PORT/config/decrypt -d $ENCRYPTED_VALUE -s)
+assertEqual "$TEST_VALUE" "$DECRYPTED_VALUE"
+
 
 setupTestdata
 
@@ -229,7 +234,6 @@ assertEqual "\"Invalid productId: -1\"" "$(echo $RESPONSE | jq .message)"
 assertCurl 400 "curl $AUTH -k https://$HOST:$PORT/product-composite/invalidProductId -s"
 assertEqual "\"Type mismatch.\"" "$(echo $RESPONSE | jq .message)"
 
-# ★ 추가 (여기부터 403 확인까지): 토큰 없으면 401, 읽기 권한만 있으면 삭제 403
 # Verify that a request without access token fails on 401, Unauthorized
 assertCurl 401 "curl -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 
@@ -241,7 +245,6 @@ READER_AUTH="-H \"Authorization: Bearer $READER_ACCESS_TOKEN\""
 assertCurl 200 "curl $READER_AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertCurl 403 "curl -X DELETE $READER_AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 
-# ★ 변경 (아래 Swagger 확인들): http → https, curl에 -k
 # Verify access to Swagger and OpenAPI URLs
 echo "Swagger/OpenAPI tests"
 assertCurl 302 "curl -ks  https://$HOST:$PORT/openapi/swagger-ui.html"

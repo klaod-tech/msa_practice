@@ -30,6 +30,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-config-client'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'  // ★ 추가
+	implementation 'org.springframework.boot:spring-boot-starter-aspectj'  // ★ 추가 (교재: spring-boot-starter-aop, Boot 4에서 이름 바뀜)
+	implementation 'org.springframework.retry:spring-retry'  // ★ 추가
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'  // 교재에는 없음 (Boot 4: MockMvc 테스트 지원이 별도 모듈)

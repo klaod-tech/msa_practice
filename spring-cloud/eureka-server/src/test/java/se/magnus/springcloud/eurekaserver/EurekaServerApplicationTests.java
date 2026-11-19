@@ -5,14 +5,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;  // ★ 추가
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.resttestclient.TestRestTemplate;  // 교재와 다름 (교재: org.springframework.boot.test.web.client.TestRestTemplate)
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;  // 교재에는 없음 (Boot 4)
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"spring.cloud.config.enabled=false"})  // ★ 변경 (properties 추가)
 @AutoConfigureTestRestTemplate  // 교재에는 없음 (Boot 4)
 class EurekaServerApplicationTests {
 
@@ -20,7 +20,6 @@ class EurekaServerApplicationTests {
   void contextLoads() {
   }
 
-  // ★ 추가: yml의 계정으로 HTTP 기본 인증을 붙인 TestRestTemplate을 쓴다
   @Value("${app.eureka-username}")
   private String username;
 
@@ -32,7 +31,7 @@ class EurekaServerApplicationTests {
     this.testRestTemplate = testRestTemplate.withBasicAuth(username, password);
   }
 
-  private TestRestTemplate testRestTemplate;  // ★ 변경 (전: @Autowired로 바로 주입)
+  private TestRestTemplate testRestTemplate;
 
   @Test
   void catalogLoads() {

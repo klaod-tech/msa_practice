@@ -1,0 +1,4 @@
+spring.web.error.include-message: always  # 교재와 다름 (교재: server.error.include-message)
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+
+spring.cloud.stream.defaultBinder: rabbit

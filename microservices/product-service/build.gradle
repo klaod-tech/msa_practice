@@ -37,7 +37,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-config-client'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'  // ★ 추가
+	implementation 'org.springframework.boot:spring-boot-starter-aspectj'  // ★ 추가 (교재: spring-boot-starter-aop, Boot 4에서 이름 바뀜)
+	implementation 'org.springframework.retry:spring-retry'  // ★ 추가
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"

@@ -22,7 +22,9 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.microservices.core.product.persistence.ProductRepository;
 
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
-@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"eureka.client.enabled=false"})
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
+  "eureka.client.enabled=false",
+  "spring.cloud.config.enabled=false"})  // ★ 추가
 class ProductServiceApplicationTests extends MongoDbTestBase {
 
   @Autowired
@@ -32,7 +34,6 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
   private ProductRepository repository;
 
   @Autowired
-  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
   @Qualifier("messageProcessor")
   private Consumer<Event<Integer, Product>> messageProcessor;
 

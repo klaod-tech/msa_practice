@@ -24,8 +24,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.boot:spring-boot-starter-security'  // ★ 추가
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'  // ★ 추가 (교재: spring-security-oauth2-resource-server, spring-security-oauth2-jose 두 줄 → Boot 4는 이 스타터가 있어야 JWT 검증 자동 설정이 켜짐)
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
@@ -36,6 +36,11 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-config-client'  // ★ 추가
+	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'  // ★ 추가
+	implementation 'org.springframework.boot:spring-boot-starter-aspectj'  // ★ 추가 (교재: spring-boot-starter-aop, Boot 4에서 이름 바뀜)
+	implementation 'org.springframework.retry:spring-retry'  // ★ 추가
 	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
 	  
 }

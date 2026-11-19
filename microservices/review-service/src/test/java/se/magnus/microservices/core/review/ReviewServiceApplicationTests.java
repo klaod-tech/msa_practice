@@ -25,7 +25,9 @@ import se.magnus.microservices.core.review.persistence.ReviewRepository;
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
   "spring.cloud.stream.defaultBinder=rabbit",
   "logging.level.se.magnus=DEBUG",
-  "eureka.client.enabled=false"})  // ★ 추가 (eureka 줄)
+  "eureka.client.enabled=false",
+  "spring.jpa.hibernate.ddl-auto=update",  // ★ 추가
+  "spring.cloud.config.enabled=false"})  // ★ 추가
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
   @Autowired
