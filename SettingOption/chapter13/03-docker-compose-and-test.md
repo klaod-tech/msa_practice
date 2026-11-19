@@ -208,9 +208,9 @@ function testCircuitBreaker() {
 
     assertEqual "CLOSED" "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/health | jq -r .components.circuitBreakers.details.product.details.state)"
 
-    assertEqual "CLOSED_TO_OPEN"      "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-3].stateTransition)"
-    assertEqual "OPEN_TO_HALF_OPEN"   "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-2].stateTransition)"
-    assertEqual "HALF_OPEN_TO_CLOSED" "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-1].stateTransition)"
+    assertEqual "State transition from CLOSED to OPEN"      "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-3].stateTransition)"  # 교재와 다름 (교재: CLOSED_TO_OPEN, Resilience4j 2.4.0)
+    assertEqual "State transition from OPEN to HALF_OPEN"   "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-2].stateTransition)"  # 교재와 다름 (교재: OPEN_TO_HALF_OPEN, Resilience4j 2.4.0)
+    assertEqual "State transition from HALF_OPEN to CLOSED" "$(docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r .circuitBreakerEvents[-1].stateTransition)"  # 교재와 다름 (교재: HALF_OPEN_TO_CLOSED, Resilience4j 2.4.0)
 }
 
 set -e
@@ -319,7 +319,7 @@ echo "End, all tests OK:" `date`
 | 5 | productId 13 | **404**, `Product Id: 13 not found in fallback cache!` |
 | 6 | 10초 대기 → health | `HALF_OPEN` |
 | 7 | 그냥 호출 3번 | 200, 진짜 이름 `product name C` |
-| 8 | health, 이벤트 | `CLOSED`, 전환 기록 `CLOSED_TO_OPEN` → `OPEN_TO_HALF_OPEN` → `HALF_OPEN_TO_CLOSED` |
+| 8 | health, 이벤트 | `CLOSED`, 전환 기록 `State transition from CLOSED to OPEN` → `... OPEN to HALF_OPEN` → `... HALF_OPEN to CLOSED` (**교재와 다름**: 교재 기대값은 `CLOSED_TO_OPEN` 형식인데, Resilience4j 2.4.0부터 이벤트에 문장으로 나온다) |
 
 health는 게이트웨이를 거치지 않고 `docker compose exec`로 composite 컨테이너 안에서 직접 본다(밖에서 actuator에 접근할 일이 없게).
 
@@ -345,11 +345,11 @@ docker compose exec -T product-composite wget -qO - http://product-composite:808
 
 ### 3-1. 타임아웃으로 회로 열기
 ```bash
-for n in 1 2 3; do curl -k "https://localhost:8443/product-composite/1?delay=3" -H "Authorization: Bearer $ACCESS_TOKEN" -s | jq -r .message; done
+for n in 1 2 3 4 5; do curl -k "https://localhost:8443/product-composite/1?delay=3" -H "Authorization: Bearer $ACCESS_TOKEN" -s | jq -r .message; done
 ```
-세 번 다 `Did not observe any item or terminal signal within 2000ms ...`(약 2초씩 걸림). 회로 상태를 보면 `OPEN`.
+다섯 번 다 `Did not observe any item or terminal signal within 2000ms ...`(약 2초씩 걸림). 회로 상태를 보면 `OPEN`.
 
-> test-em-all을 방금 돌렸다면 최근 호출이 성공으로 차 있어서 위 3번이면 열린다. compose를 막 올리고 처음 해 본다면 최근 호출 수가 5번이 안 돼서 `CLOSED`일 수 있다. 그때는 한두 번 더 하면 열린다.
+> 서킷 브레이커는 최근 **5번** 호출이 모여야 판단한다. compose를 막 올렸거나 test-em-all 직후(회로가 `CLOSED`로 돌아오면서 기록이 초기화됨)라면 실패 3번으로는 판단 전이라 `CLOSED` 그대로다. 그래서 5번 부른다. 상태가 `OPEN`이 아니면 한 번 더 부르고 다시 확인한다. **열린 뒤 10초 안에** 3-2를 해야 한다(10초 지나면 저절로 `HALF_OPEN`).
 
 ### 3-2. 열린 동안: 바로 대체 응답
 ```bash
@@ -372,6 +372,7 @@ for n in 1 2 3; do curl -k https://localhost:8443/product-composite/1 -H "Author
 ```bash
 docker compose exec -T product-composite wget -qO - http://product-composite:8080/actuator/circuitbreakerevents/product/STATE_TRANSITION | jq -r '.circuitBreakerEvents[].stateTransition'
 ```
+`State transition from CLOSED to OPEN`, `State transition from OPEN to HALF_OPEN`, `State transition from HALF_OPEN to CLOSED` 순서로 나온다(앞에 더 있을 수 있다).
 
 ### 3-5. 재시도
 ```bash

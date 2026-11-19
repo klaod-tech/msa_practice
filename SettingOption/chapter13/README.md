@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 13장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4 / Resilience4j 2.4.0**
-> 이전: [../chapter12/README.md](../chapter12/README.md) / 상태: **진행 중**
+> 이전: [../chapter12/README.md](../chapter12/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -30,6 +30,7 @@ composite가 product를 부를 때 **타임아웃(2초), 재시도(최대 3번),
 |---|---|---|---|
 | Resilience4j 모듈 | `resilience4j-spring-boot3` 2.3.0 | **`resilience4j-spring-boot4` 2.4.0** (Boot 4용 모듈은 2.4.0부터) | 02 |
 | AOP 의존성 | `spring-boot-starter-aop` 한 번 더 | 추가 안 함 (12장의 `spring-boot-starter-aspectj`가 이미 있음) | 02 |
+| test-em-all 상태 전환 기대값 | `CLOSED_TO_OPEN` 등 | `State transition from CLOSED to OPEN` 등 (Resilience4j 2.4.0 이벤트 형식) | 03 |
 | ProductCompositeIntegration | 교재 12장 코드 기준 | 이 실습 12장 코드 기준(Jackson 3 import 등 그대로) | 02 |
 | config-repo/product-composite.yml | 교재 12장 파일 + resilience4j | 이 실습 12장 파일(Boot 4 차이 포함) + resilience4j | 02 |
 
@@ -41,4 +42,5 @@ composite가 product를 부를 때 **타임아웃(2초), 재시도(최대 3번),
   - `?delay=3` → 500, `Did not observe any item or terminal signal within 2000ms`
   - 회로 OPEN → `Fallback product1`(200), productId 13 → 404 `not found in fallback cache!`
   - 10초 뒤 `HALF_OPEN` → 정상 3번 → `CLOSED`, `/actuator/circuitbreakerevents`에 전환 3개 기록
-- 안 한 것: docker compose 구동과 `test-em-all.bash`(실습 과정), 재시도(`faultPercent`)를 따로 관찰하는 것.
+- 실습에서 확인: 빌드, docker compose 구동과 `test-em-all.bash`(`End, all tests OK`), 03의 직접 해 보기(회로 열기 → 대체 응답 → 10초 뒤 `HALF_OPEN` → `CLOSED`, 전환 기록, 재시도).
+- 실습 중 고친 것: test-em-all의 상태 전환 기대값(Resilience4j 2.4.0은 `State transition from ...` 문장), 03 3-1의 느린 호출 횟수(test-em-all 직후에는 기록이 초기화돼서 3번으로는 안 열림 → 5번). troubleshooting.md 참고.
