@@ -26,39 +26,18 @@ import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등
 public interface ProductService {
 
   // ★ 추가 (POST: 생성)
-  /**
-   * Sample usage, see below.
-   *
-   * curl -X POST $HOST:$PORT/product \
-   *   -H "Content-Type: application/json" --data \
-   *   '{"productId":123,"name":"product 123","weight":123}'
-   *
-   * @param body A JSON representation of the new product
-   * @return A JSON representation of the newly created product
-   */
   @PostMapping(
     value    = "/product",
     consumes = "application/json",
     produces = "application/json")
   Product createProduct(@RequestBody Product body);
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/product/1".
-   *
-   * @param productId Id of the product
-   * @return the product, if found, else null
-   */
   @GetMapping(
     value = "/product/{productId}",
     produces = "application/json")
   Product getProduct(@PathVariable int productId);
 
   // ★ 추가 (DELETE: 삭제)
-  /**
-   * Sample usage: "curl -X DELETE $HOST:$PORT/product/1".
-   *
-   * @param productId Id of the product
-   */
   @DeleteMapping(value = "/product/{productId}")
   void deleteProduct(@PathVariable int productId);
 }
@@ -77,28 +56,12 @@ import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등
 public interface RecommendationService {
 
   // ★ 추가 (POST: 생성)
-  /**
-   * Sample usage, see below.
-   *
-   * curl -X POST $HOST:$PORT/recommendation \
-   *   -H "Content-Type: application/json" --data \
-   *   '{"productId":123,"recommendationId":456,"author":"me","rate":5,"content":"yada, yada, yada"}'
-   *
-   * @param body A JSON representation of the new recommendation
-   * @return A JSON representation of the newly created recommendation
-   */
   @PostMapping(
     value    = "/recommendation",
     consumes = "application/json",
     produces = "application/json")
   Recommendation createRecommendation(@RequestBody Recommendation body);
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/recommendation?productId=1".
-   *
-   * @param productId Id of the product
-   * @return the recommendations of the product
-   */
   @GetMapping(
     value = "/recommendation",
     produces = "application/json")
@@ -106,11 +69,6 @@ public interface RecommendationService {
     @RequestParam(value = "productId", required = true) int productId);
 
   // ★ 추가 (DELETE: 삭제)
-  /**
-   * Sample usage: "curl -X DELETE $HOST:$PORT/recommendation?productId=1".
-   *
-   * @param productId Id of the product
-   */
   @DeleteMapping(value = "/recommendation")
   void deleteRecommendations(@RequestParam(value = "productId", required = true)  int productId);
 }
@@ -129,39 +87,18 @@ import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등
 public interface ReviewService {
 
   // ★ 추가 (POST: 생성)
-  /**
-   * Sample usage, see below.
-   *
-   * curl -X POST $HOST:$PORT/review \
-   *   -H "Content-Type: application/json" --data \
-   *   '{"productId":123,"reviewId":456,"author":"me","subject":"yada, yada, yada","content":"yada, yada, yada"}'
-   *
-   * @param body A JSON representation of the new review
-   * @return A JSON representation of the newly created review
-   */
   @PostMapping(
       value    = "/review",
       consumes = "application/json",
       produces = "application/json")
   Review createReview(@RequestBody Review body);
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/review?productId=1".
-   *
-   * @param productId Id of the product
-   * @return the reviews of the product
-   */
   @GetMapping(
     value = "/review",
     produces = "application/json")
   List<Review> getReviews(@RequestParam(value = "productId", required = true) int productId);
 
   // ★ 추가 (DELETE: 삭제)
-  /**
-   * Sample usage: "curl -X DELETE $HOST:$PORT/review?productId=1".
-   *
-   * @param productId Id of the product
-   */
   @DeleteMapping(value = "/review")
   void deleteReviews(@RequestParam(value = "productId", required = true)  int productId);
 }
@@ -609,7 +546,6 @@ spring.application.name: review-service
 server.port: 7004
 spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
 
-# Strongly recommend to set this property to "none" in a production environment!
 spring.jpa.hibernate.ddl-auto: update  # ★ 추가
 
 spring.datasource:  # ★ 추가

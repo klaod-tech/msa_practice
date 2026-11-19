@@ -26,11 +26,6 @@ code test-em-all.bash
 **교재 5장 내용 그대로**다(Boot 4 때문에 바꿀 곳 없음). 4장 버전과 다른 곳은 `Type mismatch` 테스트와 `stop` 블록 사이의 **Swagger/OpenAPI 테스트 11줄**뿐이다. 실행 권한은 4장 그대로라 `chmod`는 다시 안 해도 된다.
 ```bash
 #!/usr/bin/env bash
-#
-# Sample usage:
-#
-#   HOST=localhost PORT=7001 ./test-em-all.bash
-#
 : ${HOST=localhost}
 : ${PORT=8080}
 : ${PROD_ID_REVS_RECS=1}
@@ -123,42 +118,34 @@ fi
 
 waitForService curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS
 
-# Verify that a normal request works, expect three recommendations and three reviews
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)
 assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that a 404 (Not Found) error is returned for a non-existing productId ($PROD_ID_NOT_FOUND)
 assertCurl 404 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND -s"
 assertEqual "No product found for productId: $PROD_ID_NOT_FOUND" "$(echo $RESPONSE | jq -r .message)"
 
-# Verify that no recommendations are returned for productId $PROD_ID_NO_RECS
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NO_RECS -s"
 assertEqual $PROD_ID_NO_RECS $(echo $RESPONSE | jq .productId)
 assertEqual 0 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that no reviews are returned for productId $PROD_ID_NO_REVS
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NO_REVS -s"
 assertEqual $PROD_ID_NO_REVS $(echo $RESPONSE | jq .productId)
 assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 0 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that a 422 (Unprocessable Entity) error is returned for a productId that is out of range (-1)
 assertCurl 422 "curl http://$HOST:$PORT/product-composite/-1 -s"
 assertEqual "\"Invalid productId: -1\"" "$(echo $RESPONSE | jq .message)"
 
-# Verify that a 400 (Bad Request) error error is returned for a productId that is not a number, i.e. invalid format
 assertCurl 400 "curl http://$HOST:$PORT/product-composite/invalidProductId -s"
 assertEqual "\"Type mismatch.\"" "$(echo $RESPONSE | jq .message)"
 
-# Verify access to Swagger and OpenAPI URLs
 echo "Swagger/OpenAPI tests"
 assertCurl 302 "curl -s  http://$HOST:$PORT/openapi/swagger-ui.html"
 assertCurl 200 "curl -sL http://$HOST:$PORT/openapi/swagger-ui.html"
 assertCurl 200 "curl -s  http://$HOST:$PORT/openapi/swagger-ui/index.html"
-# Verify the redirect URL
 assertCurl 200 "curl -s  http://$HOST:$PORT/openapi/swagger-ui/oauth2-redirect.html"
 assertCurl 200 "curl -s  http://$HOST:$PORT/openapi/v3/api-docs"
 assertEqual "3.1.0" "$(echo $RESPONSE | jq -r .openapi)"

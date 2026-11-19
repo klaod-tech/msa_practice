@@ -22,12 +22,6 @@ public interface ProductService {
 
   Mono<Product> createProduct(Product body);  // ★ 변경 (전: @PostMapping + Product 반환 → 이벤트로 호출, HTTP 매핑 삭제)
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/product/1".
-   *
-   * @param productId Id of the product
-   * @return the product, if found, else null
-   */
   @GetMapping(
     value = "/product/{productId}",
     produces = "application/json")
@@ -52,12 +46,6 @@ public interface RecommendationService {
 
   Mono<Recommendation> createRecommendation(Recommendation body);  // ★ 변경 (전: @PostMapping + Recommendation 반환)
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/recommendation?productId=1".
-   *
-   * @param productId Id of the product
-   * @return the recommendations of the product
-   */
   @GetMapping(
     value = "/recommendation",
     produces = "application/json")
@@ -83,12 +71,6 @@ public interface ReviewService {
 
   Mono<Review> createReview(Review body);  // ★ 변경 (전: @PostMapping + Review 반환)
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/review?productId=1".
-   *
-   * @param productId Id of the product
-   * @return the reviews of the product
-   */
   @GetMapping(
     value = "/review",
     produces = "application/json")

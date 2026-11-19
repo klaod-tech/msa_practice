@@ -20,12 +20,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
-  /**
-   * Sample usage: "curl $HOST:$PORT/product-composite/1".
-   *
-   * @param productId Id of the product
-   * @return the composite product info, if found, else null
-   */
   @Operation(
     summary = "${api.product-composite.get-composite-product.description}",
     description = "${api.product-composite.get-composite-product.notes}")

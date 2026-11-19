@@ -355,7 +355,6 @@ class PersistenceTests extends MongoDbTestBase {
       .verifyComplete();
   }
 
-
   @Test
   void create() {
     ProductEntity newEntity = new ProductEntity(2, "n", 2);
@@ -408,19 +407,14 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     ProductEntity entity1 = repository.findById(savedEntity.getId()).block();
     ProductEntity entity2 = repository.findById(savedEntity.getId()).block();
 
-    // Update the entity using the first entity object
     entity1.setName("n1");
     repository.save(entity1).block();
 
-    //  Update the entity using the second entity object.
-    // This should fail since the second entity now holds a old version number, i.e. a Optimistic Lock Error
     StepVerifier.create(repository.save(entity2)).expectError(OptimisticLockingFailureException.class).verify();
 
-    // Get the updated entity from the database and verify its new sate
     StepVerifier.create(repository.findById(savedEntity.getId()))
       .expectNextMatches(foundEntity ->
         foundEntity.getVersion() == 1
@@ -478,7 +472,6 @@ class PersistenceTests extends MongoDbTestBase {
     assertEqualsRecommendation(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -526,22 +519,17 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     RecommendationEntity entity1 = repository.findById(savedEntity.getId()).block();
     RecommendationEntity entity2 = repository.findById(savedEntity.getId()).block();
 
-    // Update the entity using the first entity object
     entity1.setAuthor("a1");
     repository.save(entity1).block();
 
-    //  Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setAuthor("a2");
       repository.save(entity2).block();
     });
 
-    // Get the updated entity from the database and verify its new sate
     RecommendationEntity updatedEntity = repository.findById(savedEntity.getId()).block();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("a1", updatedEntity.getAuthor());

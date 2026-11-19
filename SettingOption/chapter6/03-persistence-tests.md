@@ -97,7 +97,6 @@ class PersistenceTests extends MongoDbTestBase {
     assertEqualsProduct(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -145,22 +144,17 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     ProductEntity entity1 = repository.findById(savedEntity.getId()).get();
     ProductEntity entity2 = repository.findById(savedEntity.getId()).get();
 
-    // Update the entity using the first entity object
     entity1.setName("n1");
     repository.save(entity1);
 
-    // Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setName("n2");
       repository.save(entity2);
     }); 
 
-    // Get the updated entity from the database and verify its new sate
     ProductEntity updatedEntity = repository.findById(savedEntity.getId()).get();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("n1", updatedEntity.getName());
@@ -261,7 +255,6 @@ class PersistenceTests extends MongoDbTestBase {
     assertEqualsRecommendation(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -309,22 +302,17 @@ class PersistenceTests extends MongoDbTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     RecommendationEntity entity1 = repository.findById(savedEntity.getId()).get();
     RecommendationEntity entity2 = repository.findById(savedEntity.getId()).get();
 
-    // Update the entity using the first entity object
     entity1.setAuthor("a1");
     repository.save(entity1);
 
-    //  Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setAuthor("a2");
       repository.save(entity2);
     });
 
-    // Get the updated entity from the database and verify its new sate
     RecommendationEntity updatedEntity = repository.findById(savedEntity.getId()).get();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("a1", updatedEntity.getAuthor());
@@ -356,7 +344,6 @@ import org.testcontainers.mysql.MySQLContainer;  // ★ 변경 (교재: org.test
 
 public abstract class MySqlTestBase {
 
-  // Extend startup timeout since a MySQLContainer with MySQL 8 starts very slow on Win10/WSL2
   @ServiceConnection
   static final JdbcDatabaseContainer database = new MySQLContainer("mysql:9.2.0").withStartupTimeoutSeconds(300);
 
@@ -409,7 +396,6 @@ class PersistenceTests extends MySqlTestBase {
     assertEqualsReview(entity, savedEntity);
   }
 
-
   @Test
   void create() {
 
@@ -458,22 +444,17 @@ class PersistenceTests extends MySqlTestBase {
   @Test
   void optimisticLockError() {
 
-    // Store the saved entity in two separate entity objects
     ReviewEntity entity1 = repository.findById(savedEntity.getId()).get();
     ReviewEntity entity2 = repository.findById(savedEntity.getId()).get();
 
-    // Update the entity using the first entity object
     entity1.setAuthor("a1");
     repository.save(entity1);
 
-    // Update the entity using the second entity object.
-    // This should fail since the second entity now holds an old version number, i.e. an Optimistic Lock Error
     assertThrows(OptimisticLockingFailureException.class, () -> {
       entity2.setAuthor("a2");
       repository.save(entity2);
     });
 
-    // Get the updated entity from the database and verify its new sate
     ReviewEntity updatedEntity = repository.findById(savedEntity.getId()).get();
     assertEquals(1, (int)updatedEntity.getVersion());
     assertEquals("a1", updatedEntity.getAuthor());

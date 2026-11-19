@@ -536,7 +536,6 @@ eureka:
 server.port: 7004
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 
-# Strongly recommend to set this property to "none" in a production environment!
 spring.jpa.hibernate.ddl-auto: update
 
 spring.datasource:
@@ -669,31 +668,26 @@ api:
     get-composite-product:
       description: Returns a composite view of the specified product id
       notes: |
-        # Normal response
         If the requested product id is found the method will return information regarding:
         1. Product information
         1. Reviews
         1. Recommendations
         1. Service Addresses\n(technical information regarding the addresses of the microservices that created the response)
 
-        # Expected partial and error responses
         1. If no product information is found, a **404 - Not Found** error will be returned
         1. In no recommendations or reviews are found for a product, a partial response will be returned
 
     create-composite-product:
       description: Creates a composite product
       notes: |
-        # Normal response
         The composite product information posted to the API will be split up and stored as separate product-info, recommendation and review entities.
 
-        # Expected error responses
         1. If a product with the same productId as specified in the posted information already exists,
            an **422 - Unprocessable Entity** error with a "duplicate key" error message will be returned
 
     delete-composite-product:
       description: Deletes a product composite
       notes: |
-        # Normal response
         Entities for product information, recommendations and reviews related to the specified productId will be deleted.
         The implementation of the delete method is idempotent, i.e. it can be called several times with the same response.
 
@@ -1451,14 +1445,12 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one expected new product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedEvent =
       new Event<>(CREATE, composite.getProductId(), new Product(composite.getProductId(), composite.getName(), composite.getWeight(), null));
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedEvent)));
 
-    // Assert no recommendation and review events
     assertEquals(0, recommendationMessages.size());
     assertEquals(0, reviewMessages.size());
   }
@@ -1475,14 +1467,12 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one create product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedProductEvent =
       new Event<>(CREATE, composite.getProductId(), new Product(composite.getProductId(), composite.getName(), composite.getWeight(), null));
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedProductEvent)));
 
-    // Assert one create recommendation event queued up
     assertEquals(1, recommendationMessages.size());
 
     RecommendationSummary rec = composite.getRecommendations().get(0);
@@ -1491,7 +1481,6 @@ class MessagingTests {
         new Recommendation(composite.getProductId(), rec.getRecommendationId(), rec.getAuthor(), rec.getRate(), rec.getContent(), null));
     assertThat(recommendationMessages.get(0), is(sameEventExceptCreatedAt(expectedRecommendationEvent)));
 
-    // Assert one create review event queued up
     assertEquals(1, reviewMessages.size());
 
     ReviewSummary rev = composite.getReviews().get(0);
@@ -1508,19 +1497,16 @@ class MessagingTests {
     final List<String> recommendationMessages = getMessages("recommendations");
     final List<String> reviewMessages = getMessages("reviews");
 
-    // Assert one delete product event queued up
     assertEquals(1, productMessages.size());
 
     Event<Integer, Product> expectedProductEvent = new Event<>(DELETE, 1, null);
     assertThat(productMessages.get(0), is(sameEventExceptCreatedAt(expectedProductEvent)));
 
-    // Assert one delete recommendation event queued up
     assertEquals(1, recommendationMessages.size());
 
     Event<Integer, Recommendation> expectedRecommendationEvent = new Event<>(DELETE, 1, null);
     assertThat(recommendationMessages.get(0), is(sameEventExceptCreatedAt(expectedRecommendationEvent)));
 
-    // Assert one delete review event queued up
     assertEquals(1, reviewMessages.size());
 
     Event<Integer, Review> expectedReviewEvent = new Event<>(DELETE, 1, null);
@@ -1552,8 +1538,6 @@ class MessagingTests {
     try {
       return target.receive(0, bindingName);
     } catch (NullPointerException npe) {
-      // If the messageQueues member variable in the target object contains no queues when the receive method is called, it will cause a NPE to be thrown.
-      // So we catch the NPE here and return null to indicate that no messages were found.
       LOG.error("getMessage() received a NPE with binding = {}", bindingName);
       return null;
     }

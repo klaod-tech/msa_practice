@@ -46,11 +46,6 @@ public class ProductCompositeServiceApplication {
   @Value("${api.common.contact.url}")     String apiContactUrl;
   @Value("${api.common.contact.email}")   String apiContactEmail;
 
-  /**
-  * Will exposed on $HOST:$PORT/swagger-ui.html
-  *
-  * @return the common OpenAPI documentation
-  */
   @Bean
   public OpenAPI getOpenApiDocumentation() {
     return new OpenAPI()
@@ -216,7 +211,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     LOG.debug("Will call the getRecommendations API on URL: {}", url);
 
-    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Recommendation.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 
@@ -243,7 +237,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     LOG.debug("Will call the getReviews API on URL: {}", url);
 
-    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Review.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 

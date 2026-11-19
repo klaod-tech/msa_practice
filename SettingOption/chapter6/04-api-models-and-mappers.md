@@ -340,7 +340,6 @@ import se.magnus.api.core.review.Review;
 import se.magnus.microservices.core.review.persistence.ReviewEntity;
 import se.magnus.microservices.core.review.services.ReviewMapper;
 
-
 class MapperTests {
 
   private ReviewMapper mapper = Mappers.getMapper(ReviewMapper.class);

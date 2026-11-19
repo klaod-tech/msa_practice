@@ -181,9 +181,6 @@ server.port: 8080
 
 spring.application.name: gateway
 
-# During development, allow forwarding the X-Forwarded-* and Forwarded headers from any proxies.
-# When usd in QA and production, this should be set to a specific IP address or CIDR range, e.g. 10\.0\.0\..* (Java Regular Expression).
-# For more information, see https://spring.io/security/cve-2025-41235
 spring.cloud.gateway.server.webflux.trusted-proxies: ".*"
 
 app.eureka-server: localhost
@@ -281,7 +278,7 @@ app.eureka-server: eureka
 
 | 그 밖의 설정 | 뜻 |
 |---|---|
-| `trusted-proxies: ".*"` | 앞단 프록시가 보낸 `X-Forwarded-*`를 믿음 (개발용, 교재 주석 참고) |
+| `trusted-proxies: ".*"` | 앞단 프록시가 보낸 `X-Forwarded-*`를 믿음 (개발용. 운영에서는 `10\.0\.0\..*`처럼 특정 IP 대역으로 좁힌다) |
 | `management.endpoint.gateway.enabled` + `exposure.include: "*"` | `/actuator/gateway/routes`로 라우트 목록 보기 |
 | `logging ... org.springframework.cloud.gateway: TRACE` | 어떤 라우트를 탔는지 로그로 보기 |
 

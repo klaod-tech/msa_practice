@@ -489,7 +489,6 @@ spring.application.name: review-service
 server.port: 7004
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 
-# Strongly recommend to set this property to "none" in a production environment!
 spring.jpa.hibernate.ddl-auto: update
 
 spring.datasource:
