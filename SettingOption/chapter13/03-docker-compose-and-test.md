@@ -347,7 +347,7 @@ docker compose exec -T product-composite wget -qO - http://product-composite:808
 ```bash
 for n in 1 2 3 4 5; do curl -k "https://localhost:8443/product-composite/1?delay=3" -H "Authorization: Bearer $ACCESS_TOKEN" -s | jq -r .message; done
 ```
-다섯 번 다 `Did not observe any item or terminal signal within 2000ms ...`(약 2초씩 걸림). 회로 상태를 보면 `OPEN`.
+처음 몇 번은 `Did not observe any item or terminal signal within 2000ms ...`(약 2초씩 걸림)가 나온다. 회로가 열린 뒤의 호출은 product를 부르지 않고 대체 응답을 바로 돌려주는데, 대체 응답에는 `message`가 없어서 `null`이 찍힌다(예: 4번은 `Did not observe...`, 마지막 1번은 `null`). 몇 번째에 열리는지는 그 전에 한 호출 수에 따라 다르다. 회로 상태를 보면 `OPEN`.
 
 > 서킷 브레이커는 최근 **5번** 호출이 모여야 판단한다. compose를 막 올렸거나 test-em-all 직후(회로가 `CLOSED`로 돌아오면서 기록이 초기화됨)라면 실패 3번으로는 판단 전이라 `CLOSED` 그대로다. 그래서 5번 부른다. 상태가 `OPEN`이 아니면 한 번 더 부르고 다시 확인한다. **열린 뒤 10초 안에** 3-2를 해야 한다(10초 지나면 저절로 `HALF_OPEN`).
 
@@ -388,4 +388,4 @@ docker compose logs product | grep "Bad luck" | tail -3
 docker compose down
 ```
 
-다음 장: 14장(작성 예정)
+다음 장: [../chapter14/README.md](../chapter14/README.md)

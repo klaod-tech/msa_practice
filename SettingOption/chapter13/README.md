@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 13장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4 / Resilience4j 2.4.0**
-> 이전: [../chapter12/README.md](../chapter12/README.md) / 상태: **완료**
+> 이전: [../chapter12/README.md](../chapter12/README.md) / 다음: [../chapter14/README.md](../chapter14/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -43,4 +43,5 @@ composite가 product를 부를 때 **타임아웃(2초), 재시도(최대 3번),
   - 회로 OPEN → `Fallback product1`(200), productId 13 → 404 `not found in fallback cache!`
   - 10초 뒤 `HALF_OPEN` → 정상 3번 → `CLOSED`, `/actuator/circuitbreakerevents`에 전환 3개 기록
 - 실습에서 확인: 빌드, docker compose 구동과 `test-em-all.bash`(`End, all tests OK`), 03의 직접 해 보기(회로 열기 → 대체 응답 → 10초 뒤 `HALF_OPEN` → `CLOSED`, 전환 기록, 재시도).
+- 14장 검증 때 임시 폴더에서 compose 전체를 띄워 이 장의 test-em-all(`End, all tests OK`)과 03의 직접 해 보기 3-1~3-5를 문서대로 다시 확인했다(재시도: `faultPercent=25`로 12번 호출, 모두 200, product 쪽 오류 2번은 재시도로 넘어감).
 - 실습 중 고친 것: test-em-all의 상태 전환 기대값(Resilience4j 2.4.0은 `State transition from ...` 문장), 03 3-1의 느린 호출 횟수(test-em-all 직후에는 기록이 초기화돼서 3번으로는 안 열림 → 5번). troubleshooting.md 참고.
