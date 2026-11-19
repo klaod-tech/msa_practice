@@ -92,31 +92,11 @@ code spring-cloud/authorization-server/src/main/java/sample/OAuth2AuthorizationS
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author Joe Grandja
- * @since 0.0.1
- */
 @SpringBootApplication
 public class OAuth2AuthorizationServerApplication {
 
@@ -125,7 +105,6 @@ public class OAuth2AuthorizationServerApplication {
   }
 
 }
-//CHECKSTYLE:ON
 ```
 
 ## 4. 인가 서버 설정 (새 파일)
@@ -135,22 +114,6 @@ code spring-cloud/authorization-server/src/main/java/sample/config/Authorization
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2020-2022 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample.config;
 
 import java.time.Duration;
@@ -192,10 +155,6 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
-/**
- * @author Joe Grandja
- * @since 0.0.1
- */
 @Configuration(proxyBeanMethods = false)
 public class AuthorizationServerConfig {
 
@@ -205,13 +164,9 @@ public class AuthorizationServerConfig {
   @Order(Ordered.HIGHEST_PRECEDENCE)
   public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
 
-    // Replaced this call with the implementation of applyDefaultSecurity() to be able to add a custom redirect_uri validator
-    // OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-
     OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
       new OAuth2AuthorizationServerConfigurer();
 
-    // Register a custom redirect_uri validator, that allows redirect uris based on https://localhost during development
     authorizationServerConfigurer
       .authorizationEndpoint(authorizationEndpoint ->
         authorizationEndpoint
@@ -230,7 +185,7 @@ public class AuthorizationServerConfig {
       .with(authorizationServerConfigurer, Customizer.withDefaults());
 
     http.getConfigurer(OAuth2AuthorizationServerConfigurer.class)
-      .oidc(Customizer.withDefaults()); // Enable OpenID Connect 1.0
+      .oidc(Customizer.withDefaults());
 
     http
       .exceptionHandling(exceptions ->
@@ -300,9 +255,7 @@ public class AuthorizationServerConfig {
       authenticationProviders.forEach((authenticationProvider) -> {
         if (authenticationProvider instanceof OAuth2AuthorizationCodeRequestAuthenticationProvider) {
           Consumer<OAuth2AuthorizationCodeRequestAuthenticationContext> authenticationValidator =
-            // Override default redirect_uri validator
             new CustomRedirectUriValidator()
-              // Reuse default scope validator
               .andThen(OAuth2AuthorizationCodeRequestAuthenticationValidator.DEFAULT_SCOPE_VALIDATOR);
 
           ((OAuth2AuthorizationCodeRequestAuthenticationProvider) authenticationProvider)
@@ -322,7 +275,6 @@ public class AuthorizationServerConfig {
 
       LOG.trace("Will validate the redirect uri {}", requestedRedirectUri);
 
-      // Use exact string matching when comparing client redirect URIs against pre-registered URIs
       if (!registeredClient.getRedirectUris().contains(requestedRedirectUri)) {
         LOG.trace("Redirect uri is invalid!");
         OAuth2Error error = new OAuth2Error(OAuth2ErrorCodes.INVALID_REQUEST);
@@ -332,7 +284,6 @@ public class AuthorizationServerConfig {
     }
   }
 }
-//CHECKSTYLE:ON
 ```
 
 | 빈 / 메서드 | 하는 일 |
@@ -351,22 +302,6 @@ code spring-cloud/authorization-server/src/main/java/sample/config/DefaultSecuri
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -383,17 +318,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * @author Joe Grandja
- * @since 0.1.0
- */
 @Configuration
 @EnableWebSecurity
 public class DefaultSecurityConfig {
 
   private static final Logger LOG = LoggerFactory.getLogger(DefaultSecurityConfig.class);
 
-  // formatter:off
   @Bean
   SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
     http
@@ -404,12 +334,10 @@ public class DefaultSecurityConfig {
       .formLogin(withDefaults());
     return http.build();
   }
-  // formatter:on
 
-  // @formatter:off
   @Bean
   UserDetailsService users() {
-    @SuppressWarnings("deprecation") // Ok for test purposes, not for production use
+    @SuppressWarnings("deprecation")
     UserDetails user = User.withDefaultPasswordEncoder()
       .username("u")
       .password("p")
@@ -417,10 +345,8 @@ public class DefaultSecurityConfig {
       .build();
     return new InMemoryUserDetailsManager(user);
   }
-  // @formatter:on
 
 }
-//CHECKSTYLE:ON
 ```
 
 사용자 `u` / `p` 한 명. `/actuator/**`는 로그인 없이 열어 둔다(compose healthcheck용).
@@ -432,22 +358,6 @@ code spring-cloud/authorization-server/src/main/java/sample/jose/Jwks.java
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2020-2021 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample.jose;
 
 import com.nimbusds.jose.jwk.Curve;
@@ -462,10 +372,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 
-/**
- * @author Joe Grandja
- * @since 0.1.0
- */
 public final class Jwks {
 
   private Jwks() {
@@ -475,12 +381,10 @@ public final class Jwks {
     KeyPair keyPair = KeyGeneratorUtils.generateRsaKey();
     RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
     RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-    // @formatter:off
     return new RSAKey.Builder(publicKey)
         .privateKey(privateKey)
         .keyID(UUID.randomUUID().toString())
         .build();
-    // @formatter:on
   }
 
   public static ECKey generateEc() {
@@ -488,24 +392,19 @@ public final class Jwks {
     ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
     ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
     Curve curve = Curve.forECParameterSpec(publicKey.getParams());
-    // @formatter:off
     return new ECKey.Builder(curve, publicKey)
         .privateKey(privateKey)
         .keyID(UUID.randomUUID().toString())
         .build();
-    // @formatter:on
   }
 
   public static OctetSequenceKey generateSecret() {
     SecretKey secretKey = KeyGeneratorUtils.generateSecretKey();
-    // @formatter:off
     return new OctetSequenceKey.Builder(secretKey)
         .keyID(UUID.randomUUID().toString())
         .build();
-    // @formatter:on
   }
 }
-//CHECKSTYLE:ON
 ```
 
 ```bash
@@ -513,22 +412,6 @@ code spring-cloud/authorization-server/src/main/java/sample/jose/KeyGeneratorUti
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2020-2021 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample.jose;
 
 import java.math.BigInteger;
@@ -541,10 +424,6 @@ import java.security.spec.EllipticCurve;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-/**
- * @author Joe Grandja
- * @since 0.1.0
- */
 final class KeyGeneratorUtils {
 
   private KeyGeneratorUtils() {
@@ -598,7 +477,6 @@ final class KeyGeneratorUtils {
     return keyPair;
   }
 }
-//CHECKSTYLE:ON
 ```
 
 ## 7. application.yml (새 파일)
@@ -650,22 +528,6 @@ code spring-cloud/authorization-server/src/test/java/sample/OAuth2AuthorizationS
 ```
 붙여넣기 (새 파일)
 ```java
-//CHECKSTYLE:OFF
-/*
- * Copyright 2002-2018 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package sample;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -681,11 +543,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Base64;
 
-/**
- * Tests for {@link OAuth2AuthorizationServerApplication}.
- *
- * @author Josh Cummings
- */
 @SpringBootTest(properties = {"eureka.client.enabled=false", "spring.cloud.config.enabled=false"})
 @AutoConfigureMockMvc
 class OAuth2AuthorizationServerApplicationTests {
@@ -725,7 +582,6 @@ class OAuth2AuthorizationServerApplicationTests {
   }
 
 }
-//CHECKSTYLE:ON
 ```
 
 | 테스트 | 확인하는 것 |

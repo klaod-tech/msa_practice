@@ -460,11 +460,6 @@ code test-em-all.bash
 아래처럼 맞추기 (전체 파일)
 ```bash
 #!/usr/bin/env bash
-#
-# Sample usage:
-#
-#   HOST=localhost PORT=7001 ./test-em-all.bash
-#
 : ${HOST=localhost}
 : ${PORT=8443}  # ★ 변경 (전: 8080) 게이트웨이 HTTPS
 : ${PROD_ID_REVS_RECS=1}
@@ -541,7 +536,6 @@ function waitForService() {
 
 function testCompositeCreated() {
 
-    # Expect that the Product Composite for productId $PROD_ID_REVS_RECS has been created with three recommendations and three reviews
     if ! assertCurl 200 "curl $AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
     then
         echo -n "FAIL"
@@ -564,7 +558,6 @@ function testCompositeCreated() {
 function waitForMessageProcessing() {
     echo "Wait for messages to be processed... "
 
-    # Give background processing some time to complete...
     sleep 1
 
     n=0
@@ -611,7 +604,6 @@ function setupTestdata() {
 ]}'
   recreateComposite "$PROD_ID_NO_REVS" "$body"
 
-
   body="{\"productId\":$PROD_ID_REVS_RECS"
   body+=\
 ',"name":"product name C","weight":300, "recommendations":[
@@ -651,7 +643,6 @@ ACCESS_TOKEN=$(curl -k https://writer:secret-writer@$HOST:$PORT/oauth2/token -d 
 echo ACCESS_TOKEN=$ACCESS_TOKEN
 AUTH="-H \"Authorization: Bearer $ACCESS_TOKEN\""
 
-# Verify access to Eureka and that all four microservices are registered in Eureka
 # ★ 변경: https + Eureka 계정(u:p), 앱 6개(auth-server 추가)
 assertCurl 200 "curl -H "accept:application/json" -k https://u:p@$HOST:$PORT/eureka/api/apps -s"
 assertEqual 6 $(echo $RESPONSE | jq ".applications.application | length")
@@ -660,41 +651,33 @@ setupTestdata
 
 waitForMessageProcessing
 
-# Verify that a normal request works, expect three recommendations and three reviews
 assertCurl 200 "curl $AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)
 assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that a 404 (Not Found) error is returned for a non-existing productId ($PROD_ID_NOT_FOUND)
 assertCurl 404 "curl $AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND -s"
 assertEqual "No product found for productId: $PROD_ID_NOT_FOUND" "$(echo $RESPONSE | jq -r .message)"
 
-# Verify that no recommendations are returned for productId $PROD_ID_NO_RECS
 assertCurl 200 "curl $AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_NO_RECS -s"
 assertEqual $PROD_ID_NO_RECS $(echo $RESPONSE | jq .productId)
 assertEqual 0 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that no reviews are returned for productId $PROD_ID_NO_REVS
 assertCurl 200 "curl $AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_NO_REVS -s"
 assertEqual $PROD_ID_NO_REVS $(echo $RESPONSE | jq .productId)
 assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
 assertEqual 0 $(echo $RESPONSE | jq ".reviews | length")
 
-# Verify that a 422 (Unprocessable Entity) error is returned for a productId that is out of range (-1)
 assertCurl 422 "curl $AUTH -k https://$HOST:$PORT/product-composite/-1 -s"
 assertEqual "\"Invalid productId: -1\"" "$(echo $RESPONSE | jq .message)"
 
-# Verify that a 400 (Bad Request) error error is returned for a productId that is not a number, i.e. invalid format
 assertCurl 400 "curl $AUTH -k https://$HOST:$PORT/product-composite/invalidProductId -s"
 assertEqual "\"Type mismatch.\"" "$(echo $RESPONSE | jq .message)"
 
 # ★ 추가 (여기부터 403 확인까지): 토큰 없으면 401, 읽기 권한만 있으면 삭제 403
-# Verify that a request without access token fails on 401, Unauthorized
 assertCurl 401 "curl -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 
-# Verify that the reader - client with only read scope can call the read API but not delete API.
 READER_ACCESS_TOKEN=$(curl -k https://reader:secret-reader@$HOST:$PORT/oauth2/token -d grant_type=client_credentials -d scope="product:read" -s | jq .access_token -r)
 echo READER_ACCESS_TOKEN=$READER_ACCESS_TOKEN
 READER_AUTH="-H \"Authorization: Bearer $READER_ACCESS_TOKEN\""
@@ -703,12 +686,10 @@ assertCurl 200 "curl $READER_AUTH -k https://$HOST:$PORT/product-composite/$PROD
 assertCurl 403 "curl -X DELETE $READER_AUTH -k https://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 
 # ★ 변경 (아래 Swagger 확인들): http → https, curl에 -k
-# Verify access to Swagger and OpenAPI URLs
 echo "Swagger/OpenAPI tests"
 assertCurl 302 "curl -ks  https://$HOST:$PORT/openapi/swagger-ui.html"
 assertCurl 200 "curl -ksL https://$HOST:$PORT/openapi/swagger-ui.html"
 assertCurl 200 "curl -ks  https://$HOST:$PORT/openapi/swagger-ui/index.html"
-# Verify the redirect URL
 assertCurl 200 "curl -ks  https://$HOST:$PORT/openapi/swagger-ui/oauth2-redirect.html"
 assertCurl 200 "curl -ks  https://$HOST:$PORT/openapi/v3/api-docs"
 assertEqual "3.1.0" "$(echo $RESPONSE | jq -r .openapi)"

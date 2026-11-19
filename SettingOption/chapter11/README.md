@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 11장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Security 7.0 / Spring Cloud 2025.1.4**
-> 이전: [../chapter10/README.md](../chapter10/README.md) / 상태: **진행 중**
+> 이전: [../chapter10/README.md](../chapter10/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -38,6 +38,7 @@
 | 인가 서버 테스트의 `@AutoConfigureMockMvc` | `org.springframework.boot.test.autoconfigure.web.servlet` | `org.springframework.boot.webmvc.test.autoconfigure` + `spring-boot-starter-webmvc-test` | 01 |
 | 리소스 서버(JWT 검증) 의존성 | `spring-security-oauth2-resource-server`, `spring-security-oauth2-jose` | **`spring-boot-starter-oauth2-resource-server`** (없으면 `ReactiveJwtDecoder` 빈이 없어서 게이트웨이가 안 뜸) | 03, 04 |
 | 게이트웨이 인증서 `edge.p12` | 교재 소스에 있는 파일 | `keytool` 명령으로 직접 만든다(비밀번호 `password`, 별칭 `localhost`는 교재와 같음) | 03 |
+| Swagger UI authorization code 로그인 | PKCE 설정 없음 (SAS 1.x는 PKCE 선택) | **`usePkceWithAuthorizationCodeGrant: true`** 추가 (Spring Security 7은 PKCE 기본 필수, 없으면 `code_challenge` 오류) | 04 |
 | auth-server healthcheck `timeout` | `2s` | `10s` (6장 트러블슈팅) | 05 |
 | 헤더 라우팅 대상 | httpstat.us | httpbin 컨테이너 (10장부터) | 03 |
 | Auth0 `.gitignore` | `ml.*`만 제외 | **`env.bash`를 제외** (비밀값이 커밋되지 않게) | 06 |
@@ -50,4 +51,4 @@
   - writer/reader 토큰 발급, JWT에 `scope`, `iss: http://auth-server:9999`
   - 토큰 없이 GET 401, reader로 DELETE 403, writer/reader로 GET은 보안 통과(composite 로그에 `Authorization info: Subject: writer, scopes: [...]`)
   - Swagger api-docs: 서버 주소 `https://localhost:8443`, 보안 스킴 `oauth2`
-- docker compose 구동(05), 핵심 서비스 Testcontainers 테스트, 브라우저 로그인(authorization code) 흐름은 실습 과정이라 직접 돌리지 않았다. 실패하면 troubleshooting.md에 추가한다.
+- 실습에서 확인: docker compose 구동과 `test-em-all.bash`, 토큰으로 직접 호출(05 4절), Swagger UI 로그인(authorization code) 후 GET 200. Swagger 로그인은 처음에 `code_challenge` 오류가 나서 PKCE 설정을 추가했다(troubleshooting.md).

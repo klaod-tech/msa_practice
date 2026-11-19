@@ -184,9 +184,6 @@ server.port: 8443  # ★ 변경 (전: 8080) HTTPS
 
 spring.application.name: gateway
 
-# During development, allow forwarding the X-Forwarded-* and Forwarded headers from any proxies.
-# When usd in QA and production, this should be set to a specific IP address or CIDR range, e.g. 10\.0\.0\..* (Java Regular Expression).
-# For more information, see https://spring.io/security/cve-2025-41235
 spring.cloud.gateway.server.webflux.trusted-proxies: ".*"
 
 # ★ 추가 (ssl 두 블록): HTTPS용 인증서(keystore/edge.p12)

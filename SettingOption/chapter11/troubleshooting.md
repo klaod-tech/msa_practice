@@ -34,3 +34,11 @@ import org.springframework.security.config.annotation.web.configuration.OAuth2Au
 ## 다시 올렸더니 예전 토큰이 401
 **원인:** 인가 서버가 시작할 때마다 서명 키를 새로 만든다.
 **해결:** 토큰을 다시 받는다.
+
+## Swagger UI Authorize: `Auth Error [invalid_request]: OAuth 2.0 Parameter: code_challenge`
+**원인:** Spring Security 7(인가 서버 합쳐진 버전)부터 `ClientSettings.builder()`의 기본값이 `requireProofKey(true)`, 즉 authorization code 방식에 **PKCE**(`code_challenge`)가 필수다. 교재(SAS 1.x)는 기본값이 false라서 Swagger UI가 PKCE 없이 요청해도 됐다.
+**해결:** composite `application.yml`의 `springdoc.swagger-ui.oauth`에 한 줄 추가([04](04-composite-security.md)). Swagger UI가 `code_challenge`를 같이 보낸다.
+```yaml
+      usePkceWithAuthorizationCodeGrant: true
+```
+그다음 `./gradlew :microservices:product-composite-service:build && docker compose up -d --build product-composite` → 브라우저 새로고침 후 다시 Authorize.

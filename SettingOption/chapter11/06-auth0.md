@@ -54,7 +54,6 @@ CLIENT_REDIRECT_URI=https://my.redirect.uri
 API_NAME=product-composite
 API_URL=https://localhost:8443/product-composite
 
-# set -x
 set -e
 
 AT=$(curl -s --request POST \
@@ -62,11 +61,9 @@ AT=$(curl -s --request POST \
   --header 'content-type: application/json' \
   --data "{\"client_id\":\"$MGM_CLIENT_ID\",\"client_secret\":\"$MGM_CLIENT_SECRET\",\"audience\":\"https://$TENANT/api/v2/\",\"grant_type\":\"client_credentials\"}" | jq -r .access_token)
 
-# Update the tenant
 echo "Update the tenant, set its default connection to a user dictionary..."
 curl -s -H "Authorization: Bearer $AT" -X PATCH  -H "Content-Type: application/json" -d '{"default_directory":"Username-Password-Authentication"}' https://$TENANT/api/v2/tenants/settings | jq .default_directory
 
-# Create reader application
 createClientBody='"callbacks":["https://my.redirect.uri"],"app_type":"non_interactive","grant_types":["authorization_code","implicit","refresh_token","client_credentials","password","http://auth0.com/oauth/grant-type/password-realm"],"oidc_conformant":true,"token_endpoint_auth_method":"client_secret_post"'
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients?fields=name | jq -r '.[] | select(.name == "reader") | .name') ]
 then
@@ -78,7 +75,6 @@ fi
 READER_CLIENT_ID=$(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients | jq -r '.[] | select(.name == "reader") | .client_id')
 READER_CLIENT_SECRET=$(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients | jq -r '.[] | select(.name == "reader") | .client_secret')
 
-# Create writer application
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients?fields=name | jq -r '.[] | select(.name == "writer") | .name') ]
 then
   echo "Writer client app already exists"
@@ -89,10 +85,8 @@ fi
 WRITER_CLIENT_ID=$(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients | jq -r '.[] | select(.name == "writer") | .client_id')
 WRITER_CLIENT_SECRET=$(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients | jq -r '.[] | select(.name == "writer") | .client_secret')
 
-# Sleep 1 sec to avoid a "429: Too Many Requests, global limit has been reached"...'
 sleep 1
 
-# Create the API
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" "https://$TENANT/api/v2/resource-servers" | jq -r ".[] | select(.name == \"$API_NAME\") | .name") ]
 then
   echo "API $API_NAME ($API_URL) already exists"
@@ -101,7 +95,6 @@ else
   curl -s -H "Authorization: Bearer $AT" -X POST -H "Content-Type: application/json" -d "{\"name\": \"$API_NAME\", \"identifier\": \"$API_URL\", \"scopes\": [{ \"value\": \"product:read\", \"description\": \"Read product information\"}, {\"value\": \"product:write\", \"description\": \"Update product information\"}]}" https://$TENANT/api/v2/resource-servers | jq .
 fi
 
-# Create the user
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" --get --data-urlencode "email=$USER_EMAIL" https://$TENANT/api/v2/users-by-email | jq -r ".[] | select(.email == \"$USER_EMAIL\") | .email") ]
 then
   echo "User with email $USER_EMAIL already exists"
@@ -110,8 +103,6 @@ else
   curl -s -H "Authorization: Bearer $AT" -X POST  -H "Content-Type: application/json" -d "{\"email\": \"$USER_EMAIL\",  \"connection\": \"Username-Password-Authentication\", \"password\": \"$USER_PASSWORD\"}" https://$TENANT/api/v2/users | jq .
 fi
 
-
-# Grant access to the API for the reader client app
 clientGrantsCount=$(curl -s -H "Authorization: Bearer $AT" --get --data-urlencode "audience=$API_URL" --data-urlencode "client_id=$READER_CLIENT_ID" https://$TENANT/api/v2/client-grants | jq length)
 if [[ "$clientGrantsCount" -ne 0 ]]
 then
@@ -122,7 +113,6 @@ else
   echo
 fi
 
-# Grant access to the API for the writer client app
 clientGrantsCount=$(curl -s -H "Authorization: Bearer $AT" --get --data-urlencode "audience=$API_URL" --data-urlencode "client_id=$WRITER_CLIENT_ID" https://$TENANT/api/v2/client-grants | jq length)
 if [[ "$clientGrantsCount" -ne 0 ]]
 then
@@ -133,7 +123,6 @@ else
   echo
 fi
 
-# Echo Auth0 - OAuth2 settings
 echo
 echo "Auth0 - OAuth2 settings:"
 echo
@@ -164,17 +153,12 @@ code auth0/reset-tenant.bash
 ```bash
 #!/usr/bin/env bash
 
-#
-# *** THIS SCRIPT RESET THE DEFINITIPONS IN THE TENANT ***
-#
-
 source env.bash
 
 CLIENT_REDIRECT_URI=https://my.redirect.uri
 API_NAME=product-composite
 API_URL=https://localhost:8443/product-composite
 
-# set -x
 set -e
 
 AT=$(curl -s --request POST \
@@ -182,7 +166,6 @@ AT=$(curl -s --request POST \
   --header 'content-type: application/json' \
   --data "{\"client_id\":\"$MGM_CLIENT_ID\",\"client_secret\":\"$MGM_CLIENT_SECRET\",\"audience\":\"https://$TENANT/api/v2/\",\"grant_type\":\"client_credentials\"}" | jq -r .access_token)
 
-# Delete reader application
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients?fields=name | jq -r '.[] | select(.name == "reader") | .name') ]
 then
   echo "Delete reader client app..."
@@ -192,7 +175,6 @@ else
   echo "Reader client app already deleted"
 fi
 
-# Delete writer application
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" https://$TENANT/api/v2/clients?fields=name | jq -r '.[] | select(.name == "writer") | .name') ]
 then
   echo "Delete writer client app..."
@@ -202,7 +184,6 @@ else
   echo "Writer client app already deleted"
 fi
 
-# Delete the API
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" "https://$TENANT/api/v2/resource-servers" | jq -r ".[] | select(.name == \"$API_NAME\") | .name") ]
 then
   echo "Delete API $API_NAME ($API_URL)..."
@@ -212,7 +193,6 @@ else
   echo "API $API_NAME ($API_URL) already deleted"
 fi
 
-# Delete the user
 if [ ! -z $(curl -s -H "Authorization: Bearer $AT" --get --data-urlencode "email=$USER_EMAIL" https://$TENANT/api/v2/users-by-email | jq -r ".[] | select(.email == \"$USER_EMAIL\") | .email") ]
 then
   userID=$(curl -s -H "Authorization: Bearer $AT" --get --data-urlencode "email=$USER_EMAIL" https://$TENANT/api/v2/users-by-email | jq -r ".[] | select(.email == \"$USER_EMAIL\") | .user_id")
