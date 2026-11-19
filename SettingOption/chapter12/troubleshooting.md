@@ -15,6 +15,13 @@
 **원인:** 테스트에는 설정 서버가 없는데 클라이언트가 켜져 있다. `failFast: true`라서 설정을 못 받으면 앱이 아예 안 뜬다.
 **해결:** 해당 테스트의 `@SpringBootTest` / `@DataMongoTest` / `@DataJpaTest`에 `spring.cloud.config.enabled=false`가 있는지 확인한다([03](03-config-clients.md) 3절).
 
+## 테스트 실패: `ConfigServicePropertySourceLocator` ... `HttpClientErrorException$Unauthorized`
+**원인:** 위와 같이 테스트에 `spring.cloud.config.enabled=false`가 빠졌는데, 마침 [02](02-config-repo.md) 끝에서 로컬로 띄운 설정 서버가 8888에 켜져 있었다. 테스트가 그 설정 서버에 계정 없이 접속해서 401을 받는다(설정 서버가 꺼져 있으면 `Connection refused`).
+**해결:** 테스트 파일을 [03](03-config-clients.md)대로 고치고, 설정 서버를 띄운 터미널에서 `Ctrl+C`. 아래 명령에 아무것도 안 나오면 꺼진 것이다.
+```bash
+ss -ltn | grep 8888
+```
+
 ## compose: 서비스가 몇 분 뒤 종료됨 (`Could not locate PropertySource` + `config-server`)
 **원인:** retry를 20번 다 해도 설정 서버에서 설정을 못 받았다.
 **확인:**

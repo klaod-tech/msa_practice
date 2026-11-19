@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 12장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4**
-> 이전: [../chapter11/README.md](../chapter11/README.md) / 다음: [../chapter13/README.md](../chapter13/README.md) / 상태: **진행 중**
+> 이전: [../chapter11/README.md](../chapter11/README.md) / 다음: [../chapter13/README.md](../chapter13/README.md) / 상태: **완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -44,4 +44,5 @@
   - Eureka, 인가 서버, 게이트웨이가 설정 서버에서 설정을 받아 시작(`Located environment: name=...`), Eureka 기본 인증(암호문으로 받은 `p`) 동작, 게이트웨이 HTTPS(암호문으로 받은 인증서 비밀번호) 동작
   - 게이트웨이 `/config/**` 라우트로 설정 조회(계정 없으면 401), 암호화/복호화
   - 설정 서버를 늦게 켜도 클라이언트가 retry로 기다렸다가 시작
-- docker compose 구동과 `test-em-all.bash`는 실습 과정이라 직접 돌리지 않았다. 실패하면 troubleshooting.md에 추가한다.
+- 실습에서 확인: 전체 빌드(테스트 포함), docker compose 구동과 `test-em-all.bash`.
+- 실습 중 막힌 것: recommendation 테스트 하나에 `spring.cloud.config.enabled=false`를 빠뜨렸고, 02에서 띄운 설정 서버가 8888에 남아 있어서 테스트가 `Unauthorized`로 실패했다. 테스트 파일을 03대로 고치고 설정 서버를 끄니 통과(troubleshooting.md).
