@@ -26,8 +26,8 @@ cd ~/work
 |---|---|---|---|---|
 | - | 환경 | [../SettingOption/setting/](../SettingOption/setting/README.md) 01~05 | WSL, Docker, Java, Spring CLI, kubectl 등 | 설치 완료 |
 | 1부 | 3 | [chapter3](chapter3/README.md) | 빈 폴더 → Chapter03/2-basic-rest-services | 검증 완료 |
-| 1부 | 4 | chapter4 | Chapter03/2-basic-rest-services → Chapter04 | 작성 중 |
-| 1부 | 5 | chapter5 | Chapter04 → Chapter05 | 예정 |
+| 1부 | 4 | [chapter4](chapter4/README.md) | Chapter03/2-basic-rest-services → Chapter04 | 검증 완료 |
+| 1부 | 5 | [chapter5](chapter5/README.md) | Chapter04 → Chapter05 | 검증 완료 |
 | 1부 | 6 | chapter6 | Chapter05 → Chapter06 | 예정 |
 | 1부 | 7 | chapter7 | Chapter06 → Chapter07 | 예정 |
 | 2부 | 8 | (코드 없음) | | |
