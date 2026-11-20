@@ -53,10 +53,10 @@ public interface ProductCompositeService {
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
-  Mono<ProductAggregate> getProduct(  // ★ 변경 (전: getProduct(@PathVariable int productId))
+  Mono<ProductAggregate> getProduct(
     @PathVariable int productId,
-    @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,  // ★ 추가
-    @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent  // ★ 추가
+    @RequestParam(value = "delay", required = false, defaultValue = "0") int delay,
+    @RequestParam(value = "faultPercent", required = false, defaultValue = "0") int faultPercent
   );
 
   /**

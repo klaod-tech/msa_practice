@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import se.magnus.microservices.core.review.persistence.ReviewEntity;
 import se.magnus.microservices.core.review.persistence.ReviewRepository;
 
-@DataJpaTest(properties = {"spring.jpa.hibernate.ddl-auto=update", "spring.cloud.config.enabled=false"})  // ★ 변경 (전: @DataJpaTest)
+@DataJpaTest(properties = {"spring.jpa.hibernate.ddl-auto=update", "spring.cloud.config.enabled=false"})
 @Transactional(propagation = NOT_SUPPORTED)
 class PersistenceTests extends MySqlTestBase {
 

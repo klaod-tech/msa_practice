@@ -1,14 +1,14 @@
 FROM eclipse-temurin:21-jre-noble AS builder
-WORKDIR /extracted
+WORKDIR /builder
 ADD ./build/libs/*.jar app.jar
-RUN java -Djarmode=tools -jar app.jar extract --layers --launcher --destination layers
+RUN java -Djarmode=tools -jar app.jar extract --layers --launcher --destination extracted
 
 FROM eclipse-temurin:21-jre-noble
 WORKDIR /application
-COPY --from=builder /extracted/layers/dependencies/ ./
-COPY --from=builder /extracted/layers/spring-boot-loader/ ./
-COPY --from=builder /extracted/layers/snapshot-dependencies/ ./
-COPY --from=builder /extracted/layers/application/ ./
+COPY --from=builder /builder/extracted/dependencies/ ./
+COPY --from=builder /builder/extracted/spring-boot-loader/ ./
+COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
+COPY --from=builder /builder/extracted/application/ ./
 
 EXPOSE 8761
 

@@ -8,13 +8,13 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;  // 교재와 다름 (6장부터)
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationEntity;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationRepository;
 
-@DataMongoTest(properties = {"spring.cloud.config.enabled=false"})  // ★ 변경 (전: @DataMongoTest)
+@DataMongoTest(properties = {"spring.cloud.config.enabled=false"})
 class PersistenceTests extends MongoDbTestBase {
 
   @Autowired

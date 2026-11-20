@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface RecommendationService {
 
-  Mono<Recommendation> createRecommendation(Recommendation body);  // ★ 변경 (전: @PostMapping + Recommendation 반환)
+  Mono<Recommendation> createRecommendation(Recommendation body);
 
   /**
    * Sample usage: "curl $HOST:$PORT/recommendation?productId=1".
@@ -17,8 +17,8 @@ public interface RecommendationService {
   @GetMapping(
     value = "/recommendation",
     produces = "application/json")
-  Flux<Recommendation> getRecommendations(  // ★ 변경 (전: List<Recommendation>)
+  Flux<Recommendation> getRecommendations(
     @RequestParam(value = "productId", required = true) int productId);
 
-  Mono<Void> deleteRecommendations(int productId);  // ★ 변경 (전: @DeleteMapping + void)
+  Mono<Void> deleteRecommendations(int productId);
 }

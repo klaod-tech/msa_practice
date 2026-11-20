@@ -33,7 +33,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   }
 
   @Override
-  public Mono<Recommendation> createRecommendation(Recommendation body) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Mono<Recommendation> createRecommendation(Recommendation body) {
 
     if (body.getProductId() < 1) {
       throw new InvalidInputException("Invalid productId: " + body.getProductId());
@@ -51,7 +51,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   }
 
   @Override
-  public Flux<Recommendation> getRecommendations(int productId) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Flux<Recommendation> getRecommendations(int productId) {
 
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
@@ -66,7 +66,7 @@ public class RecommendationServiceImpl implements RecommendationService {
   }
 
   @Override
-  public Mono<Void> deleteRecommendations(int productId) {  // ★ 변경: 블로킹 반환 → Mono/Flux
+  public Mono<Void> deleteRecommendations(int productId) {
 
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);

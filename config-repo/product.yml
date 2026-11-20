@@ -1,8 +1,7 @@
 server.port: 7002
-spring.web.error.include-message: always  # 교재와 다름 (교재: server.error.include-message, 3장부터)
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+spring.web.error.include-message: always
 
-spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터)
+spring.mongodb:
   host: localhost
   port: 27017
   database: product-db
@@ -31,7 +30,7 @@ spring.cloud.stream.kafka.bindings.messageProcessor-in-0.consumer:
 logging:
   level:
     root: INFO
-    se.magnus: DEBUG
+    se.magnus: INFO
     org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 
 ---
@@ -39,7 +38,7 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.mongodb.host: mongodb  # 교재와 다름 (교재: spring.data.mongodb.host, 6장부터)
+spring.mongodb.host: mongodb
 
 ---
 spring.config.activate.on-profile: streaming_partitioned

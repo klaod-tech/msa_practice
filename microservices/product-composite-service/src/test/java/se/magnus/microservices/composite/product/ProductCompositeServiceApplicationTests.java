@@ -1,8 +1,8 @@
 package se.magnus.microservices.composite.product;
 
 import static java.util.Collections.singletonList;
-import static org.mockito.ArgumentMatchers.anyInt;  // ★ 추가
-import static org.mockito.ArgumentMatchers.eq;  // ★ 추가
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -25,6 +25,7 @@ import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
+@AutoConfigureWebTestClient
 @SpringBootTest(
   webEnvironment = RANDOM_PORT,
   classes = {TestSecurityConfig.class},
@@ -33,7 +34,6 @@ import se.magnus.microservices.composite.product.services.ProductCompositeIntegr
     "spring.main.allow-bean-definition-overriding=true",
     "eureka.client.enabled=false",
     "spring.cloud.config.enabled=false"})
-@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class ProductCompositeServiceApplicationTests {
 
   private static final int PRODUCT_ID_OK = 1;
@@ -49,7 +49,7 @@ class ProductCompositeServiceApplicationTests {
   @BeforeEach
   void setUp() {
 
-    when(compositeIntegration.getProduct(eq(PRODUCT_ID_OK), anyInt(), anyInt()))  // ★ 변경
+    when(compositeIntegration.getProduct(eq(PRODUCT_ID_OK), anyInt(), anyInt()))
       .thenReturn(Mono.just(new Product(PRODUCT_ID_OK, "name", 1, "mock-address")));
 
     when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
@@ -58,9 +58,9 @@ class ProductCompositeServiceApplicationTests {
     when(compositeIntegration.getReviews(PRODUCT_ID_OK))
       .thenReturn(Flux.fromIterable(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"))));
 
-    when(compositeIntegration.getProduct(eq(PRODUCT_ID_NOT_FOUND), anyInt(), anyInt())).thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));  // ★ 변경
+    when(compositeIntegration.getProduct(eq(PRODUCT_ID_NOT_FOUND), anyInt(), anyInt())).thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
 
-    when(compositeIntegration.getProduct(eq(PRODUCT_ID_INVALID), anyInt(), anyInt())).thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));  // ★ 변경
+    when(compositeIntegration.getProduct(eq(PRODUCT_ID_INVALID), anyInt(), anyInt())).thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
   }
 
   @Test
@@ -87,7 +87,7 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void getProductInvalidInput() {
 
-    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)
       .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
       .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
   }

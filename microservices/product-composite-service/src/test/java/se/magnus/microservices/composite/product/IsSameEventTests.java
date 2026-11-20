@@ -7,17 +7,18 @@ import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
 import static se.magnus.microservices.composite.product.IsSameEvent.sameEventExceptCreatedAt;
 
-import tools.jackson.databind.ObjectMapper;  // 교재와 다름 (교재: com.fasterxml.jackson.databind.ObjectMapper)
 import org.junit.jupiter.api.Test;
 import se.magnus.api.core.product.Product;
 import se.magnus.api.event.Event;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 class IsSameEventTests {
 
   ObjectMapper mapper = new ObjectMapper();
 
   @Test
-  void testEventObjectCompare() {  // 교재와 다름 (교재: throws JsonProcessingException, Jackson 3 예외는 unchecked)
+  void testEventObjectCompare() throws JacksonException {
 
     // Event #1 and #2 are the same event, but occurs as different times
     // Event #3 and #4 are different events

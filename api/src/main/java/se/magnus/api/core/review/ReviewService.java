@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface ReviewService {
 
-  Mono<Review> createReview(Review body);  // ★ 변경 (전: @PostMapping + Review 반환)
+  Mono<Review> createReview(Review body);
 
   /**
    * Sample usage: "curl $HOST:$PORT/review?productId=1".
@@ -17,8 +17,7 @@ public interface ReviewService {
   @GetMapping(
     value = "/review",
     produces = "application/json")
-  Flux<Review> getReviews(  // ★ 변경 (전: List<Review>)
-   @RequestParam(value = "productId", required = true) int productId);
+  Flux<Review> getReviews(@RequestParam(value = "productId", required = true) int productId);
 
-  Mono<Void> deleteReviews(int productId);  // ★ 변경 (전: @DeleteMapping + void)
+  Mono<Void> deleteReviews(int productId);
 }

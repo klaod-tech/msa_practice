@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest(webEnvironment = RANDOM_PORT,
   properties = {
     "eureka.client.enabled=false",
-    "spring.cloud.config.enabled=false"})  // ★ 추가
+    "spring.cloud.config.enabled=false"})
 class GatewayApplicationTests {
 
   @Test

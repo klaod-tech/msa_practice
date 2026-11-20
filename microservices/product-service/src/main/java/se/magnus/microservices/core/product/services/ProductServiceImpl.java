@@ -2,8 +2,8 @@ package se.magnus.microservices.core.product.services;
 
 import static java.util.logging.Level.FINE;
 
-import java.time.Duration;  // ★ 추가
-import java.util.Random;  // ★ 추가
+import java.time.Duration;
+import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -53,7 +53,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Mono<Product> getProduct(int productId, int delay, int faultPercent) {  // ★ 변경 (delay, faultPercent 추가)
+  public Mono<Product> getProduct(int productId, int delay, int faultPercent) {
 
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
@@ -62,8 +62,8 @@ public class ProductServiceImpl implements ProductService {
     LOG.info("Will get product info for id={}", productId);
 
     return repository.findByProductId(productId)
-      .map(e -> throwErrorIfBadLuck(e, faultPercent))  // ★ 추가
-      .delayElement(Duration.ofSeconds(delay))  // ★ 추가
+      .map(e -> throwErrorIfBadLuck(e, faultPercent))
+      .delayElement(Duration.ofSeconds(delay))
       .switchIfEmpty(Mono.error(new NotFoundException("No product found for productId: " + productId)))
       .log(LOG.getName(), FINE)
       .map(e -> mapper.entityToApi(e))
@@ -86,7 +86,6 @@ public class ProductServiceImpl implements ProductService {
     return e;
   }
 
-  // ★ 추가 (아래 두 메서드와 필드): faultPercent 확률로 일부러 오류
   private ProductEntity throwErrorIfBadLuck(ProductEntity entity, int faultPercent) {
 
     if (faultPercent == 0) {

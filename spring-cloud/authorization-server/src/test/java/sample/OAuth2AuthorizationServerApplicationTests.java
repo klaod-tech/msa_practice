@@ -23,7 +23,7 @@ import static org.hamcrest.core.Is.is;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;  // 교재와 다름 (교재: org.springframework.boot.test.autoconfigure.web.servlet, Boot 4)
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 

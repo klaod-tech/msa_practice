@@ -1,9 +1,5 @@
 package se.magnus.microservices.composite.product;
 
-import tools.jackson.core.JacksonException;  // 교재와 다름 (Jackson 3: tools.jackson.*, 교재: com.fasterxml.jackson.*)
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import org.hamcrest.Description;
@@ -12,6 +8,10 @@ import org.hamcrest.TypeSafeMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import se.magnus.api.event.Event;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public class IsSameEvent extends TypeSafeMatcher<String> {
 

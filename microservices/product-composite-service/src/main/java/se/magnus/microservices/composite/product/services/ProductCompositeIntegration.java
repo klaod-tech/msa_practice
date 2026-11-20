@@ -5,9 +5,6 @@ import static reactor.core.publisher.Flux.empty;
 import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
 
-import tools.jackson.core.JacksonException;  // 교재와 다름 (교재: java.io.IOException, 3장부터)
-import tools.jackson.databind.ObjectMapper;  // 교재와 다름 (교재: com.fasterxml.jackson.databind.ObjectMapper, 3장부터)
-// ★ 추가 (import 5줄)
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -23,7 +20,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import org.springframework.web.util.UriComponentsBuilder;  // ★ 추가
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
@@ -37,40 +34,39 @@ import se.magnus.api.event.Event;
 import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.util.http.HttpErrorInfo;
-import se.magnus.util.http.ServiceUtil;  // ★ 추가
+import se.magnus.util.http.ServiceUtil;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 public class ProductCompositeIntegration implements ProductService, RecommendationService, ReviewService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
-  private final WebClient webClient;
-  private final ObjectMapper mapper;
-
   private static final String PRODUCT_SERVICE_URL = "http://product";
   private static final String RECOMMENDATION_SERVICE_URL = "http://recommendation";
   private static final String REVIEW_SERVICE_URL = "http://review";
 
+  private final Scheduler publishEventScheduler;
+  private final WebClient webClient;
+  private final ObjectMapper mapper;
   private final StreamBridge streamBridge;
 
-  private final Scheduler publishEventScheduler;
-
-  private final ServiceUtil serviceUtil;  // ★ 추가
+  private final ServiceUtil serviceUtil;
 
   public ProductCompositeIntegration(
     @Qualifier("publishEventScheduler") Scheduler publishEventScheduler,
-
-    WebClient.Builder webClientBuilder,
+    WebClient webClient,
     ObjectMapper mapper,
     StreamBridge streamBridge,
-    ServiceUtil serviceUtil  // ★ 추가
+    ServiceUtil serviceUtil
   ) {
+    this.webClient = webClient;
 
     this.publishEventScheduler = publishEventScheduler;
-    this.webClient = webClientBuilder.build();
     this.mapper = mapper;
     this.streamBridge = streamBridge;
-    this.serviceUtil = serviceUtil;  // ★ 추가
+    this.serviceUtil = serviceUtil;
   }
 
   @Override
@@ -82,7 +78,6 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }).subscribeOn(publishEventScheduler);
   }
 
-  // ★ 변경 (getProduct 메서드 전체 + 아래 getProductFallbackValue 추가)
   @Override
   @Retry(name = "product")
   @TimeLimiter(name = "product")
@@ -131,10 +126,11 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   @Override
   public Flux<Recommendation> getRecommendations(int productId) {
 
-    URI url = UriComponentsBuilder.fromUriString(RECOMMENDATION_SERVICE_URL + "/recommendation?productId={productId}").build(productId);  // ★ 변경 (전: String url = ... + productId)
+    URI url = UriComponentsBuilder.fromUriString(RECOMMENDATION_SERVICE_URL + "/recommendation?productId={productId}").build(productId);
 
     LOG.debug("Will call the getRecommendations API on URL: {}", url);
 
+    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Recommendation.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 
@@ -157,10 +153,11 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   @Override
   public Flux<Review> getReviews(int productId) {
 
-    URI url = UriComponentsBuilder.fromUriString(REVIEW_SERVICE_URL + "/review?productId={productId}").build(productId);  // ★ 변경 (전: String url = ... + productId)
+    URI url = UriComponentsBuilder.fromUriString(REVIEW_SERVICE_URL + "/review?productId={productId}").build(productId);
 
     LOG.debug("Will call the getReviews API on URL: {}", url);
 
+    // Return an empty result if something goes wrong to make it possible for the composite service to return partial responses
     return webClient.get().uri(url).retrieve().bodyToFlux(Review.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
   }
 
@@ -193,7 +190,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
       case NOT_FOUND:
         return new NotFoundException(getErrorMessage(wcre));
 
-      case UNPROCESSABLE_CONTENT:  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY, 3장부터)
+      case UNPROCESSABLE_CONTENT:
         return new InvalidInputException(getErrorMessage(wcre));
 
       default:
@@ -206,7 +203,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   private String getErrorMessage(WebClientResponseException ex) {
     try {
       return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-    } catch (JacksonException ioex) {  // 교재와 다름 (교재: IOException, 3장부터)
+    } catch (JacksonException ioex) {
       return ex.getMessage();
     }
   }

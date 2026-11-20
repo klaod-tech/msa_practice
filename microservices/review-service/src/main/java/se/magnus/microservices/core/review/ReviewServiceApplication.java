@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import reactor.core.publisher.Hooks;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
 
@@ -17,7 +18,6 @@ public class ReviewServiceApplication {
 
   private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceApplication.class);
 
-  // ★ 추가 (생성자와 jdbcScheduler 빈: 블로킹 JPA 호출을 별도 스레드 풀에서 실행)
   private final Integer threadPoolSize;
   private final Integer taskQueueSize;
 
@@ -36,6 +36,7 @@ public class ReviewServiceApplication {
   }
 
   public static void main(String[] args) {
+    Hooks.enableAutomaticContextPropagation();
     ConfigurableApplicationContext ctx = SpringApplication.run(ReviewServiceApplication.class, args);
 
     String mysqlUri = ctx.getEnvironment().getProperty("spring.datasource.url");

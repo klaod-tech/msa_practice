@@ -1,5 +1,8 @@
 server.port: 8443
 
+# During development, allow forwarding the X-Forwarded-* and Forwarded headers from any proxies.
+# When usd in QA and production, this should be set to a specific IP address or CIDR range, e.g. 10\.0\.0\..* (Java Regular Expression).
+# For more information, see https://spring.io/security/cve-2025-41235
 spring.cloud.gateway.server.webflux.trusted-proxies: ".*"
 
 spring.ssl.bundle.jks.gateway:
@@ -66,31 +69,31 @@ spring.cloud.gateway.server.webflux.routes:
   - RewritePath=/config/(?<segment>.*), /$\{segment}
 
 - id: host_route_200
-  uri: http://httpbin:8080  # 교재와 다름 (교재: http://httpstat.us, 10장부터)
+  uri: http://httpstat.us
   predicates:
   - Host=i.feel.lucky:8080
   - Path=/headerrouting/**
   filters:
-  - SetPath=/status/200  # 교재와 다름 (교재: /200)
+  - SetPath=/200
 
 - id: host_route_418
-  uri: http://httpbin:8080  # 교재와 다름 (교재: http://httpstat.us, 10장부터)
+  uri: http://httpstat.us
   predicates:
   - Host=im.a.teapot:8080
   - Path=/headerrouting/**
   filters:
-  - SetPath=/status/418  # 교재와 다름 (교재: /418)
+  - SetPath=/418
 
 - id: host_route_501
-  uri: http://httpbin:8080  # 교재와 다름 (교재: http://httpstat.us, 10장부터)
+  uri: http://httpstat.us
   predicates:
   - Path=/headerrouting/**
   filters:
-  - SetPath=/status/501  # 교재와 다름 (교재: /501)
+  - SetPath=/501
 
 spring.security.oauth2.resourceserver.jwt.issuer-uri: http://${app.auth-server}:9999
 
-management.endpoint.gateway.enabled: true
+management.endpoint.gateway.access: unrestricted
 
 logging:
   level:
@@ -98,3 +101,4 @@ logging:
     org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
     org.springframework.cloud.gateway: TRACE
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
+

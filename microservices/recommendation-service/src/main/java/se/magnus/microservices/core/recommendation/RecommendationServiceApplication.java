@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.index.ReactiveIndexOperations;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
+import reactor.core.publisher.Hooks;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationEntity;
 
 @SpringBootApplication
@@ -25,15 +26,16 @@ public class RecommendationServiceApplication {
   private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceApplication.class);
 
   public static void main(String[] args) {
+    Hooks.enableAutomaticContextPropagation();
     ConfigurableApplicationContext ctx = SpringApplication.run(RecommendationServiceApplication.class, args);
 
-    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");  // 교재와 다름 (교재: spring.data.mongodb.host, 6장부터)
-    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");  // 교재와 다름 (교재: spring.data.mongodb.port, 6장부터)
+    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");
+    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");
     LOG.info("Connected to MongoDb: " + mongodDbHost + ":" + mongodDbPort);
   }
 
   @Autowired
-  ReactiveMongoOperations mongoTemplate;  // ★ 변경 (전: MongoOperations)
+  ReactiveMongoOperations mongoTemplate;
 
   @EventListener(ContextRefreshedEvent.class)
   public void initIndicesAfterStartup() {
@@ -41,7 +43,6 @@ public class RecommendationServiceApplication {
     MappingContext<? extends MongoPersistentEntity<?>, MongoPersistentProperty> mappingContext = mongoTemplate.getConverter().getMappingContext();
     IndexResolver resolver = new MongoPersistentEntityIndexResolver(mappingContext);
 
-    // ★ 변경 (전: IndexOperations, 아래 줄 끝에 .block() 추가)
     ReactiveIndexOperations indexOps = mongoTemplate.indexOps(RecommendationEntity.class);
     resolver.resolveIndexFor(RecommendationEntity.class).forEach(e -> indexOps.createIndex(e).block());
   }

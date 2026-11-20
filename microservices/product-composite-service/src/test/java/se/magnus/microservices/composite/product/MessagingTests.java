@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.cloud.stream.binder.test.OutputDestination;
 import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
 import org.springframework.context.annotation.Import;
@@ -34,6 +34,7 @@ import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
 import se.magnus.api.event.Event;
 
+@AutoConfigureWebTestClient
 @SpringBootTest(
   webEnvironment = RANDOM_PORT,
   classes = {TestSecurityConfig.class},
@@ -41,10 +42,9 @@ import se.magnus.api.event.Event;
     "spring.security.oauth2.resourceserver.jwt.issuer-uri=",
     "spring.main.allow-bean-definition-overriding=true",
     "eureka.client.enabled=false",
-    "spring.cloud.stream.defaultBinder=rabbit",  // ★ 추가
-    "spring.cloud.config.enabled=false"})  // ★ 추가
+    "spring.cloud.stream.defaultBinder=rabbit",
+    "spring.cloud.config.enabled=false"})
 @Import({TestChannelBinderConfiguration.class})
-@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 class MessagingTests {
 
   private static final Logger LOG = LoggerFactory.getLogger(MessagingTests.class);

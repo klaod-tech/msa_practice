@@ -1,16 +1,17 @@
 package se.magnus.microservices.core.product;
 
+import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;  // 교재와 다름 (6장부터)
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import reactor.test.StepVerifier;
 import se.magnus.microservices.core.product.persistence.ProductEntity;
 import se.magnus.microservices.core.product.persistence.ProductRepository;
 
-@DataMongoTest(properties = {"spring.cloud.config.enabled=false"})  // ★ 변경 (전: @DataMongoTest)
+@DataMongoTest(properties = {"spring.cloud.config.enabled=false"})
 class PersistenceTests extends MongoDbTestBase {
 
   @Autowired
@@ -107,7 +108,7 @@ class PersistenceTests extends MongoDbTestBase {
   private boolean areProductEqual(ProductEntity expectedEntity, ProductEntity actualEntity) {
     return
       (expectedEntity.getId().equals(actualEntity.getId()))
-      && (expectedEntity.getVersion() == actualEntity.getVersion())
+      && (Objects.equals(expectedEntity.getVersion(), actualEntity.getVersion()))
       && (expectedEntity.getProductId() == actualEntity.getProductId())
       && (expectedEntity.getName().equals(actualEntity.getName()))
       && (expectedEntity.getWeight() == actualEntity.getWeight());

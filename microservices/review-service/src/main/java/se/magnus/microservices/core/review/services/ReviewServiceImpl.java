@@ -29,7 +29,7 @@ public class ReviewServiceImpl implements ReviewService {
 
   private final ServiceUtil serviceUtil;
 
-  private final Scheduler jdbcScheduler;  // ★ 추가
+  private final Scheduler jdbcScheduler;
 
   public ReviewServiceImpl(@Qualifier("jdbcScheduler") Scheduler jdbcScheduler, ReviewRepository repository, ReviewMapper mapper, ServiceUtil serviceUtil) {
     this.jdbcScheduler = jdbcScheduler;
@@ -44,7 +44,6 @@ public class ReviewServiceImpl implements ReviewService {
     if (body.getProductId() < 1) {
       throw new InvalidInputException("Invalid productId: " + body.getProductId());
     }
-    // ★ 변경: 블로킹 JPA 코드를 internalXxx로 옮기고 jdbcScheduler에서 실행
     return Mono.fromCallable(() -> internalCreateReview(body))
       .subscribeOn(jdbcScheduler);
   }

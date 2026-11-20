@@ -1,22 +1,54 @@
 #!/usr/bin/env bash
-mkdir -p microservices
+
+mkdir microservices
 cd microservices
 
-create() {
-  spring init \
-  --boot-version=4.0.9 \
-  --type=gradle-project \
-  --java-version=21 \
-  --packaging=jar \
-  --name=$1 \
-  --package-name=$2 \
-  --groupId=$2 \
-  --dependencies=actuator,webflux \
-  --version=1.0.0-SNAPSHOT \
-  $1
-}
+spring init \
+--boot-version=4.0.9 \
+--type=gradle-project \
+--java-version=21 \
+--packaging=jar \
+--name=product-service \
+--package-name=se.magnus.microservices.core.product \
+--groupId=se.magnus.microservices.core.product \
+--dependencies=actuator,webflux \
+--version=1.0.0-SNAPSHOT \
+product-service
 
-create product-service           se.magnus.microservices.core.product
-create review-service            se.magnus.microservices.core.review
-create recommendation-service    se.magnus.microservices.core.recommendation
-create product-composite-service se.magnus.microservices.composite.product
+spring init \
+--boot-version=4.0.9 \
+--type=gradle-project \
+--java-version=21 \
+--packaging=jar \
+--name=review-service \
+--package-name=se.magnus.microservices.core.review \
+--groupId=se.magnus.microservices.core.review \
+--dependencies=actuator,webflux \
+--version=1.0.0-SNAPSHOT \
+review-service
+
+spring init \
+--boot-version=4.0.9 \
+--type=gradle-project \
+--java-version=21 \
+--packaging=jar \
+--name=recommendation-service \
+--package-name=se.magnus.microservices.core.recommendation \
+--groupId=se.magnus.microservices.core.recommendation \
+--dependencies=actuator,webflux \
+--version=1.0.0-SNAPSHOT \
+recommendation-service
+
+spring init \
+--boot-version=4.0.9 \
+--type=gradle-project \
+--java-version=21 \
+--packaging=jar \
+--name=product-composite-service \
+--package-name=se.magnus.microservices.composite.product \
+--groupId=se.magnus.microservices.composite.product \
+--dependencies=actuator,webflux \
+--version=1.0.0-SNAPSHOT \
+product-composite-service
+
+cd ..

@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.health.contributor.*;  // 교재와 다름 (교재: org.springframework.boot.actuate.health.*)
+import org.springframework.boot.health.contributor.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -32,7 +32,7 @@ public class HealthCheckConfiguration {
     registry.put("recommendation",    () -> getHealth("http://recommendation"));
     registry.put("review",            () -> getHealth("http://review"));
     registry.put("product-composite", () -> getHealth("http://product-composite"));
-    registry.put("auth-server",       () -> getHealth("http://auth-server"));  // ★ 추가
+    registry.put("auth-server",       () -> getHealth("http://auth-server"));
 
     return CompositeReactiveHealthContributor.fromMap(registry);
   }

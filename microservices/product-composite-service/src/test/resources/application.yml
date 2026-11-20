@@ -1,5 +1,3 @@
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
-
 api:
 
   common:
