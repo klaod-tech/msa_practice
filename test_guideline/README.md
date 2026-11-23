@@ -80,6 +80,6 @@ echo "127.0.0.1 minikube.me health.minikube.me grafana.minikube.me kiali.minikub
 | 3부 | 15 | [chapter15](chapter15/README.md) | Chapter14 → Chapter15 | 검증 완료 |
 | 3부 | 16 | [chapter16](chapter16/README.md) | Chapter15 → Chapter16 | 검증 완료 |
 | 3부 | 17 | [chapter17](chapter17/README.md) | Chapter16 → Chapter17 | 검증 완료 |
-| 3부 | 18 | chapter18 | Chapter17 → Chapter18 | 예정 |
+| 3부 | 18 | [chapter18](chapter18/README.md) | Chapter17 → Chapter18 | 검증 완료 |
 | 3부 | 19 | chapter19 | Chapter18 → Chapter19 | 예정 |
 | 3부 | 20 | chapter20 | Chapter19 → Chapter20 | 예정 |
