@@ -37,11 +37,6 @@ public class ProductCompositeServiceApplication {
   @Value("${api.common.contact.url}")     String apiContactUrl;
   @Value("${api.common.contact.email}")   String apiContactEmail;
 
-  /**
-  * Will exposed on $HOST:$PORT/swagger-ui.html
-  *
-  * @return the common OpenAPI documentation
-  */
   @Bean
   public OpenAPI getOpenApiDocumentation() {
     return new OpenAPI()
@@ -82,7 +77,7 @@ public class ProductCompositeServiceApplication {
   private ReactorLoadBalancerExchangeFilterFunction lbFunction;
 
   @Bean
-  public WebClient webClient(WebClient.Builder builder) {
+  WebClient webClient(WebClient.Builder builder) {  // ★ 변경 (전: public WebClient webClient(WebClient.Builder builder) {)
     return builder.filter(lbFunction).build();
   }
 
