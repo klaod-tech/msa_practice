@@ -36,5 +36,5 @@ cd ~/work
 | 2부 | 11 | [chapter11](chapter11/README.md) | Chapter10 → Chapter11 | 검증 완료 |
 | 2부 | 12 | [chapter12](chapter12/README.md) | Chapter11 → Chapter12 | 검증 완료 |
 | 2부 | 13 | [chapter13](chapter13/README.md) | Chapter12 → Chapter13 | 검증 완료 |
-| 2부 | 14 | chapter14 | Chapter13 → Chapter14 | 예정 |
+| 2부 | 14 | [chapter14](chapter14/README.md) | Chapter13 → Chapter14 | 검증 완료 |
 | 3부 | 15~20 | | 쿠버네티스, Istio 등 | 예정 |
