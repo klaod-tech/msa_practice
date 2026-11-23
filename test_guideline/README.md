@@ -33,7 +33,7 @@ cd ~/work
 | 2부 | 8 | (코드 없음) | | |
 | 2부 | 9 | [chapter9](chapter9/README.md) | Chapter07 → Chapter09 | 검증 완료 |
 | 2부 | 10 | [chapter10](chapter10/README.md) | Chapter09 → Chapter10 | 검증 완료 |
-| 2부 | 11 | chapter11 | Chapter10 → Chapter11 | 예정 |
+| 2부 | 11 | [chapter11](chapter11/README.md) | Chapter10 → Chapter11 | 검증 완료 |
 | 2부 | 12 | chapter12 | Chapter11 → Chapter12 | 예정 |
 | 2부 | 13 | chapter13 | Chapter12 → Chapter13 | 예정 |
 | 2부 | 14 | chapter14 | Chapter13 → Chapter14 | 예정 |
