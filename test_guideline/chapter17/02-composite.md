@@ -392,7 +392,9 @@ class ProductCompositeServiceApplicationTests {
 ## 2-4. 지울 파일
 ```bash
 cd ~/msa
-rm microservices/product-composite-service/src/main/resources/bootstrap.yml
+rm -rf microservices/product-composite-service/src/main/resources
 ```
+
+`rm -rf 폴더`는 이 장에서 폴더째 없어지는 것이다. 빌드나 `helm dep up`이 만든 파일(`build/`, `Chart.lock`, `charts/`)까지 함께 지운다.
 
 다음: [03-spring-cloud.md](03-spring-cloud.md)

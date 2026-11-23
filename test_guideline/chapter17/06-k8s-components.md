@@ -1027,24 +1027,10 @@ configmap:
 ## 6-23. 지울 파일
 ```bash
 cd ~/msa
-rm kubernetes/helm/components/config-server/.helmignore
-rm kubernetes/helm/components/config-server/Chart.yaml
-rm kubernetes/helm/components/config-server/config-repo/application.yml
-rm kubernetes/helm/components/config-server/config-repo/auth-server.yml
-rm kubernetes/helm/components/config-server/config-repo/gateway.yml
-rm kubernetes/helm/components/config-server/config-repo/product-composite.yml
-rm kubernetes/helm/components/config-server/config-repo/product.yml
-rm kubernetes/helm/components/config-server/config-repo/recommendation.yml
-rm kubernetes/helm/components/config-server/config-repo/review.yml
-rm kubernetes/helm/components/config-server/templates/configmap_from_file.yaml
-rm kubernetes/helm/components/config-server/templates/deployment.yaml
-rm kubernetes/helm/components/config-server/templates/service.yaml
-rm kubernetes/helm/components/config-server/values.yaml
-rm kubernetes/helm/components/gateway/.helmignore
-rm kubernetes/helm/components/gateway/Chart.yaml
-rm kubernetes/helm/components/gateway/templates/deployment.yaml
-rm kubernetes/helm/components/gateway/templates/service.yaml
-rm kubernetes/helm/components/gateway/values.yaml
+rm -rf kubernetes/helm/components/config-server
+rm -rf kubernetes/helm/components/gateway
 ```
+
+`rm -rf 폴더`는 이 장에서 폴더째 없어지는 것이다. 빌드나 `helm dep up`이 만든 파일(`build/`, `Chart.lock`, `charts/`)까지 함께 지운다.
 
 다음: [07-k8s-environments.md](07-k8s-environments.md)

@@ -243,16 +243,11 @@ class GatewayApplicationTests {
 ## 3-6. 지울 파일
 ```bash
 cd ~/msa
-rm spring-cloud/authorization-server/src/main/resources/bootstrap.yml
-rm spring-cloud/config-server/build.gradle
-rm spring-cloud/config-server/settings.gradle
-rm spring-cloud/config-server/.gitignore
-rm spring-cloud/config-server/src/main/java/se/magnus/springcloud/configserver/ConfigServerApplication.java
-rm spring-cloud/config-server/src/main/java/se/magnus/springcloud/configserver/SecurityConfig.java
-rm spring-cloud/config-server/src/main/resources/application.yml
-rm spring-cloud/config-server/src/test/java/se/magnus/springcloud/configserver/ConfigServerApplicationTests.java
-rm spring-cloud/config-server/Dockerfile
+rm -rf spring-cloud/authorization-server/src/main/resources
+rm -rf spring-cloud/config-server
 rm spring-cloud/gateway/src/main/resources/bootstrap.yml
 ```
+
+`rm -rf 폴더`는 이 장에서 폴더째 없어지는 것이다. 빌드나 `helm dep up`이 만든 파일(`build/`, `Chart.lock`, `charts/`)까지 함께 지운다.
 
 다음: [04-config-repo.md](04-config-repo.md)
