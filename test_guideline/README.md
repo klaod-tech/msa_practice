@@ -60,6 +60,12 @@ echo "127.0.0.1 minikube.me health.minikube.me grafana.minikube.me kiali.minikub
 
 **5. 메모리 주의** — minikube를 쓰는 동안에는 도커 컴포즈로 띄운 것을 내린다(`docker compose down`).
 
+**6. 443 포트 열기 (20장)** — 20장 test-em-all은 `https://health.minikube.me/...`처럼 443 포트를 고정해 쓰는 줄이 있어서 port-forward를 443으로 해야 한다. 1024보다 낮은 포트를 일반 사용자도 열 수 있게 한 번만 설정한다(재시작해도 유지).
+```bash
+echo "net.ipv4.ip_unprivileged_port_start=443" | sudo tee /etc/sysctl.d/99-unprivileged-443.conf
+sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443
+```
+
 ## 장 목록
 
 | 부 | 장 | 문서 | 시작 → 결과 | 상태 |
@@ -82,4 +88,4 @@ echo "127.0.0.1 minikube.me health.minikube.me grafana.minikube.me kiali.minikub
 | 3부 | 17 | [chapter17](chapter17/README.md) | Chapter16 → Chapter17 | 검증 완료 |
 | 3부 | 18 | [chapter18](chapter18/README.md) | Chapter17 → Chapter18 | 검증 완료 |
 | 3부 | 19 | [chapter19](chapter19/README.md) | Chapter18 → Chapter19 | 검증 완료 |
-| 3부 | 20 | chapter20 | Chapter19 → Chapter20 | 예정 |
+| 3부 | 20 | [chapter20](chapter20/README.md) | Chapter19 → Chapter20 | 검증 완료 |
