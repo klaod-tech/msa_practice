@@ -31,7 +31,7 @@ cd ~/work
 | 1부 | 6 | [chapter6](chapter6/README.md) | Chapter05 → Chapter06 | 검증 완료 |
 | 1부 | 7 | [chapter7](chapter7/README.md) | Chapter06 → Chapter07 | 검증 완료 |
 | 2부 | 8 | (코드 없음) | | |
-| 2부 | 9 | chapter9 | Chapter07 → Chapter09 | 예정 |
+| 2부 | 9 | [chapter9](chapter9/README.md) | Chapter07 → Chapter09 | 검증 완료 |
 | 2부 | 10 | chapter10 | Chapter09 → Chapter10 | 예정 |
 | 2부 | 11 | chapter11 | Chapter10 → Chapter11 | 예정 |
 | 2부 | 12 | chapter12 | Chapter11 → Chapter12 | 예정 |
