@@ -7,19 +7,12 @@
 
 ## 진행 순서
 
-> **환경 설정이 이미 되어 있으면(`~/msa`만 새로 만드는 경우) 6번 [06-create-projects.md](06-create-projects.md)부터 시작한다.** 1~5는 건너뛰고, 9번 GitHub는 기존 레포에 push하지 않는다.
+> **환경 설정이 이미 되어 있으면(`~/msa` 같은 실습 폴더만 새로 만드는 경우) [02-project-folder.md](02-project-folder.md)부터 시작한다.**
 
 | 순서 | 문서 | 내용 | 교재 |
 |---|---|---|---|
-| 1 | [01-windows.md](01-windows.md) | WSL2 + Ubuntu, Docker Desktop, VS Code | 22장 |
-| 2 | [02-apt-helm.md](02-apt-helm.md) | apt 기본 도구(jq, zip, unzip, siege), Helm | 22장 |
-| 3 | [03-sdkman-java-spring.md](03-sdkman-java-spring.md) | SDKMAN → Java 21, Spring Boot CLI | 22장 |
-| 4 | [04-kubernetes-tools.md](04-kubernetes-tools.md) | kubectl, minikube, istioctl | 22장 |
-| 5 | [05-verify-and-book-source.md](05-verify-and-book-source.md) | 설치 버전 확인, 교재 소스 내려받기(`$BOOK_HOME`) | 22장 |
-| 6 | [06-create-projects.md](06-create-projects.md) | 실습 폴더, `create-projects.bash`로 서비스 4개 생성 | 3장 |
-| 7 | [07-multi-project.md](07-multi-project.md) | 루트 `settings.gradle`, Gradle 래퍼 정리 | 3장 |
-| 8 | [08-build.md](08-build.md) | 전체 빌드, 구조 확인 | 3장 |
-| 9 | [09-github.md](09-github.md) | git 초기화, 커밋, GitHub 푸시 | - |
+| 1 | [01-ubuntu-environment.md](01-ubuntu-environment.md) | 처음 한 번만: WSL2 + Ubuntu 24.04, Docker Desktop, VS Code(WSL·Java 확장), apt 도구, Helm, SDKMAN → Java 21·Spring CLI, kubectl·minikube·istioctl, 교재 소스(`$BOOK_HOME`) | 22장 |
+| 2 | [02-project-folder.md](02-project-folder.md) | 실습 폴더 생성, VS Code로 열기, `create-projects.bash`로 서비스 4개, 루트 `settings.gradle`·래퍼 정리, 전체 빌드, (선택) GitHub | 3장 |
 | - | [troubleshooting.md](troubleshooting.md) | 시행착오와 주의사항 | |
 
 ## 설치 결과 요약
@@ -30,13 +23,13 @@
 | Docker | 29.0.1 (Compose v2.40.3) | Windows용 Docker Desktop의 WSL 연동 | 01 |
 | VS Code | - | Windows에 설치한 뒤 WSL 원격 연결(`code .`) | 01 |
 | git | 2.43.0 | Ubuntu 기본 포함 | - |
-| jq / zip / unzip / siege | jq-1.7 / - / - / 4.0.7 | apt | 02 |
-| Helm | v3.22.1 | 공식 설치 스크립트 | 02 |
-| Java | 21.0.13 (Temurin) | SDKMAN | 03 |
-| Spring Boot CLI | 4.0.7 | SDKMAN | 03 |
-| kubectl | v1.32.0 | 바이너리 다운로드 | 04 |
-| minikube | v1.35.0 | 바이너리 다운로드 | 04 |
-| istioctl | 1.24.2 | Istio 다운로드 스크립트 | 04 |
+| jq / zip / unzip / siege | jq-1.7 / - / - / 4.0.7 | apt | 01 |
+| Helm | v3.22.1 | 공식 설치 스크립트 | 01 |
+| Java | 21.0.13 (Temurin) | SDKMAN | 01 |
+| Spring Boot CLI | 4.0.7 | SDKMAN | 01 |
+| kubectl | v1.32.0 | 바이너리 다운로드 | 01 |
+| minikube | v1.35.0 | 바이너리 다운로드 | 01 |
+| istioctl | 1.24.2 | Istio 다운로드 스크립트 | 01 |
 
 ## 실습 레포
 

@@ -3,7 +3,7 @@
 > 코드 없이 읽기만 하는 문서.
 
 ## 1. 시작 상태
-[환경 설정](../../SettingOption/setting/README.md) 01~05에서 Java 21, Spring CLI, VS Code를 준비했다. 코드는 아직 없다.
+[환경 설정 01](../../SettingOption/setting/01-ubuntu-environment.md)에서 Java 21, Spring CLI, VS Code를 준비했다. 코드는 아직 없다.
 
 ## 2. 3장이 끝나면
 ```
