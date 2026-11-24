@@ -1,6 +1,6 @@
 # 07. 도커 컴포즈에 RabbitMQ 추가, 파티션, Kafka, 전체 테스트
 
-> 표기: `★ 추가` / `★ 변경` = 6장 코드 대비 바뀌는 줄, `교재와 다름 (...)` = Boot 4 때문에 교재 7장과 다르게 쓰는 부분.
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 > 교재 "리액티브 마이크로서비스 환경 수동 테스트", "리액티브 마이크로서비스 환경 자동 테스트" 절.
 
 compose 파일 3개를 쓴다.
@@ -25,9 +25,11 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mongodb:
+        # ★ 추가 시작 (2줄)
         condition: service_healthy
-      rabbitmq:  # ★ 추가
-        condition: service_healthy  # ★ 추가
+      rabbitmq:
+        # ★ 추가 끝
+        condition: service_healthy
 
   recommendation:
     build: microservices/recommendation-service
@@ -37,8 +39,10 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-      rabbitmq:  # ★ 추가
-        condition: service_healthy  # ★ 추가
+      # ★ 추가 시작 (2줄)
+      rabbitmq:
+        condition: service_healthy
+      # ★ 추가 끝
 
   review:
     build: microservices/review-service
@@ -48,8 +52,10 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
-      rabbitmq:  # ★ 추가
-        condition: service_healthy  # ★ 추가
+      # ★ 추가 시작 (2줄)
+      rabbitmq:
+        condition: service_healthy
+      # ★ 추가 끝
 
   product-composite:
     build: microservices/product-composite-service
@@ -58,9 +64,11 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-    depends_on:  # ★ 추가
-      rabbitmq:  # ★ 추가
-        condition: service_healthy  # ★ 추가
+    # ★ 추가 시작 (3줄)
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    # ★ 추가 끝
 
   mongodb:
     image: mongo:8.0.5
@@ -71,7 +79,7 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 5s
-      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)
+      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)  # ★ 변경 (전: timeout: 10s)
       retries: 60
 
   mysql:
@@ -87,10 +95,10 @@ services:
     healthcheck:
       test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
       interval: 5s
-      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)
+      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)  # ★ 변경 (전: timeout: 10s)
       retries: 60
 
-  # ★ 추가 (rabbitmq 서비스 전체)
+  # ★ 추가 시작 (11줄)
   rabbitmq:
     image: rabbitmq:4.0.7-management
     mem_limit: 512m
@@ -102,6 +110,7 @@ services:
       interval: 5s
       timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)
       retries: 60
+  # ★ 추가 끝
 ```
 
 | 항목 | 뜻 |
@@ -456,7 +465,7 @@ function waitForService() {
   echo "DONE, continues..."
 }
 
-# ★ 추가 (testCompositeCreated, waitForMessageProcessing 함수 두 개)
+# ★ 추가 시작 (33줄)
 function testCompositeCreated() {
 
     if ! assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
@@ -498,14 +507,18 @@ function waitForMessageProcessing() {
     done
     echo "All messages are now processed!"
 }
+# ★ 추가 끝
 
 function recreateComposite() {
   local productId=$1
   local composite=$2
 
-  # ★ 변경 (전: assertCurl 200, POST는 응답 코드 확인 없음) → 이제 202 Accepted
+  # ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  # ★ 전: assertCurl 200 "curl -X DELETE http://$HOST:$PORT/product-composite/${productId} -s"
+  # ★ 전: curl -X POST http://$HOST:$PORT/product-composite -H "Content-Type: application/json" --data "$composite"
   assertCurl 202 "curl -X DELETE http://$HOST:$PORT/product-composite/${productId} -s"
   assertEqual 202 $(curl -X POST -s http://$HOST:$PORT/product-composite -H "Content-Type: application/json" --data "$composite" -w "%{http_code}")
+  # ★ 변경 끝
 }
 
 function setupTestdata() {
@@ -559,12 +572,13 @@ then
   docker compose up -d
 fi
 
-# ★ 변경 (전: waitForService curl -X DELETE http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND)
+# ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: waitForService curl -X DELETE http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND
 waitForService curl http://$HOST:$PORT/actuator/health
 setupTestdata
+# ★ 변경 끝
 
-# ★ 추가 (이벤트가 처리될 때까지 기다림)
-waitForMessageProcessing
+waitForMessageProcessing  # ★ 변경 (전: setupTestdata)
 
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)

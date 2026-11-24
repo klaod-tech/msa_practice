@@ -1,6 +1,6 @@
 # 02. api, util 프로젝트 추가
 
-> 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(넣을 위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 ## 핵심 개념
 - **api**: 인터페이스(`ProductService` 등)와 데이터 클래스(`Product` 등)를 둔다. 여러 서비스가 함께 쓰는 "약속"이다.
@@ -26,8 +26,10 @@ include ':microservices:product-service'
 include ':microservices:review-service'
 include ':microservices:recommendation-service'
 include ':microservices:product-composite-service'
-include ':api'                                     // ★ 추가
-include ':util'                                    // ★ 추가
+// ★ 추가 시작 (2줄)
+include ':api'
+include ':util'
+// ★ 추가 끝
 ```
 
 ## 2. 폴더 만들기

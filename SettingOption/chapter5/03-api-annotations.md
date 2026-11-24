@@ -10,16 +10,19 @@ code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.j
 ```java
 package se.magnus.api.composite.product;
 
+// ★ 추가 시작 (4줄)
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+// ★ 추가 끝
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Tag(name = "ProductComposite", description = "REST API for composite product information.")
+@Tag(name = "ProductComposite", description = "REST API for composite product information.")  // ★ 추가
 public interface ProductCompositeService {
 
+  // ★ 추가 시작 (9줄)
   @Operation(
     summary = "${api.product-composite.get-composite-product.description}",
     description = "${api.product-composite.get-composite-product.notes}")
@@ -29,6 +32,7 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "404", description = "${api.responseCodes.notFound.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
+  // ★ 추가 끝
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
@@ -78,7 +82,7 @@ code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.jav
 ```java
 package se.magnus.util.http;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;  // ★ 추가
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;
 
@@ -90,7 +94,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import se.magnus.api.exceptions.BadRequestException;
+import se.magnus.api.exceptions.BadRequestException;  // ★ 추가
 import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 
@@ -99,6 +103,7 @@ class GlobalControllerExceptionHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
+  // ★ 추가 시작 (6줄)
   @ResponseStatus(BAD_REQUEST)
   @ExceptionHandler(BadRequestException.class)
   public @ResponseBody HttpErrorInfo handleBadRequestExceptions(
@@ -106,6 +111,7 @@ class GlobalControllerExceptionHandler {
 
     return createHttpErrorInfo(BAD_REQUEST, request, ex);
   }
+  // ★ 추가 끝
 
   @ResponseStatus(NOT_FOUND)
   @ExceptionHandler(NotFoundException.class)

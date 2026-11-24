@@ -497,11 +497,9 @@ class PersistenceTests extends MySqlTestBase {
 확인 방법(클래스가 어느 jar의 어느 패키지에 있는지):
 ```bash
 find ~/.gradle/caches -name "spring-boot-data-mongodb-test-4.0.9.jar" | head -1 | xargs unzip -l | grep DataMongoTest.class
-# org/springframework/boot/data/mongodb/test/autoconfigure/DataMongoTest.class
 find ~/.gradle/caches -name "testcontainers-mongodb-2.0.5.jar" | head -1 | xargs unzip -l | grep MongoDBContainer.class
-# org/testcontainers/containers/MongoDBContainer.class   ← 옛 위치 (deprecated)
-# org/testcontainers/mongodb/MongoDBContainer.class      ← 새 위치
 ```
+결과: `DataMongoTest`는 `org/springframework/boot/data/mongodb/test/autoconfigure/`에, `MongoDBContainer`는 `org/testcontainers/containers/`(옛 위치, deprecated)와 `org/testcontainers/mongodb/`(새 위치) 두 곳에 나온다.
 
 ## 실행
 Docker Desktop이 켜져 있는지 먼저 확인한다(`docker ps`가 오류 없이 나오면 된다).

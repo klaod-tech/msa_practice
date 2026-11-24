@@ -1,6 +1,6 @@
 # 04. API 모델 클래스 수정 + MapStruct 매퍼
 
-> 표기: `★ 추가` / `★ 변경` = 5장 코드 대비 바뀌는 줄, `(교재: ...)` = 교재 6장과 다르게 쓰는 부분
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 ## 왜 API 클래스를 고치나
 이제 서비스가 **DB에서 읽은 엔티티 → API 객체**로 바꿔서 응답하고, 응답 직전에 `serviceAddress`를 채워 넣는다(`setServiceAddress`). 매퍼(MapStruct)도 빈 객체를 만든 뒤 setter로 값을 채운다. 그래서 `final`을 빼고 setter를 만든다.
@@ -21,15 +21,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;  // ★ 추가
 
 @Getter
-@Setter  // ★ 추가 (교재: setter 메서드를 직접 작성)
+@Setter  // ★ 추가 — 교재: setter 메서드를 직접 작성
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 
 public class Product {
-    private int productId;  // ★ 변경: final 삭제
-    private String name;  // ★ 변경: final 삭제
-    private int weight;  // ★ 변경: final 삭제
-    private String serviceAddress;  // ★ 변경: final 삭제
+    // ★ 변경 시작 (전 4줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: private final int productId;
+    // ★ 전: private final String name;
+    // ★ 전: private final int weight;
+    // ★ 전: private final String serviceAddress;
+    private int productId;
+    private String name;
+    private int weight;
+    private String serviceAddress;
+    // ★ 변경 끝
 }
 ```
 
@@ -46,17 +52,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;  // ★ 추가
 
 @Getter
-@Setter  // ★ 추가 (교재: setter 메서드를 직접 작성)
-@AllArgsConstructor 
+@Setter  // ★ 추가 — 교재: setter 메서드를 직접 작성
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
 
 public class Recommendation {
-  private int productId;  // ★ 변경: final 삭제
-  private int recommendationId;  // ★ 변경: final 삭제
-  private String author;  // ★ 변경: final 삭제
-  private int rate;  // ★ 변경: final 삭제
-  private String content;  // ★ 변경: final 삭제
-  private String serviceAddress;  // ★ 변경: final 삭제
+  // ★ 변경 시작 (전 6줄 → 6줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private final int productId;
+  // ★ 전: private final int recommendationId;
+  // ★ 전: private final String author;
+  // ★ 전: private final int rate;
+  // ★ 전: private final String content;
+  // ★ 전: private final String serviceAddress;
+  private int productId;
+  private int recommendationId;
+  private String author;
+  private int rate;
+  private String content;
+  private String serviceAddress;
+  // ★ 변경 끝
 }
 ```
 
@@ -73,17 +87,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;  // ★ 추가
 
 @Getter
-@Setter  // ★ 추가 (교재: setter 메서드를 직접 작성)
-@AllArgsConstructor 
+@Setter  // ★ 추가 — 교재: setter 메서드를 직접 작성
+@AllArgsConstructor
 @NoArgsConstructor(force = true)
 
 public class Review {
-  private int productId;  // ★ 변경: final 삭제
-  private int reviewId;  // ★ 변경: final 삭제
-  private String author;  // ★ 변경: final 삭제
-  private String subject;  // ★ 변경: final 삭제
-  private String content;  // ★ 변경: final 삭제
-  private String serviceAddress;  // ★ 변경: final 삭제
+  // ★ 변경 시작 (전 6줄 → 6줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private final int productId;
+  // ★ 전: private final int reviewId;
+  // ★ 전: private final String author;
+  // ★ 전: private final String subject;
+  // ★ 전: private final String content;
+  // ★ 전: private final String serviceAddress;
+  private int productId;
+  private int reviewId;
+  private String author;
+  private String subject;
+  private String content;
+  private String serviceAddress;
+  // ★ 변경 끝
 }
 ```
 

@@ -1,6 +1,6 @@
 # 05. 핵심 서비스 3개를 DB와 연결 (서비스 계층)
 
-> 표기: `★ 추가` / `★ 변경` = 5장 코드 대비, `(교재: ...)` = 교재 6장과 다르게 쓰는 부분.
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 > 서비스 구현, Application, yml, 테스트는 바뀌는 곳이 많아서 **전체 파일로 교체**한다.
 
 이 단계가 끝나면 세 서비스가 각자 자기 DB에 연결된다.
@@ -21,25 +21,35 @@ code api/src/main/java/se/magnus/api/core/product/ProductService.java
 ```java
 package se.magnus.api.core.product;
 
-import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등 개별 import → *)
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.web.bind.annotation.GetMapping;
+// ★ 전: import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+// ★ 변경 끝
 
 public interface ProductService {
 
-  // ★ 추가 (POST: 생성)
+  // ★ 추가 시작 (5줄) — POST: 생성
   @PostMapping(
     value    = "/product",
     consumes = "application/json",
     produces = "application/json")
   Product createProduct(@RequestBody Product body);
+  // ★ 추가 끝
 
   @GetMapping(
     value = "/product/{productId}",
+    // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: produces = "application/json"
+    // ★ 전: )
     produces = "application/json")
+    // ★ 변경 끝
   Product getProduct(@PathVariable int productId);
 
-  // ★ 추가 (DELETE: 삭제)
+  // ★ 추가 시작 (2줄) — DELETE: 삭제
   @DeleteMapping(value = "/product/{productId}")
   void deleteProduct(@PathVariable int productId);
+  // ★ 추가 끝
 }
 ```
 
@@ -51,16 +61,21 @@ code api/src/main/java/se/magnus/api/core/recommendation/RecommendationService.j
 package se.magnus.api.core.recommendation;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등 개별 import → *)
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.web.bind.annotation.GetMapping;
+// ★ 전: import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+// ★ 변경 끝
 
 public interface RecommendationService {
 
-  // ★ 추가 (POST: 생성)
+  // ★ 추가 시작 (5줄) — POST: 생성
   @PostMapping(
     value    = "/recommendation",
     consumes = "application/json",
     produces = "application/json")
   Recommendation createRecommendation(@RequestBody Recommendation body);
+  // ★ 추가 끝
 
   @GetMapping(
     value = "/recommendation",
@@ -68,9 +83,10 @@ public interface RecommendationService {
   List<Recommendation> getRecommendations(
     @RequestParam(value = "productId", required = true) int productId);
 
-  // ★ 추가 (DELETE: 삭제)
+  // ★ 추가 시작 (2줄) — DELETE: 삭제
   @DeleteMapping(value = "/recommendation")
   void deleteRecommendations(@RequestParam(value = "productId", required = true)  int productId);
+  // ★ 추가 끝
 }
 ```
 
@@ -82,25 +98,31 @@ code api/src/main/java/se/magnus/api/core/review/ReviewService.java
 package se.magnus.api.core.review;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping 등 개별 import → *)
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.web.bind.annotation.GetMapping;
+// ★ 전: import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+// ★ 변경 끝
 
 public interface ReviewService {
 
-  // ★ 추가 (POST: 생성)
+  // ★ 추가 시작 (5줄) — POST: 생성
   @PostMapping(
       value    = "/review",
       consumes = "application/json",
       produces = "application/json")
   Review createReview(@RequestBody Review body);
+  // ★ 추가 끝
 
   @GetMapping(
     value = "/review",
     produces = "application/json")
   List<Review> getReviews(@RequestParam(value = "productId", required = true) int productId);
 
-  // ★ 추가 (DELETE: 삭제)
+  // ★ 추가 시작 (2줄) — DELETE: 삭제
   @DeleteMapping(value = "/review")
   void deleteReviews(@RequestParam(value = "productId", required = true)  int productId);
+  // ★ 추가 끝
 }
 ```
 
@@ -116,25 +138,34 @@ code microservices/product-service/src/main/java/se/magnus/microservices/core/pr
 ```java
 package se.magnus.microservices.core.product.services;
 
+// ★ 추가 시작 (3줄)
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
+// ★ 추가 끝
 import org.springframework.web.bind.annotation.RestController;
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.product.ProductService;
 import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
+// ★ 추가 시작 (2줄)
 import se.magnus.microservices.core.product.persistence.ProductEntity;
 import se.magnus.microservices.core.product.persistence.ProductRepository;
+// ★ 추가 끝
 import se.magnus.util.http.ServiceUtil;
 
 @RestController
+// ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: public class ProductServiceImpl implements ProductService{
 public class ProductServiceImpl implements ProductService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductServiceImpl.class);
+// ★ 변경 끝
 
   private final ServiceUtil serviceUtil;
 
+  // ★ 변경 시작 (전 1줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public ProductServiceImpl(ServiceUtil serviceUtil){
   private final ProductRepository repository;
 
   private final ProductMapper mapper;
@@ -142,9 +173,11 @@ public class ProductServiceImpl implements ProductService {
   public ProductServiceImpl(ProductRepository repository, ProductMapper mapper, ServiceUtil serviceUtil) {
     this.repository = repository;
     this.mapper = mapper;
+  // ★ 변경 끝
     this.serviceUtil = serviceUtil;
   }
 
+  // ★ 추가 시작 (11줄)
   @Override
   public Product createProduct(Product body) {
     try {
@@ -158,10 +191,15 @@ public class ProductServiceImpl implements ProductService {
       throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId());
     }
   }
+  // ★ 추가 끝
 
   @Override
   public Product getProduct(int productId) {
 
+    // ★ 변경 시작 (전 3줄 → 14줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: if (productId < 1) throw new InvalidInputException("Invalid productId: " + productId);
+    // ★ 전: if (productId == 13) throw new NotFoundException("No product found for productId: " + productId);
+    // ★ 전: return new Product(productId, "name-" + productId, 123, serviceUtil.getServiceAddress());
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
     }
@@ -181,6 +219,7 @@ public class ProductServiceImpl implements ProductService {
   public void deleteProduct(int productId) {
     LOG.debug("deleteProduct: tries to delete an entity with productId: {}", productId);
     repository.findByProductId(productId).ifPresent(e -> repository.delete(e));
+    // ★ 변경 끝
   }
 }
 ```
@@ -192,16 +231,19 @@ code microservices/recommendation-service/src/main/java/se/magnus/microservices/
 ```java
 package se.magnus.microservices.core.recommendation.services;
 
+// ★ 삭제: import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.DuplicateKeyException;  // ★ 추가
 import org.springframework.web.bind.annotation.RestController;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.recommendation.RecommendationService;
 import se.magnus.api.exceptions.InvalidInputException;
+// ★ 추가 시작 (2줄)
 import se.magnus.microservices.core.recommendation.persistence.RecommendationEntity;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationRepository;
+// ★ 추가 끝
 import se.magnus.util.http.ServiceUtil;
 
 @RestController
@@ -209,18 +251,24 @@ public class RecommendationServiceImpl implements RecommendationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceImpl.class);
 
+  // ★ 추가 시작 (2줄)
   private final RecommendationRepository repository;
 
   private final RecommendationMapper mapper;
+  // ★ 추가 끝
 
   private final ServiceUtil serviceUtil;
 
+  // ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public RecommendationServiceImpl(ServiceUtil serviceUtil) {
   public RecommendationServiceImpl(RecommendationRepository repository, RecommendationMapper mapper, ServiceUtil serviceUtil) {
     this.repository = repository;
     this.mapper = mapper;
+  // ★ 변경 끝
     this.serviceUtil = serviceUtil;
   }
 
+  // ★ 추가 시작 (11줄)
   @Override
   public Recommendation createRecommendation(Recommendation body) {
     try {
@@ -234,6 +282,7 @@ public class RecommendationServiceImpl implements RecommendationService {
       throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Recommendation Id:" + body.getRecommendationId());
     }
   }
+  // ★ 추가 끝
 
   @Override
   public List<Recommendation> getRecommendations(int productId) {
@@ -241,22 +290,37 @@ public class RecommendationServiceImpl implements RecommendationService {
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
     }
-    
+
+    // ★ 변경 시작 (전 4줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: if (productId == 113) {
+    // ★ 전: LOG.debug("No recommendations found for productId: {}", productId);
+    // ★ 전: return new ArrayList<>();
+    // ★ 전: }
     List<RecommendationEntity> entityList = repository.findByProductId(productId);
     List<Recommendation> list = mapper.entityListToApiList(entityList);
     list.forEach(e -> e.setServiceAddress(serviceUtil.getServiceAddress()));
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 5줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: List<Recommendation> list = new ArrayList<>();
+    // ★ 전: list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", serviceUtil.getServiceAddress()));
+    // ★ 전: list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", serviceUtil.getServiceAddress()));
+    // ★ 전: list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", serviceUtil.getServiceAddress()));
+    // ★ 전: LOG.debug("/recommendation response size: {}", list.size());
     LOG.debug("getRecommendations: response size: {}", list.size());
+    // ★ 변경 끝
 
     return list;
   }
 
+  // ★ 추가 시작 (4줄)
   @Override
   public void deleteRecommendations(int productId) {
     LOG.debug("deleteRecommendations: tries to delete recommendations for the product with productId: {}", productId);
     repository.deleteAll(repository.findByProductId(productId));
+  // ★ 추가 끝
   }
-}
+}  // ★ 추가
 ```
 
 ```bash
@@ -266,16 +330,19 @@ code microservices/review-service/src/main/java/se/magnus/microservices/core/rev
 ```java
 package se.magnus.microservices.core.review.services;
 
+// ★ 삭제: import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataIntegrityViolationException;  // ★ 추가
 import org.springframework.web.bind.annotation.RestController;
 import se.magnus.api.core.review.Review;
 import se.magnus.api.core.review.ReviewService;
 import se.magnus.api.exceptions.InvalidInputException;
+// ★ 추가 시작 (2줄)
 import se.magnus.microservices.core.review.persistence.ReviewEntity;
 import se.magnus.microservices.core.review.persistence.ReviewRepository;
+// ★ 추가 끝
 import se.magnus.util.http.ServiceUtil;
 
 @RestController
@@ -283,18 +350,24 @@ public class ReviewServiceImpl implements ReviewService {
 
   private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
+  // ★ 추가 시작 (2줄)
   private final ReviewRepository repository;
 
   private final ReviewMapper mapper;
+  // ★ 추가 끝
 
   private final ServiceUtil serviceUtil;
 
+  // ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public ReviewServiceImpl(ServiceUtil serviceUtil) {
   public ReviewServiceImpl(ReviewRepository repository, ReviewMapper mapper, ServiceUtil serviceUtil) {
     this.repository = repository;
     this.mapper = mapper;
+  // ★ 변경 끝
     this.serviceUtil = serviceUtil;
   }
 
+  // ★ 추가 시작 (11줄)
   @Override
   public Review createReview(Review body) {
     try {
@@ -308,6 +381,7 @@ public class ReviewServiceImpl implements ReviewService {
       throw new InvalidInputException("Duplicate key, Product Id: " + body.getProductId() + ", Review Id:" + body.getReviewId());
     }
   }
+  // ★ 추가 끝
 
   @Override
   public List<Review> getReviews(int productId) {
@@ -315,22 +389,37 @@ public class ReviewServiceImpl implements ReviewService {
     if (productId < 1) {
       throw new InvalidInputException("Invalid productId: " + productId);
     }
-    
+
+    // ★ 변경 시작 (전 4줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: if (productId == 213) {
+    // ★ 전: LOG.debug("No reviews found for productId: {}", productId);
+    // ★ 전: return new ArrayList<>();
+    // ★ 전: }
     List<ReviewEntity> entityList = repository.findByProductId(productId);
     List<Review> list = mapper.entityListToApiList(entityList);
     list.forEach(e -> e.setServiceAddress(serviceUtil.getServiceAddress()));
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 5줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: List<Review> list = new ArrayList<>();
+    // ★ 전: list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1", serviceUtil.getServiceAddress()));
+    // ★ 전: list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2", serviceUtil.getServiceAddress()));
+    // ★ 전: list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3", serviceUtil.getServiceAddress()));
+    // ★ 전: LOG.debug("/reviews response size: {}", list.size());
     LOG.debug("getReviews: response size: {}", list.size());
+    // ★ 변경 끝
 
     return list;
   }
 
+  // ★ 추가 시작 (4줄)
   @Override
   public void deleteReviews(int productId) {
     LOG.debug("deleteReviews: tries to delete reviews for the product with productId: {}", productId);
     repository.deleteAll(repository.findByProductId(productId));
+  // ★ 추가 끝
   }
-}
+}  // ★ 추가
 ```
 
 - **중복 키 → 422**: 같은 키로 또 넣으면 MongoDB는 `DuplicateKeyException`, JPA는 `DataIntegrityViolationException`을 던진다. 이걸 `InvalidInputException`으로 바꿔서 util의 핸들러가 **422**로 응답하게 한다.
@@ -345,13 +434,16 @@ code microservices/product-service/src/main/java/se/magnus/microservices/core/pr
 ```java
 package se.magnus.microservices.core.product;
 
+// ★ 추가 시작 (3줄)
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+// ★ 추가 끝
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;  // ★ 추가
 import org.springframework.context.annotation.ComponentScan;
+// ★ 추가 시작 (10줄)
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mapping.context.MappingContext;
@@ -362,21 +454,26 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import se.magnus.microservices.core.product.persistence.ProductEntity;
+// ★ 추가 끝
 
 @SpringBootApplication
 @ComponentScan("se.magnus")
 public class ProductServiceApplication {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProductServiceApplication.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProductServiceApplication.class);  // ★ 추가
 
   public static void main(String[] args) {
+    // ★ 변경 시작 (전 1줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: SpringApplication.run(ProductServiceApplication.class, args);
     ConfigurableApplicationContext ctx = SpringApplication.run(ProductServiceApplication.class, args);
 
-    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");  // ★ 변경 (교재: spring.data.mongodb.host)
-    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");  // ★ 변경 (교재: spring.data.mongodb.port)
+    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");  // ★ 참고: 교재: spring.data.mongodb.host
+    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");  // ★ 참고: 교재: spring.data.mongodb.port
     LOG.info("Connected to MongoDb: " + mongodDbHost + ":" + mongodDbPort);
+    // ★ 변경 끝
   }
 
+  // ★ 추가 시작 (8줄)
   @Autowired
   MongoOperations mongoTemplate;
 
@@ -388,8 +485,9 @@ public class ProductServiceApplication {
 
     IndexOperations indexOps = mongoTemplate.indexOps(ProductEntity.class);
     resolver.resolveIndexFor(ProductEntity.class).forEach(e -> indexOps.createIndex(e));
+  // ★ 추가 끝
   }
-}
+}  // ★ 추가
 ```
 
 ```bash
@@ -399,13 +497,16 @@ code microservices/recommendation-service/src/main/java/se/magnus/microservices/
 ```java
 package se.magnus.microservices.core.recommendation;
 
+// ★ 추가 시작 (3줄)
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+// ★ 추가 끝
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;  // ★ 추가
 import org.springframework.context.annotation.ComponentScan;
+// ★ 추가 시작 (10줄)
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.mapping.context.MappingContext;
@@ -416,21 +517,27 @@ import org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexRes
 import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationEntity;
+// ★ 추가 끝
 
-@SpringBootApplication
+@SpringBootApplication  // ★ 추가
 @ComponentScan("se.magnus")
+// ★ 삭제: @SpringBootApplication
 public class RecommendationServiceApplication {
 
-  private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceApplication.class);
+  private static final Logger LOG = LoggerFactory.getLogger(RecommendationServiceApplication.class);  // ★ 추가
 
   public static void main(String[] args) {
+    // ★ 변경 시작 (전 1줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: SpringApplication.run(RecommendationServiceApplication.class, args);
     ConfigurableApplicationContext ctx = SpringApplication.run(RecommendationServiceApplication.class, args);
 
-    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");  // ★ 변경 (교재: spring.data.mongodb.host)
-    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");  // ★ 변경 (교재: spring.data.mongodb.port)
+    String mongodDbHost = ctx.getEnvironment().getProperty("spring.mongodb.host");  // ★ 참고: 교재: spring.data.mongodb.host
+    String mongodDbPort = ctx.getEnvironment().getProperty("spring.mongodb.port");  // ★ 참고: 교재: spring.data.mongodb.port
     LOG.info("Connected to MongoDb: " + mongodDbHost + ":" + mongodDbPort);
+    // ★ 변경 끝
   }
 
+  // ★ 추가 시작 (8줄)
   @Autowired
   MongoOperations mongoTemplate;
 
@@ -442,8 +549,9 @@ public class RecommendationServiceApplication {
 
     IndexOperations indexOps = mongoTemplate.indexOps(RecommendationEntity.class);
     resolver.resolveIndexFor(RecommendationEntity.class).forEach(e -> indexOps.createIndex(e));
+  // ★ 추가 끝
   }
-}
+}  // ★ 추가
 ```
 
 ```bash
@@ -453,24 +561,30 @@ code microservices/review-service/src/main/java/se/magnus/microservices/core/rev
 ```java
 package se.magnus.microservices.core.review;
 
+// ★ 추가 시작 (2줄)
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+// ★ 추가 끝
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;  // ★ 추가
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
+@SpringBootApplication  // ★ 추가
 @ComponentScan("se.magnus")
+// ★ 삭제: @SpringBootApplication
 public class ReviewServiceApplication {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceApplication.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ReviewServiceApplication.class);  // ★ 추가
 
   public static void main(String[] args) {
+    // ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: SpringApplication.run(ReviewServiceApplication.class, args);
     ConfigurableApplicationContext ctx = SpringApplication.run(ReviewServiceApplication.class, args);
 
     String mysqlUri = ctx.getEnvironment().getProperty("spring.datasource.url");
     LOG.info("Connected to MySQL: " + mysqlUri);
+    // ★ 변경 끝
   }
 }
 ```
@@ -487,12 +601,15 @@ code microservices/product-service/src/main/resources/application.yml
 spring.application.name: product-service
 
 server.port: 7002
+# ★ 변경 시작 (전 1줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.web.error.include-message: always
 spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
 
-spring.mongodb:  # ★ 추가 (교재: spring.data.mongodb:)
-  host: localhost  # ★ 추가
-  port: 27017  # ★ 추가
-  database: product-db  # ★ 추가
+spring.mongodb:  # ★ 참고: 교재: spring.data.mongodb:
+  host: localhost
+  port: 27017
+  database: product-db
+# ★ 변경 끝
 
 logging:
   level:
@@ -505,7 +622,7 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.mongodb.host: mongodb  # ★ 추가 (교재: spring.data.mongodb.host)
+spring.mongodb.host: mongodb  # ★ 추가 — 교재: spring.data.mongodb.host
 ```
 
 ```bash
@@ -516,12 +633,15 @@ code microservices/recommendation-service/src/main/resources/application.yml
 spring.application.name: recommendation-service
 
 server.port: 7003
+# ★ 변경 시작 (전 1줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.web.error.include-message: always
 spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
 
-spring.mongodb:  # ★ 추가 (교재: spring.data.mongodb:)
-  host: localhost  # ★ 추가
-  port: 27017  # ★ 추가
-  database: recommendation-db  # ★ 추가
+spring.mongodb:  # ★ 참고: 교재: spring.data.mongodb:
+  host: localhost
+  port: 27017
+  database: recommendation-db
+# ★ 변경 끝
 
 logging:
   level:
@@ -534,7 +654,7 @@ spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.mongodb.host: mongodb  # ★ 추가 (교재: spring.data.mongodb.host)
+spring.mongodb.host: mongodb  # ★ 추가 — 교재: spring.data.mongodb.host
 ```
 
 ```bash
@@ -544,31 +664,38 @@ code microservices/review-service/src/main/resources/application.yml
 ```yaml
 spring.application.name: review-service
 server.port: 7004
+# ★ 변경 시작 (전 1줄 → 7줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.web.error.include-message: always
 spring.web.error.include-message: always  # (교재: server.error.include-message, 3장부터 우리 값 유지)
 
-spring.jpa.hibernate.ddl-auto: update  # ★ 추가
+spring.jpa.hibernate.ddl-auto: update
 
-spring.datasource:  # ★ 추가
-  url: jdbc:mysql://localhost/review-db  # ★ 추가
-  username: user  # ★ 추가
-  password: pwd  # ★ 추가
+spring.datasource:
+  url: jdbc:mysql://localhost/review-db
+  username: user
+  password: pwd
 
-spring.datasource.hikari.initializationFailTimeout: 60000  # ★ 추가
+spring.datasource.hikari.initializationFailTimeout: 60000
+# ★ 변경 끝
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
-    org.hibernate.SQL: DEBUG  # ★ 추가
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE  # ★ 추가
+    # ★ 추가 시작 (2줄)
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    # ★ 추가 끝
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.datasource:  # ★ 추가
-  url: jdbc:mysql://mysql/review-db  # ★ 추가
+# ★ 추가 시작 (2줄)
+spring.datasource:
+  url: jdbc:mysql://mysql/review-db
+# ★ 추가 끝
 ```
 
 - `spring.application.name`과 `spring.web.error.include-message`는 우리 파일에 원래 있던 줄이다. 교재 파일을 통째로 복사하면 `server.error.include-message`로 돌아가니 주의.
@@ -582,8 +709,8 @@ Spring Boot 4.0에서 MongoDB **연결** 설정(host, port, database 등)의 이
 확인 방법(Boot jar 안의 설정 메타데이터):
 ```bash
 find ~/.gradle/caches -name "spring-boot-mongodb-4.0.9.jar" | head -1 | xargs -I{} unzip -p {} META-INF/spring-configuration-metadata.json | grep -A6 '"spring.data.mongodb.host"'
-# "level": "error", "replacement": "spring.mongodb.host", "since": "4.0.0"
 ```
+결과에 `"level": "error", "replacement": "spring.mongodb.host"`가 보이면 옛 이름은 읽지 않는다는 뜻이다.
 
 ## 5. 서비스 테스트 (전체 교체)
 5장까지의 `contextLoads` 테스트를 교재 6장 테스트로 바꾼다. 03의 `MongoDbTestBase` / `MySqlTestBase`를 상속하므로 **Docker가 켜져 있어야** 한다.
@@ -595,6 +722,7 @@ code microservices/product-service/src/test/java/se/magnus/microservices/core/pr
 ```java
 package se.magnus.microservices.core.product;
 
+// ★ 추가 시작 (7줄)
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -603,17 +731,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static reactor.core.publisher.Mono.just;
 
 import org.junit.jupiter.api.BeforeEach;
+// ★ 추가 끝
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // ★ Boot 4 (교재에는 없음)
+// ★ 추가 시작 (5줄) — Boot 4 (교재에는 없음)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.product.Product;
 import se.magnus.microservices.core.product.persistence.ProductRepository;
+// ★ 추가 끝
 
+// ★ 변경 시작 (전 2줄 → 9줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: @SpringBootTest
+// ★ 전: class ProductServiceApplicationTests {
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // ★ Boot 4 (교재에는 없음)
+@AutoConfigureWebTestClient  // ★ 참고: Boot 4 (교재에는 없음)
 class ProductServiceApplicationTests extends MongoDbTestBase {
 
   @Autowired private WebTestClient client;
@@ -624,8 +758,11 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
   void setupDb() {
     repository.deleteAll();
   }
+// ★ 변경 끝
 
   @Test
+  // ★ 변경 시작 (전 1줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: void contextLoads() {
   void getProductById() {
 
     int productId = 1;
@@ -635,8 +772,10 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
     assertTrue(repository.findByProductId(productId).isPresent());
 
     getAndVerifyProduct(productId, OK).jsonPath("$.productId").isEqualTo(productId);
+  // ★ 변경 끝
   }
 
+  // ★ 추가 시작 (8줄)
   @Test
   void duplicateError() {
 
@@ -646,11 +785,13 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     assertTrue(repository.findByProductId(productId).isPresent());
 
-    postAndVerifyProduct(productId, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    postAndVerifyProduct(productId, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/product")
       .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: " + productId);
+  // ★ 추가 끝
   }
 
+  // ★ 추가 시작 (61줄)
   @Test
   void deleteProduct() {
 
@@ -687,7 +828,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/product/" + productIdInvalid)
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -727,6 +868,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
       .expectBody();
   }
 }
+  // ★ 추가 끝
 ```
 
 ```bash
@@ -736,6 +878,7 @@ code microservices/recommendation-service/src/test/java/se/magnus/microservices/
 ```java
 package se.magnus.microservices.core.recommendation;
 
+// ★ 추가 시작 (6줄)
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
@@ -743,17 +886,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static reactor.core.publisher.Mono.just;
 
 import org.junit.jupiter.api.BeforeEach;
+// ★ 추가 끝
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // ★ Boot 4 (교재에는 없음)
+// ★ 추가 시작 (5줄) — Boot 4 (교재에는 없음)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.microservices.core.recommendation.persistence.RecommendationRepository;
+// ★ 추가 끝
 
+// ★ 변경 시작 (전 2줄 → 11줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: @SpringBootTest
+// ★ 전: class RecommendationServiceApplicationTests {
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // ★ Boot 4 (교재에는 없음)
+@AutoConfigureWebTestClient  // ★ 참고: Boot 4 (교재에는 없음)
 class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
   @Autowired
@@ -766,8 +915,11 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
   void setupDb() {
     repository.deleteAll();
   }
-  
+// ★ 변경 끝
+
   @Test
+  // ★ 변경 시작 (전 1줄 → 88줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: void contextLoads() {
   void getRecommendationsByProductId() {
 
     int productId = 1;
@@ -796,7 +948,7 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
     assertEquals(1, repository.count());
 
-    postAndVerifyRecommendation(productId, recommendationId, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    postAndVerifyRecommendation(productId, recommendationId, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/recommendation")
       .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Recommendation Id:1");
 
@@ -846,7 +998,7 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/recommendation")
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -884,8 +1036,9 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
       .exchange()
       .expectStatus().isEqualTo(expectedStatus)
       .expectBody();
+  // ★ 변경 끝
   }
-    
+
 }
 ```
 
@@ -896,6 +1049,7 @@ code microservices/review-service/src/test/java/se/magnus/microservices/core/rev
 ```java
 package se.magnus.microservices.core.review;
 
+// ★ 추가 시작 (6줄)
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
@@ -903,17 +1057,23 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static reactor.core.publisher.Mono.just;
 
 import org.junit.jupiter.api.BeforeEach;
+// ★ 추가 끝
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Autowired;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // ★ Boot 4 (교재에는 없음)
+// ★ 추가 시작 (5줄) — Boot 4 (교재에는 없음)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.review.Review;
 import se.magnus.microservices.core.review.persistence.ReviewRepository;
+// ★ 추가 끝
 
+// ★ 변경 시작 (전 2줄 → 11줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: @SpringBootTest
+// ★ 전: class ReviewServiceApplicationTests {
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // ★ Boot 4 (교재에는 없음)
+@AutoConfigureWebTestClient  // ★ 참고: Boot 4 (교재에는 없음)
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
   @Autowired
@@ -926,8 +1086,11 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
   void setupDb() {
     repository.deleteAll();
   }
+// ★ 변경 끝
 
   @Test
+  // ★ 변경 시작 (전 1줄 → 11줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: void contextLoads() {
   void getReviewsByProductId() {
 
     int productId = 1;
@@ -944,8 +1107,10 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
       .jsonPath("$.length()").isEqualTo(3)
       .jsonPath("$[2].productId").isEqualTo(productId)
       .jsonPath("$[2].reviewId").isEqualTo(3);
+  // ★ 변경 끝
   }
 
+  // ★ 추가 시작 (13줄)
   @Test
   void duplicateError() {
 
@@ -960,13 +1125,15 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 
     assertEquals(1, repository.count());
 
-    postAndVerifyReview(productId, reviewId, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    postAndVerifyReview(productId, reviewId, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/review")
       .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Review Id:1");
 
     assertEquals(1, repository.count());
+  // ★ 추가 끝
   }
 
+  // ★ 추가 시작 (66줄)
   @Test
   void deleteReviews() {
 
@@ -1010,7 +1177,7 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyReviewsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyReviewsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
       .jsonPath("$.path").isEqualTo("/review")
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -1050,6 +1217,7 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
       .expectBody();
   }
 }
+  // ★ 추가 끝
 ```
 
 교재와 다른 두 가지는 3장에서 composite 테스트에 했던 것과 같다:

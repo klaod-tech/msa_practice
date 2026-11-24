@@ -1,6 +1,6 @@
 # 06. composite: 조회는 WebClient, 생성/삭제는 이벤트 게시
 
-> 표기: `★ 추가` / `★ 변경` = 6장 코드 대비 바뀌는 줄, `교재와 다름 (...)` = Boot 4 때문에 교재 7장과 다르게 쓰는 부분.
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 > 교재 "복합 서비스의 논블로킹 REST API", "복합 서비스에서 이벤트 게시", "상태 점검 API 추가" 절.
 
 | 연산 | 6장 | 7장 |
@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;  // ★ 추가
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;  // ★ 추가
 
@@ -35,11 +35,11 @@ public interface ProductCompositeService {
     @ApiResponse(responseCode = "400", description = "${api.responseCodes.badRequest.description}"),
     @ApiResponse(responseCode = "422", description = "${api.responseCodes.unprocessableEntity.description}")
   })
-  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가 (202: 받았고 처리는 나중에)
+  @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가
   @PostMapping(
     value    = "/product-composite",
     consumes = "application/json")
-  Mono<Void> createProduct(@RequestBody ProductAggregate body);  // ★ 변경 (전: void)
+  Mono<Void> createProduct(@RequestBody ProductAggregate body);  // ★ 변경 (전: void createProduct(@RequestBody ProductAggregate body);)
 
   @Operation(
     summary = "${api.product-composite.get-composite-product.description}",
@@ -53,7 +53,7 @@ public interface ProductCompositeService {
   @GetMapping(
     value = "/product-composite/{productId}",
     produces = "application/json")
-  Mono<ProductAggregate> getProduct(@PathVariable int productId);  // ★ 변경 (전: ProductAggregate)
+  Mono<ProductAggregate> getProduct(@PathVariable int productId);  // ★ 변경 (전: ProductAggregate getProduct(@PathVariable int productId);)
 
   @Operation(
     summary = "${api.product-composite.delete-composite-product.description}",
@@ -64,7 +64,7 @@ public interface ProductCompositeService {
   })
   @ResponseStatus(HttpStatus.ACCEPTED)  // ★ 추가
   @DeleteMapping(value = "/product-composite/{productId}")
-  Mono<Void> deleteProduct(@PathVariable int productId);  // ★ 변경 (전: void)
+  Mono<Void> deleteProduct(@PathVariable int productId);  // ★ 변경 (전: void deleteProduct(@PathVariable int productId);)
 }
 ```
 
@@ -79,11 +79,23 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```java
 package se.magnus.microservices.composite.product;
 
+// ★ 삭제 시작 (8줄) — 아래 줄들을 지운다
+// ★ 지움: import java.util.List;
+// ★ 지움: import org.springframework.beans.factory.annotation.Value;
+// ★ 지움: import org.springframework.boot.SpringApplication;
+// ★ 지움: import org.springframework.boot.autoconfigure.SpringBootApplication;
+// ★ 지움: import org.springframework.context.annotation.Bean;
+// ★ 지움: import org.springframework.context.annotation.ComponentScan;
+// ★ 지움: import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
+// ★ 지움: import org.springframework.web.client.RestTemplate;
+// ★ 삭제 끝
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+// ★ 변경 시작 (전 1줄 → 9줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import tools.jackson.databind.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,12 +105,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import reactor.core.scheduler.Scheduler;
 import reactor.core.scheduler.Schedulers;
+// ★ 변경 끝
 
-@SpringBootApplication
+@SpringBootApplication  // ★ 추가
 @ComponentScan("se.magnus")
+// ★ 삭제: @SpringBootApplication
 public class ProductCompositeServiceApplication {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceApplication.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceApplication.class);  // ★ 추가
 
   @Value("${api.common.version}")         String apiVersion;
   @Value("${api.common.title}")           String apiTitle;
@@ -112,6 +126,15 @@ public class ProductCompositeServiceApplication {
   @Value("${api.common.contact.url}")     String apiContactUrl;
   @Value("${api.common.contact.email}")   String apiContactEmail;
 
+  // ★ 삭제 시작 (7줄) — 아래 줄들을 지운다
+  // ★ 지움: public static void main(String[] args) {
+  // ★ 지움: SpringApplication.run(ProductCompositeServiceApplication.class, args);
+  // ★ 지움: }
+  // ★ 지움: @Bean
+  // ★ 지움: RestTemplate restTemplate(JsonMapper jsonMapper) {
+  // ★ 지움: return new RestTemplate(List.of(new JacksonJsonHttpMessageConverter(jsonMapper)));
+  // ★ 지움: }
+  // ★ 삭제 끝
   @Bean
   public OpenAPI getOpenApiDocumentation() {
     return new OpenAPI()
@@ -131,8 +154,7 @@ public class ProductCompositeServiceApplication {
         .url(apiExternalDocUrl));
   }
 
-  // ★ 추가 (생성자와 publishEventScheduler 빈: 이벤트 게시를 별도 스레드 풀에서 실행)
-  // ★ 삭제: RestTemplate 빈 (WebClient로 바뀜)
+  // ★ 추가 시작 (8줄) — 생성자와 publishEventScheduler 빈: 이벤트 게시를 별도 스레드 풀에서 실행 / RestTemplate 빈 (WebClient로 바뀜
   private final Integer threadPoolSize;
   private final Integer taskQueueSize;
 
@@ -142,8 +164,10 @@ public class ProductCompositeServiceApplication {
   ) {
     this.threadPoolSize = threadPoolSize;
     this.taskQueueSize = taskQueueSize;
+  // ★ 추가 끝
   }
 
+  // ★ 추가 시작 (9줄)
   @Bean
   public Scheduler publishEventScheduler() {
     LOG.info("Creates a messagingScheduler with connectionPoolSize = {}", threadPoolSize);
@@ -155,6 +179,7 @@ public class ProductCompositeServiceApplication {
   }
 
 }
+  // ★ 추가 끝
 ```
 
 ## 3. ProductCompositeIntegration (전체 교체)
@@ -165,35 +190,53 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```java
 package se.magnus.microservices.composite.product.services;
 
+// ★ 변경 시작 (전 1줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static org.springframework.http.HttpMethod.GET;
 import static java.util.logging.Level.FINE;
 import static reactor.core.publisher.Flux.empty;
 import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
+// ★ 변경 끝
 
+// ★ 변경 시작 (전 4줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import tools.jackson.core.JacksonException;
+// ★ 전: import tools.jackson.databind.ObjectMapper;
+// ★ 전: import java.util.ArrayList;
+// ★ 전: import java.util.List;
 import tools.jackson.core.JacksonException;  // 교재와 다름 (교재: java.io.IOException, 3장부터)
 import tools.jackson.databind.ObjectMapper;  // 교재와 다름 (교재: com.fasterxml.jackson.databind.ObjectMapper, 3장부터)
+// ★ 변경 끝
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Qualifier;  // ★ 추가
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.health.contributor.Health;  // ★ 추가 (교재: org.springframework.boot.actuate.health.Health)
-import org.springframework.cloud.stream.function.StreamBridge;  // ★ 추가
+// ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.boot.health.contributor.Health;  // ★ 참고: 교재: org.springframework.boot.actuate.health.Health
+import org.springframework.cloud.stream.function.StreamBridge;
+// ★ 변경 끝
 import org.springframework.http.HttpStatus;
+// ★ 추가 시작 (2줄)
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+// ★ 추가 끝
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;  // ★ 추가 (RestTemplate 대신)
+// ★ 변경 시작 (전 2줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.web.client.HttpClientErrorException;
+// ★ 전: import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
+// ★ 변경 끝
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.product.ProductService;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.recommendation.RecommendationService;
 import se.magnus.api.core.review.Review;
 import se.magnus.api.core.review.ReviewService;
-import se.magnus.api.event.Event;
+import se.magnus.api.event.Event;  // ★ 추가
 import se.magnus.api.exceptions.InvalidInputException;
 import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.util.http.HttpErrorInfo;
@@ -203,122 +246,256 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
   private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
-  private final WebClient webClient;  // ★ 변경 (전: RestTemplate restTemplate)
+  private final WebClient webClient;  // ★ 변경 (전: private final RestTemplate restTemplate;)
   private final ObjectMapper mapper;
 
   private final String productServiceUrl;
   private final String recommendationServiceUrl;
   private final String reviewServiceUrl;
 
-  private final StreamBridge streamBridge;  // ★ 추가
+  // ★ 추가 시작 (2줄)
+  private final StreamBridge streamBridge;
 
-  private final Scheduler publishEventScheduler;  // ★ 추가
+  private final Scheduler publishEventScheduler;
+  // ★ 추가 끝
 
   public ProductCompositeIntegration(
+    // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: RestTemplate restTemplate,
     @Qualifier("publishEventScheduler") Scheduler publishEventScheduler,
 
     WebClient.Builder webClient,
+    // ★ 변경 끝
     ObjectMapper mapper,
-    StreamBridge streamBridge,
+    StreamBridge streamBridge,  // ★ 추가
 
     @Value("${app.product-service.host}") String productServiceHost,
-    @Value("${app.product-service.port}") int  productServicePort,
+    @Value("${app.product-service.port}") int  productServicePort,  // ★ 변경 (전: @Value("${app.product-service.port}") int productServicePort,)
 
     @Value("${app.recommendation-service.host}") String recommendationServiceHost,
-    @Value("${app.recommendation-service.port}") int  recommendationServicePort,
+    @Value("${app.recommendation-service.port}") int  recommendationServicePort,  // ★ 변경 (전: @Value("${app.recommendation-service.port}") int recommendationServ...)
 
     @Value("${app.review-service.host}") String reviewServiceHost,
+    // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: @Value("${app.review-service.port}") int reviewServicePort) {
     @Value("${app.review-service.port}") int  reviewServicePort
   ) {
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: this.restTemplate = restTemplate;
     this.publishEventScheduler = publishEventScheduler;
     this.webClient = webClient.build();
+    // ★ 변경 끝
     this.mapper = mapper;
-    this.streamBridge = streamBridge;
+    this.streamBridge = streamBridge;  // ★ 추가
 
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
+    // ★ 전: recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
+    // ★ 전: reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
     productServiceUrl        = "http://" + productServiceHost + ":" + productServicePort;
     recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort;
     reviewServiceUrl         = "http://" + reviewServiceHost + ":" + reviewServicePort;
+    // ★ 변경 끝
   }
 
   @Override
-  public Mono<Product> createProduct(Product body) {  // ★ 변경: HTTP POST 대신 이벤트 게시
+  public Mono<Product> createProduct(Product body) {  // ★ 변경 (전: public Product createProduct(Product body) {)
 
+    // ★ 변경 시작 (전 9줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: try {
+    // ★ 전: String url = productServiceUrl;
+    // ★ 전: LOG.debug("Will post a new product to URL: {}", url);
+    // ★ 전: Product product = restTemplate.postForObject(url, body, Product.class);
+    // ★ 전: LOG.debug("Created a product with id: {}", product.getProductId());
+    // ★ 전: return product;
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromCallable(() -> {
       sendMessage("products-out-0", new Event<>(CREATE, body.getProductId(), body));
       return body;
     }).subscribeOn(publishEventScheduler);
+    // ★ 변경 끝
   }
 
   @Override
+  // ★ 변경 시작 (전 3줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public Product getProduct(int productId) {
+  // ★ 전: try {
+  // ★ 전: String url = productServiceUrl + "/" + productId;
   public Mono<Product> getProduct(int productId) {
     String url = productServiceUrl + "/product/" + productId;
+  // ★ 변경 끝
     LOG.debug("Will call the getProduct API on URL: {}", url);
 
+    // ★ 변경 시작 (전 6줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: Product product = restTemplate.getForObject(url, Product.class);
+    // ★ 전: LOG.debug("Found a product with id: {}", product.getProductId());
+    // ★ 전: return product;
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return webClient.get().uri(url).retrieve().bodyToMono(Product.class).log(LOG.getName(), FINE).onErrorMap(WebClientResponseException.class, ex -> handleException(ex));
+    // ★ 변경 끝
   }
 
   @Override
+  // ★ 변경 시작 (전 4줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public void deleteProduct(int productId) {
+  // ★ 전: try {
+  // ★ 전: String url = productServiceUrl + "/" + productId;
+  // ★ 전: LOG.debug("Will call the deleteProduct API on URL: {}", url);
   public Mono<Void> deleteProduct(int productId) {
+  // ★ 변경 끝
 
+    // ★ 변경 시작 (전 4줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: restTemplate.delete(url);
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromRunnable(() -> sendMessage("products-out-0", new Event<>(DELETE, productId, null)))
       .subscribeOn(publishEventScheduler).then();
+    // ★ 변경 끝
   }
 
   @Override
-  public Mono<Recommendation> createRecommendation(Recommendation body) {
+  public Mono<Recommendation> createRecommendation(Recommendation body) {  // ★ 변경 (전: public Recommendation createRecommendation(Recommendation body) {)
 
+    // ★ 변경 시작 (전 9줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: try {
+    // ★ 전: String url = recommendationServiceUrl;
+    // ★ 전: LOG.debug("Will post a new recommendation to URL: {}", url);
+    // ★ 전: Recommendation recommendation = restTemplate.postForObject(url, body, Recommendation.class);
+    // ★ 전: LOG.debug("Created a recommendation with id: {}", recommendation.getProductId());
+    // ★ 전: return recommendation;
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromCallable(() -> {
       sendMessage("recommendations-out-0", new Event<>(CREATE, body.getProductId(), body));
       return body;
     }).subscribeOn(publishEventScheduler);
+    // ★ 변경 끝
   }
 
   @Override
-  public Flux<Recommendation> getRecommendations(int productId) {
+  public Flux<Recommendation> getRecommendations(int productId) {  // ★ 변경 (전: public List<Recommendation> getRecommendations(int productId) {)
 
+    // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: try {
+    // ★ 전: String url = recommendationServiceUrl + "?productId=" + productId;
     String url = recommendationServiceUrl + "/recommendation?productId=" + productId;
+    // ★ 변경 끝
 
     LOG.debug("Will call the getRecommendations API on URL: {}", url);
+// ★ 삭제 시작 (3줄) — 아래 줄들을 지운다
+// ★ 지움: List<Recommendation> recommendations = restTemplate
+// ★ 지움: .exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() {})
+// ★ 지움: .getBody();
+// ★ 삭제 끝
 
+    // ★ 변경 시작 (전 6줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: LOG.debug("Found {} recommendations for a product with id: {}", recommendations.size(), productId);
+    // ★ 전: return recommendations;
+    // ★ 전: } catch (Exception ex) {
+    // ★ 전: LOG.warn("Got an exception while requesting recommendations, return zero recommendations: {}", ex.getMessage());
+    // ★ 전: return new ArrayList<>();
+    // ★ 전: }
     return webClient.get().uri(url).retrieve().bodyToFlux(Recommendation.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
+    // ★ 변경 끝
   }
 
   @Override
+  // ★ 변경 시작 (전 4줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public void deleteRecommendations(int productId) {
+  // ★ 전: try {
+  // ★ 전: String url = recommendationServiceUrl + "?productId=" + productId;
+  // ★ 전: LOG.debug("Will call the deleteRecommendations API on URL: {}", url);
   public Mono<Void> deleteRecommendations(int productId) {
+  // ★ 변경 끝
 
+    // ★ 변경 시작 (전 4줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: restTemplate.delete(url);
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromRunnable(() -> sendMessage("recommendations-out-0", new Event<>(DELETE, productId, null)))
       .subscribeOn(publishEventScheduler).then();
+    // ★ 변경 끝
   }
 
   @Override
-  public Mono<Review> createReview(Review body) {
+  public Mono<Review> createReview(Review body) {  // ★ 변경 (전: public Review createReview(Review body) {)
 
+    // ★ 변경 시작 (전 9줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: try {
+    // ★ 전: String url = reviewServiceUrl;
+    // ★ 전: LOG.debug("Will post a new review to URL: {}", url);
+    // ★ 전: Review review = restTemplate.postForObject(url, body, Review.class);
+    // ★ 전: LOG.debug("Created a review with id: {}", review.getProductId());
+    // ★ 전: return review;
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromCallable(() -> {
       sendMessage("reviews-out-0", new Event<>(CREATE, body.getProductId(), body));
       return body;
     }).subscribeOn(publishEventScheduler);
+    // ★ 변경 끝
   }
 
   @Override
-  public Flux<Review> getReviews(int productId) {
+  public Flux<Review> getReviews(int productId) {  // ★ 변경 (전: public List<Review> getReviews(int productId) {)
 
+    // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: try {
+    // ★ 전: String url = reviewServiceUrl + "?productId=" + productId;
     String url = reviewServiceUrl + "/review?productId=" + productId;
+    // ★ 변경 끝
 
     LOG.debug("Will call the getReviews API on URL: {}", url);
+// ★ 삭제 시작 (3줄) — 아래 줄들을 지운다
+// ★ 지움: List<Review> reviews = restTemplate
+// ★ 지움: .exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() {})
+// ★ 지움: .getBody();
+// ★ 삭제 끝
 
+    // ★ 변경 시작 (전 6줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: LOG.debug("Found {} reviews for a product with id: {}", reviews.size(), productId);
+    // ★ 전: return reviews;
+    // ★ 전: } catch (Exception ex) {
+    // ★ 전: LOG.warn("Got an exception while requesting reviews, return zero reviews: {}", ex.getMessage());
+    // ★ 전: return new ArrayList<>();
+    // ★ 전: }
     return webClient.get().uri(url).retrieve().bodyToFlux(Review.class).log(LOG.getName(), FINE).onErrorResume(error -> empty());
+    // ★ 변경 끝
   }
 
   @Override
+  // ★ 변경 시작 (전 4줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public void deleteReviews(int productId) {
+  // ★ 전: try {
+  // ★ 전: String url = reviewServiceUrl + "?productId=" + productId;
+  // ★ 전: LOG.debug("Will call the deleteReviews API on URL: {}", url);
   public Mono<Void> deleteReviews(int productId) {
+  // ★ 변경 끝
 
+    // ★ 변경 시작 (전 4줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: restTemplate.delete(url);
+    // ★ 전: } catch (HttpClientErrorException ex) {
+    // ★ 전: throw handleHttpClientException(ex);
+    // ★ 전: }
     return Mono.fromRunnable(() -> sendMessage("reviews-out-0", new Event<>(DELETE, productId, null)))
       .subscribeOn(publishEventScheduler).then();
+    // ★ 변경 끝
   }
 
-  // ★ 추가 (상태 점검: HealthCheckConfiguration이 사용)
-  public Mono<Health> getProductHealth() {
+  // ★ 변경 시작 (전 2줄 → 31줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
+  // ★ 전: switch (HttpStatus.resolve(ex.getStatusCode().value())) {
+  public Mono<Health> getProductHealth() {  // ★ 참고: 상태 점검: HealthCheckConfiguration이 사용
     return getHealth(productServiceUrl);
   }
 
@@ -339,8 +516,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
       .log(LOG.getName(), FINE);
   }
 
-  // ★ 추가 (이벤트를 토픽으로 보내는 공통 메서드)
-  private void sendMessage(String bindingName, Event event) {
+  private void sendMessage(String bindingName, Event event) {  // ★ 참고: 이벤트를 토픽으로 보내는 공통 메서드
     LOG.debug("Sending a {} message to {}", event.getEventType(), bindingName);
     Message message = MessageBuilder.withPayload(event)
       .setHeader("partitionKey", event.getKey())
@@ -358,24 +534,33 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     WebClientResponseException wcre = (WebClientResponseException)ex;
 
     switch (HttpStatus.resolve(wcre.getStatusCode().value())) {
+  // ★ 변경 끝
 
       case NOT_FOUND:
-        return new NotFoundException(getErrorMessage(wcre));
+        return new NotFoundException(getErrorMessage(wcre));  // ★ 변경 (전: return new NotFoundException(getErrorMessage(ex));)
 
+      // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: case UNPROCESSABLE_CONTENT:
+      // ★ 전: return new InvalidInputException(getErrorMessage(ex));
       case UNPROCESSABLE_CONTENT:  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY, 3장부터)
         return new InvalidInputException(getErrorMessage(wcre));
+      // ★ 변경 끝
 
       default:
+        // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+        // ★ 전: LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
+        // ★ 전: LOG.warn("Error body: {}", ex.getResponseBodyAsString());
         LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", wcre.getStatusCode());
         LOG.warn("Error body: {}", wcre.getResponseBodyAsString());
+        // ★ 변경 끝
         return ex;
     }
   }
 
-  private String getErrorMessage(WebClientResponseException ex) {
+  private String getErrorMessage(WebClientResponseException ex) {  // ★ 변경 (전: private String getErrorMessage(HttpClientErrorException ex) {)
     try {
       return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-    } catch (JacksonException ioex) {  // 교재와 다름 (교재: IOException, 3장부터)
+    } catch (JacksonException ioex) {  // 교재와 다름 (교재: IOException, 3장부터)  // ★ 변경 (전: } catch (JacksonException ioex) {)
       return ex.getMessage();
     }
   }
@@ -440,19 +625,22 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```java
 package se.magnus.microservices.composite.product.services;
 
+// ★ 추가 시작 (2줄)
 import static java.util.logging.Level.FINE;
 
 import java.util.ArrayList;
+// ★ 추가 끝
 import java.util.List;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Mono;  // ★ 추가
 import se.magnus.api.composite.product.*;
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
+// ★ 삭제: import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.util.http.ServiceUtil;
 
 @RestController
@@ -461,55 +649,77 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
   private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
 
   private final ServiceUtil serviceUtil;
-  private final ProductCompositeIntegration integration;
+  private final ProductCompositeIntegration integration;  // ★ 변경 (전: private ProductCompositeIntegration integration;)
 
+  // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public ProductCompositeServiceImpl(
+  // ★ 전: ServiceUtil serviceUtil, ProductCompositeIntegration integration) {
   public ProductCompositeServiceImpl(ServiceUtil serviceUtil, ProductCompositeIntegration integration) {
+  // ★ 변경 끝
     this.serviceUtil = serviceUtil;
     this.integration = integration;
   }
 
   @Override
-  public Mono<Void> createProduct(ProductAggregate body) {  // ★ 변경: 결과 Mono들을 모아 Mono.zip으로 합침
+  public Mono<Void> createProduct(ProductAggregate body) {  // ★ 변경 (전: public void createProduct(ProductAggregate body) {)
 
     try {
 
+      // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: LOG.debug("createCompositeProduct: creates a new composite entity for productId: {}", body.getProductId());
       List<Mono> monoList = new ArrayList<>();
 
       LOG.info("Will create a new composite entity for product.id: {}", body.getProductId());
+      // ★ 변경 끝
 
       Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
-      monoList.add(integration.createProduct(product));
+      monoList.add(integration.createProduct(product));  // ★ 변경 (전: integration.createProduct(product);)
 
       if (body.getRecommendations() != null) {
         body.getRecommendations().forEach(r -> {
           Recommendation recommendation = new Recommendation(body.getProductId(), r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent(), null);
-          monoList.add(integration.createRecommendation(recommendation));
+          monoList.add(integration.createRecommendation(recommendation));  // ★ 변경 (전: integration.createRecommendation(recommendation);)
         });
       }
 
       if (body.getReviews() != null) {
         body.getReviews().forEach(r -> {
           Review review = new Review(body.getProductId(), r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent(), null);
-          monoList.add(integration.createReview(review));
+          monoList.add(integration.createReview(review));  // ★ 변경 (전: integration.createReview(review);)
         });
       }
 
       LOG.debug("createCompositeProduct: composite entities created for productId: {}", body.getProductId());
 
+      // ★ 추가 시작 (3줄)
       return Mono.zip(r -> "", monoList.toArray(new Mono[0]))
         .doOnError(ex -> LOG.warn("createCompositeProduct failed: {}", ex.toString()))
         .then();
+      // ★ 추가 끝
 
     } catch (RuntimeException re) {
-      LOG.warn("createCompositeProduct failed: {}", re.toString());
+      LOG.warn("createCompositeProduct failed: {}", re.toString());  // ★ 변경 (전: LOG.warn("createCompositeProduct failed", re);)
       throw re;
     }
   }
 
   @Override
+  // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: public ProductAggregate getProduct(int productId) {
   @SuppressWarnings("unchecked")
-  public Mono<ProductAggregate> getProduct(int productId) {  // ★ 변경: 세 서비스를 동시에 부르고 Mono.zip으로 합침
+  public Mono<ProductAggregate> getProduct(int productId) {
+  // ★ 변경 끝
 
+    // ★ 변경 시작 (전 9줄 → 8줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: LOG.debug("getCompositeProduct: lookup a product aggregate for productId: {}", productId);
+    // ★ 전: Product product = integration.getProduct(productId);
+    // ★ 전: if (product == null) {
+    // ★ 전: throw new NotFoundException("No product found for productId: " + productId);
+    // ★ 전: }
+    // ★ 전: List<Recommendation> recommendations = integration.getRecommendations(productId);
+    // ★ 전: List<Review> reviews = integration.getReviews(productId);
+    // ★ 전: LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);
+    // ★ 전: return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
     LOG.info("Will get composite product info for product.id={}", productId);
     return Mono.zip(
       values -> createProductAggregate((Product) values[0], (List<Recommendation>) values[1], (List<Review>) values[2], serviceUtil.getServiceAddress()),
@@ -518,15 +728,18 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
       integration.getReviews(productId).collectList())
       .doOnError(ex -> LOG.warn("getCompositeProduct failed: {}", ex.toString()))
       .log(LOG.getName(), FINE);
+    // ★ 변경 끝
   }
 
   @Override
-  public Mono<Void> deleteProduct(int productId) {  // ★ 변경: 삭제 이벤트 3개를 Mono.zip으로 합침
+  public Mono<Void> deleteProduct(int productId) {  // ★ 변경 (전: public void deleteProduct(int productId) {)
 
-    try {
+    try {  // ★ 변경 (전: LOG.debug("deleteCompositeProduct: Deletes a product aggregate for ...)
 
-      LOG.info("Will delete a product aggregate for product.id: {}", productId);
+      LOG.info("Will delete a product aggregate for product.id: {}", productId);  // ★ 변경 (전: integration.deleteProduct(productId);)
 
+      // ★ 변경 시작 (전 1줄 → 7줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: integration.deleteRecommendations(productId);
       return Mono.zip(
         r -> "",
         integration.deleteProduct(productId),
@@ -534,14 +747,26 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         integration.deleteReviews(productId))
         .doOnError(ex -> LOG.warn("delete failed: {}", ex.toString()))
         .log(LOG.getName(), FINE).then();
+      // ★ 변경 끝
 
+    // ★ 변경 시작 (전 2줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: integration.deleteReviews(productId);
+    // ★ 전: LOG.debug("deleteCompositeProduct: aggregate entities deleted for productId: {}", productId);
     } catch (RuntimeException re) {
       LOG.warn("deleteCompositeProduct failed: {}", re.toString());
       throw re;
     }
+    // ★ 변경 끝
   }
 
+  // ★ 변경 시작 (전 5줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private ProductAggregate createProductAggregate(
+  // ★ 전: Product product,
+  // ★ 전: List<Recommendation> recommendations,
+  // ★ 전: List<Review> reviews,
+  // ★ 전: String serviceAddress) {
   private ProductAggregate createProductAggregate(Product product, List<Recommendation> recommendations, List<Review> reviews, String serviceAddress) {
+  // ★ 변경 끝
 
     int productId = product.getProductId();
     String name = product.getName();
@@ -552,7 +777,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
         .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
         .collect(Collectors.toList());
 
-    List<ReviewSummary> reviewSummaries = (reviews == null)  ? null :
+    List<ReviewSummary> reviewSummaries = (reviews == null)  ? null :  // ★ 변경 (전: List<ReviewSummary> reviewSummaries = (reviews == null) ? null :)
       reviews.stream()
         .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
         .collect(Collectors.toList());
@@ -650,7 +875,8 @@ app:
     host: localhost
     port: 7004
 
-spring.cloud.stream:  # ★ 추가 (여기부터 management까지)
+# ★ 추가 시작 (24줄)
+spring.cloud.stream:
   defaultBinder: rabbit
   default.contentType: application/json
   bindings:
@@ -676,14 +902,17 @@ spring.rabbitmq:
   port: 5672
   username: guest
   password: guest
+# ★ 추가 끝
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
 
+# ★ 추가 시작 (2줄)
 management.endpoint.health.show-details: "ALWAYS"
 management.endpoints.web.exposure.include: "*"
+# ★ 추가 끝
 
 ---
 spring.config.activate.on-profile: docker
@@ -701,11 +930,11 @@ app:
     host: review
     port: 8080
 
-spring.rabbitmq.host: rabbitmq  # ★ 추가
+# ★ 추가 시작 (19줄)
+spring.rabbitmq.host: rabbitmq
 
-spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+spring.cloud.stream.kafka.binder.brokers: kafka
 
-# ★ 추가 (여기부터 파일 끝까지)
 ---
 spring.config.activate.on-profile: streaming_partitioned
 
@@ -728,6 +957,7 @@ management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka
 spring.kafka.bootstrap-servers: kafka:9092
 spring.cloud.stream.kafka.binder.replication-factor: 1
+# ★ 추가 끝
 ```
 
 | 설정 | 뜻 |
@@ -751,17 +981,23 @@ import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+// ★ 삭제: import static reactor.core.publisher.Mono.just;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)  // ★ 변경 (전: import org.springframework.boot.webtestclient.autoconfigure.AutoCon...)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+// ★ 변경 시작 (전 3줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import se.magnus.api.composite.product.ProductAggregate;
+// ★ 전: import se.magnus.api.composite.product.RecommendationSummary;
+// ★ 전: import se.magnus.api.composite.product.ReviewSummary;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+// ★ 변경 끝
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
@@ -770,38 +1006,67 @@ import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
+@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)  // ★ 변경 (전: @AutoConfigureWebTestClient  // Boot 4 (3장부터 유지))
 class ProductCompositeServiceApplicationTests {
 
   private static final int PRODUCT_ID_OK = 1;
   private static final int PRODUCT_ID_NOT_FOUND = 2;
   private static final int PRODUCT_ID_INVALID = 3;
 
+  // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: @Autowired private WebTestClient client;
   @Autowired
   private WebTestClient client;
+  // ★ 변경 끝
 
+  // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: @MockitoBean private ProductCompositeIntegration compositeIntegration;
   @MockitoBean
   private ProductCompositeIntegration compositeIntegration;
+  // ★ 변경 끝
 
   @BeforeEach
   void setUp() {
 
     when(compositeIntegration.getProduct(PRODUCT_ID_OK))
-      .thenReturn(Mono.just(new Product(PRODUCT_ID_OK, "name", 1, "mock-address")));
+      .thenReturn(Mono.just(new Product(PRODUCT_ID_OK, "name", 1, "mock-address")));  // ★ 변경 (전: .thenReturn(new Product(PRODUCT_ID_OK, "name", 1, "mock-address"));)
 
     when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
-      .thenReturn(Flux.fromIterable(singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address"))));
+      .thenReturn(Flux.fromIterable(singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address"))));  // ★ 변경 (전: .thenReturn(singletonList(new Recommendation(PRODUCT_ID_OK, 1, "aut...)
 
     when(compositeIntegration.getReviews(PRODUCT_ID_OK))
-      .thenReturn(Flux.fromIterable(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"))));
+      .thenReturn(Flux.fromIterable(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address"))));  // ★ 변경 (전: .thenReturn(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "s...)
 
+    // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND))
+    // ★ 전: .thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
     when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND)).thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: when(compositeIntegration.getProduct(PRODUCT_ID_INVALID))
+    // ★ 전: .thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
     when(compositeIntegration.getProduct(PRODUCT_ID_INVALID)).thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
+    // ★ 변경 끝
   }
 
   @Test
+  // ★ 변경 시작 (전 21줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: void contextLoads() {}
+  // ★ 전: @Test
+  // ★ 전: void createCompositeProduct1() {
+  // ★ 전: ProductAggregate compositeProduct = new ProductAggregate(1, "name", 1, null, null, null);
+  // ★ 전: postAndVerifyProduct(compositeProduct, OK);
+  // ★ 전: }
+  // ★ 전: @Test
+  // ★ 전: void createCompositeProduct2() {
+  // ★ 전: ProductAggregate compositeProduct = new ProductAggregate(1, "name", 1,
+  // ★ 전: singletonList(new RecommendationSummary(1, "a", 1, "c")),
+  // ★ 전: singletonList(new ReviewSummary(1, "a", "s", "c")), null);
+  // ★ 전: postAndVerifyProduct(compositeProduct, OK);
+  // ★ 전: ... (9줄 더)
   void contextLoads() {
+  // ★ 변경 끝
   }
 
   @Test
@@ -824,7 +1089,7 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void getProductInvalidInput() {
 
-    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT))
       .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
       .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
   }
@@ -838,7 +1103,24 @@ class ProductCompositeServiceApplicationTests {
       .expectHeader().contentType(APPLICATION_JSON)
       .expectBody();
   }
+// ★ 삭제 시작 (6줄) — 아래 줄들을 지운다
+// ★ 지움: private void postAndVerifyProduct(ProductAggregate compositeProduct, HttpStatus expectedStatus) {
+// ★ 지움: client.post()
+// ★ 지움: .uri("/product-composite")
+// ★ 지움: .body(just(compositeProduct), ProductAggregate.class)
+// ★ 지움: .exchange()
+// ★ 지움: .expectStatus().isEqualTo(expectedStatus);
+// ★ 삭제 끝
 }
+// ★ 삭제 시작 (7줄) — 아래 줄들을 지운다
+// ★ 지움: private void deleteAndVerifyProduct(int productId, HttpStatus expectedStatus) {
+// ★ 지움: client.delete()
+// ★ 지움: .uri("/product-composite/" + productId)
+// ★ 지움: .exchange()
+// ★ 지움: .expectStatus().isEqualTo(expectedStatus);
+// ★ 지움: }
+// ★ 지움: }
+// ★ 삭제 끝
 ```
 
 ### 7-2. IsSameEvent (새 파일)

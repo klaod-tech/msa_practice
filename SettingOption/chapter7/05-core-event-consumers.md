@@ -1,6 +1,6 @@
 # 05. 핵심 서비스가 이벤트를 받게 (Event, MessageProcessorConfig, yml, 테스트)
 
-> 표기: `★ 추가` / `★ 변경` = 6장 코드 대비 바뀌는 줄, `교재와 다름 (...)` = Boot 4 때문에 교재 7장과 다르게 쓰는 부분.
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 > 교재 "토픽과 이벤트 정의", "핵심 서비스에서 이벤트 소비" 절.
 
 토픽 3개와 거기 실리는 이벤트:
@@ -295,16 +295,17 @@ code microservices/product-service/src/main/resources/application.yml
 spring.application.name: product-service
 
 server.port: 7002
-spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
+spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)  # ★ 변경 (전: spring.web.error.include-message: always  # (교재: server.error.inclu...)
 
-spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)
+spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)  # ★ 변경 (전: spring.mongodb:)
   host: localhost
   port: 27017
   database: product-db
 
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 추가 (교재에는 없음, Jackson 3: Event의 final 필드 역직렬화)
+# ★ 추가 시작 (26줄) — 교재에는 없음, Jackson 3: Event의 final 필드 역직렬화
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 
-spring.cloud.function.definition: messageProcessor  # ★ 추가 (여기부터 spring.rabbitmq까지)
+spring.cloud.function.definition: messageProcessor
 
 spring.cloud.stream:
   defaultBinder: rabbit
@@ -335,28 +336,33 @@ spring.rabbitmq:
   port: 5672
   username: guest
   password: guest
+# ★ 추가 끝
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
-    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG  # ★ 변경 (전: MongoTemplate)
+    # ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    # ★ 전: org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 
-management.endpoint.health.show-details: "ALWAYS"  # ★ 추가
-management.endpoints.web.exposure.include: "*"  # ★ 추가
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+    # ★ 변경 끝
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
 
+# ★ 변경 시작 (전 1줄 → 20줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.mongodb.host: mongodb
 spring.mongodb.host: mongodb  # 교재와 다름 (교재: spring.data.mongodb.host, 6장부터 유지)
 
-spring.rabbitmq.host: rabbitmq  # ★ 추가
+spring.rabbitmq.host: rabbitmq
 
-spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+spring.cloud.stream.kafka.binder.brokers: kafka
 
-# ★ 추가 (여기부터 파일 끝까지)
 ---
 spring.config.activate.on-profile: streaming_partitioned
 
@@ -381,6 +387,7 @@ management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka
 spring.kafka.bootstrap-servers: kafka:9092
 spring.cloud.stream.kafka.binder.replication-factor: 1
+# ★ 변경 끝
 ```
 
 ```bash
@@ -391,16 +398,17 @@ code microservices/recommendation-service/src/main/resources/application.yml
 spring.application.name: recommendation-service
 
 server.port: 7003
-spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
+spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)  # ★ 변경 (전: spring.web.error.include-message: always  # (교재: server.error.inclu...)
 
-spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)
+spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)  # ★ 변경 (전: spring.mongodb:)
   host: localhost
   port: 27017
   database: recommendation-db
 
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 추가 (교재에는 없음, Jackson 3: Event의 final 필드 역직렬화)
+# ★ 추가 시작 (26줄) — 교재에는 없음, Jackson 3: Event의 final 필드 역직렬화
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 
-spring.cloud.function.definition: messageProcessor  # ★ 추가 (여기부터 spring.rabbitmq까지)
+spring.cloud.function.definition: messageProcessor
 
 spring.cloud.stream:
   defaultBinder: rabbit
@@ -431,28 +439,33 @@ spring.rabbitmq:
   port: 5672
   username: guest
   password: guest
+# ★ 추가 끝
 
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
-    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG  # ★ 변경 (전: MongoTemplate)
+    # ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    # ★ 전: org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.springframework.data.mongodb.core.ReactiveMongoTemplate: DEBUG
 
-management.endpoint.health.show-details: "ALWAYS"  # ★ 추가
-management.endpoints.web.exposure.include: "*"  # ★ 추가
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+    # ★ 변경 끝
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
 
+# ★ 변경 시작 (전 1줄 → 20줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.mongodb.host: mongodb
 spring.mongodb.host: mongodb  # 교재와 다름 (교재: spring.data.mongodb.host, 6장부터 유지)
 
-spring.rabbitmq.host: rabbitmq  # ★ 추가
+spring.rabbitmq.host: rabbitmq
 
-spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+spring.cloud.stream.kafka.binder.brokers: kafka
 
-# ★ 추가 (여기부터 파일 끝까지)
 ---
 spring.config.activate.on-profile: streaming_partitioned
 
@@ -477,6 +490,7 @@ management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka
 spring.kafka.bootstrap-servers: kafka:9092
 spring.cloud.stream.kafka.binder.replication-factor: 1
+# ★ 변경 끝
 ```
 
 ```bash
@@ -487,7 +501,7 @@ code microservices/review-service/src/main/resources/application.yml
 spring.application.name: review-service
 
 server.port: 7004
-spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
+spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)  # ★ 변경 (전: spring.web.error.include-message: always  # (교재: server.error.inclu...)
 
 spring.jpa.hibernate.ddl-auto: update
 
@@ -498,9 +512,10 @@ spring.datasource:
 
 spring.datasource.hikari.initializationFailTimeout: 60000
 
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 추가 (교재에는 없음, Jackson 3: Event의 final 필드 역직렬화)
+# ★ 추가 시작 (26줄) — 교재에는 없음, Jackson 3: Event의 final 필드 역직렬화
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 
-spring.cloud.function.definition: messageProcessor  # ★ 추가 (여기부터 spring.rabbitmq까지)
+spring.cloud.function.definition: messageProcessor
 
 spring.cloud.stream:
   defaultBinder: rabbit
@@ -531,6 +546,7 @@ spring.rabbitmq:
   port: 5672
   username: guest
   password: guest
+# ★ 추가 끝
 
 logging:
   level:
@@ -539,21 +555,25 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-management.endpoint.health.show-details: "ALWAYS"  # ★ 추가
-management.endpoints.web.exposure.include: "*"  # ★ 추가
+# ★ 추가 시작 (2줄)
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+# ★ 추가 끝
 
 ---
 spring.config.activate.on-profile: docker
 
 server.port: 8080
 
-spring.datasource.url: jdbc:mysql://mysql/review-db  # ★ 변경 (전: spring.datasource: 아래 url 두 줄 → 한 줄로)
+# ★ 변경 시작 (전 2줄 → 20줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.datasource:
+# ★ 전: url: jdbc:mysql://mysql/review-db
+spring.datasource.url: jdbc:mysql://mysql/review-db
 
-spring.rabbitmq.host: rabbitmq  # ★ 추가
+spring.rabbitmq.host: rabbitmq
 
-spring.cloud.stream.kafka.binder.brokers: kafka  # ★ 추가
+spring.cloud.stream.kafka.binder.brokers: kafka
 
-# ★ 추가 (여기부터 파일 끝까지)
 ---
 spring.config.activate.on-profile: streaming_partitioned
 
@@ -578,6 +598,7 @@ management.health.rabbit.enabled: false
 spring.cloud.stream.defaultBinder: kafka
 spring.kafka.bootstrap-servers: kafka:9092
 spring.cloud.stream.kafka.binder.replication-factor: 1
+# ★ 변경 끝
 ```
 
 | 설정 | 뜻 |
@@ -604,45 +625,60 @@ code microservices/product-service/src/test/java/se/magnus/microservices/core/pr
 ```java
 package se.magnus.microservices.core.product;
 
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static org.junit.jupiter.api.Assertions.assertFalse;
+// ★ 전: import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
+// ★ 변경 끝
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+// ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static reactor.core.publisher.Mono.just;
 import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
+// ★ 변경 끝
 
-import java.util.function.Consumer;
+import java.util.function.Consumer;  // ★ 추가
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Qualifier;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)  // ★ 변경 (전: import org.springframework.boot.webtestclient.autoconfigure.AutoCon...)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.product.Product;
+// ★ 추가 시작 (2줄)
 import se.magnus.api.event.Event;
 import se.magnus.api.exceptions.InvalidInputException;
+// ★ 추가 끝
 import se.magnus.microservices.core.product.persistence.ProductRepository;
 
-@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
+@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)  // ★ 추가
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+// ★ 삭제: @AutoConfigureWebTestClient
 class ProductServiceApplicationTests extends MongoDbTestBase {
 
+  // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: @Autowired private WebTestClient client;
   @Autowired
   private WebTestClient client;
+  // ★ 변경 끝
 
+  // ★ 변경 시작 (전 1줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: @Autowired private ProductRepository repository;
   @Autowired
   private ProductRepository repository;
 
   @Autowired
-  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
-  @Qualifier("messageProcessor")
+  @Qualifier("messageProcessor")  // ★ 참고: HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트
   private Consumer<Event<Integer, Product>> messageProcessor;
+  // ★ 변경 끝
 
   @BeforeEach
   void setupDb() {
-    repository.deleteAll().block();
+    repository.deleteAll().block();  // ★ 변경 (전: repository.deleteAll();)
   }
 
   @Test
@@ -650,16 +686,22 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
+    // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyProduct(productId, OK);
     assertNull(repository.findByProductId(productId).block());
     assertEquals(0, (long)repository.count().block());
+    // ★ 변경 끝
 
-    sendCreateProductEvent(productId);
+    sendCreateProductEvent(productId);  // ★ 변경 (전: assertTrue(repository.findByProductId(productId).isPresent());)
 
+    // ★ 변경 시작 (전 1줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: getAndVerifyProduct(productId, OK).jsonPath("$.productId").isEqualTo(productId);
     assertNotNull(repository.findByProductId(productId).block());
     assertEquals(1, (long)repository.count().block());
 
     getAndVerifyProduct(productId, OK)
       .jsonPath("$.productId").isEqualTo(productId);
+    // ★ 변경 끝
   }
 
   @Test
@@ -667,10 +709,14 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
-    assertNull(repository.findByProductId(productId).block());
+    assertNull(repository.findByProductId(productId).block());  // ★ 변경 (전: postAndVerifyProduct(productId, OK);)
 
-    sendCreateProductEvent(productId);
+    sendCreateProductEvent(productId);  // ★ 변경 (전: assertTrue(repository.findByProductId(productId).isPresent());)
 
+    // ★ 변경 시작 (전 3줄 → 6줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyProduct(productId, UNPROCESSABLE_CONTENT)
+    // ★ 전: .jsonPath("$.path").isEqualTo("/product")
+    // ★ 전: .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: " + productId);
     assertNotNull(repository.findByProductId(productId).block());
 
     InvalidInputException thrown = assertThrows(
@@ -678,6 +724,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
       () -> sendCreateProductEvent(productId),
       "Expected a InvalidInputException here!");
     assertEquals("Duplicate key, Product Id: " + productId, thrown.getMessage());
+    // ★ 변경 끝
   }
 
   @Test
@@ -685,13 +732,21 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
+    // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyProduct(productId, OK);
+    // ★ 전: assertTrue(repository.findByProductId(productId).isPresent());
     sendCreateProductEvent(productId);
     assertNotNull(repository.findByProductId(productId).block());
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: deleteAndVerifyProduct(productId, OK);
+    // ★ 전: assertFalse(repository.findByProductId(productId).isPresent());
     sendDeleteProductEvent(productId);
     assertNull(repository.findByProductId(productId).block());
+    // ★ 변경 끝
 
-    sendDeleteProductEvent(productId);
+    sendDeleteProductEvent(productId);  // ★ 변경 (전: deleteAndVerifyProduct(productId, OK);)
   }
 
   @Test
@@ -716,7 +771,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT))
       .jsonPath("$.path").isEqualTo("/product/" + productIdInvalid)
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -735,15 +790,34 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
       .expectBody();
   }
 
-  private void sendCreateProductEvent(int productId) {
+  private void sendCreateProductEvent(int productId) {  // ★ 변경 (전: private WebTestClient.BodyContentSpec postAndVerifyProduct(int prod...)
     Product product = new Product(productId, "Name " + productId, productId, "SA");
+    // ★ 변경 시작 (전 8줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: return client.post()
+    // ★ 전: .uri("/product")
+    // ★ 전: .body(just(product), Product.class)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody();
     Event<Integer, Product> event = new Event<>(CREATE, productId, product);
     messageProcessor.accept(event);
+    // ★ 변경 끝
   }
 
+  // ★ 변경 시작 (전 7줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private WebTestClient.BodyContentSpec deleteAndVerifyProduct(int productId, HttpStatus expectedStatus) {
+  // ★ 전: return client.delete()
+  // ★ 전: .uri("/product/" + productId)
+  // ★ 전: .accept(APPLICATION_JSON)
+  // ★ 전: .exchange()
+  // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+  // ★ 전: .expectBody();
   private void sendDeleteProductEvent(int productId) {
     Event<Integer, Product> event = new Event<>(DELETE, productId, null);
     messageProcessor.accept(event);
+  // ★ 변경 끝
   }
 }
 ```
@@ -755,29 +829,35 @@ code microservices/recommendation-service/src/test/java/se/magnus/microservices/
 ```java
 package se.magnus.microservices.core.recommendation;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;  // ★ 변경 (전: import static org.junit.jupiter.api.Assertions.assertEquals;)
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+// ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static reactor.core.publisher.Mono.just;
 import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
+// ★ 변경 끝
 
-import java.util.function.Consumer;
+import java.util.function.Consumer;  // ★ 추가
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Qualifier;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)  // ★ 변경 (전: import org.springframework.boot.webtestclient.autoconfigure.AutoCon...)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.recommendation.Recommendation;
+// ★ 추가 시작 (2줄)
 import se.magnus.api.event.Event;
 import se.magnus.api.exceptions.InvalidInputException;
+// ★ 추가 끝
 import se.magnus.microservices.core.recommendation.persistence.RecommendationRepository;
 
-@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
+@AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)  // ★ 추가
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+// ★ 삭제: @AutoConfigureWebTestClient
 class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
   @Autowired
@@ -786,14 +866,15 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
   @Autowired
   private RecommendationRepository repository;
 
+  // ★ 추가 시작 (3줄)
   @Autowired
-  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
-  @Qualifier("messageProcessor")
+  @Qualifier("messageProcessor")  // ★ 참고: HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트
   private Consumer<Event<Integer, Recommendation>> messageProcessor;
+  // ★ 추가 끝
 
   @BeforeEach
   void setupDb() {
-    repository.deleteAll().block();
+    repository.deleteAll().block();  // ★ 변경 (전: repository.deleteAll();)
   }
 
   @Test
@@ -801,11 +882,16 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
     int productId = 1;
 
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyRecommendation(productId, 1, OK);
+    // ★ 전: postAndVerifyRecommendation(productId, 2, OK);
+    // ★ 전: postAndVerifyRecommendation(productId, 3, OK);
     sendCreateRecommendationEvent(productId, 1);
     sendCreateRecommendationEvent(productId, 2);
     sendCreateRecommendationEvent(productId, 3);
+    // ★ 변경 끝
 
-    assertEquals(3, (long)repository.findByProductId(productId).count().block());
+    assertEquals(3, (long)repository.findByProductId(productId).count().block());  // ★ 변경 (전: assertEquals(3, repository.findByProductId(productId).size());)
 
     getAndVerifyRecommendationsByProductId(productId, OK)
       .jsonPath("$.length()").isEqualTo(3)
@@ -819,17 +905,27 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
+    // ★ 변경 시작 (전 3줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyRecommendation(productId, recommendationId, OK)
+    // ★ 전: .jsonPath("$.productId").isEqualTo(productId)
+    // ★ 전: .jsonPath("$.recommendationId").isEqualTo(recommendationId);
     sendCreateRecommendationEvent(productId, recommendationId);
+    // ★ 변경 끝
 
-    assertEquals(1, (long)repository.count().block());
+    assertEquals(1, (long)repository.count().block());  // ★ 변경 (전: assertEquals(1, repository.count());)
 
+    // ★ 변경 시작 (전 3줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyRecommendation(productId, recommendationId, UNPROCESSABLE_CONTENT)
+    // ★ 전: .jsonPath("$.path").isEqualTo("/recommendation")
+    // ★ 전: .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Recommendation Id:1");
     InvalidInputException thrown = assertThrows(
       InvalidInputException.class,
       () -> sendCreateRecommendationEvent(productId, recommendationId),
       "Expected a InvalidInputException here!");
     assertEquals("Duplicate key, Product Id: 1, Recommendation Id:1", thrown.getMessage());
+    // ★ 변경 끝
 
-    assertEquals(1, (long)repository.count().block());
+    assertEquals(1, (long)repository.count().block());  // ★ 변경 (전: assertEquals(1, repository.count());)
   }
 
   @Test
@@ -838,13 +934,21 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
     int productId = 1;
     int recommendationId = 1;
 
+    // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyRecommendation(productId, recommendationId, OK);
+    // ★ 전: assertEquals(1, repository.findByProductId(productId).size());
     sendCreateRecommendationEvent(productId, recommendationId);
     assertEquals(1, (long)repository.findByProductId(productId).count().block());
+    // ★ 변경 끝
 
+    // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: deleteAndVerifyRecommendationsByProductId(productId, OK);
+    // ★ 전: assertEquals(0, repository.findByProductId(productId).size());
     sendDeleteRecommendationEvent(productId);
     assertEquals(0, (long)repository.findByProductId(productId).count().block());
+    // ★ 변경 끝
 
-    sendDeleteRecommendationEvent(productId);
+    sendDeleteRecommendationEvent(productId);  // ★ 변경 (전: deleteAndVerifyRecommendationsByProductId(productId, OK);)
   }
 
   @Test
@@ -875,7 +979,7 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyRecommendationsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyRecommendationsByProductId("?productId=" + productIdInv...)
       .jsonPath("$.path").isEqualTo("/recommendation")
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -894,15 +998,34 @@ class RecommendationServiceApplicationTests extends MongoDbTestBase {
       .expectBody();
   }
 
-  private void sendCreateRecommendationEvent(int productId, int recommendationId) {
+  private void sendCreateRecommendationEvent(int productId, int recommendationId) {  // ★ 변경 (전: private WebTestClient.BodyContentSpec postAndVerifyRecommendation(i...)
     Recommendation recommendation = new Recommendation(productId, recommendationId, "Author " + recommendationId, recommendationId, "Content " + recommendationId, "SA");
+    // ★ 변경 시작 (전 8줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: return client.post()
+    // ★ 전: .uri("/recommendation")
+    // ★ 전: .body(just(recommendation), Recommendation.class)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody();
     Event<Integer, Recommendation> event = new Event<>(CREATE, productId, recommendation);
     messageProcessor.accept(event);
+    // ★ 변경 끝
   }
 
+  // ★ 변경 시작 (전 7줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private WebTestClient.BodyContentSpec deleteAndVerifyRecommendationsByProductId(int productId, HttpStatus expectedStatus) {
+  // ★ 전: return client.delete()
+  // ★ 전: .uri("/recommendation?productId=" + productId)
+  // ★ 전: .accept(APPLICATION_JSON)
+  // ★ 전: .exchange()
+  // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+  // ★ 전: .expectBody();
   private void sendDeleteRecommendationEvent(int productId) {
     Event<Integer, Recommendation> event = new Event<>(DELETE, productId, null);
     messageProcessor.accept(event);
+  // ★ 변경 끝
   }
 }
 ```
@@ -914,31 +1037,40 @@ code microservices/review-service/src/test/java/se/magnus/microservices/core/rev
 ```java
 package se.magnus.microservices.core.review;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;  // ★ 변경 (전: import static org.junit.jupiter.api.Assertions.assertEquals;)
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+// ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static reactor.core.publisher.Mono.just;
 import static se.magnus.api.event.Event.Type.CREATE;
 import static se.magnus.api.event.Event.Type.DELETE;
+// ★ 변경 끝
 
-import java.util.function.Consumer;
+import java.util.function.Consumer;  // ★ 추가
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Qualifier;  // ★ 추가
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;  // 교재와 다름 (Boot 4)  // ★ 변경 (전: import org.springframework.boot.webtestclient.autoconfigure.AutoCon...)
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.magnus.api.core.review.Review;
+// ★ 추가 시작 (2줄)
 import se.magnus.api.event.Event;
 import se.magnus.api.exceptions.InvalidInputException;
+// ★ 추가 끝
 import se.magnus.microservices.core.review.persistence.ReviewRepository;
 
+// ★ 변경 시작 (전 2줄 → 4줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: @SpringBootTest(webEnvironment = RANDOM_PORT)
+// ★ 전: @AutoConfigureWebTestClient
 @AutoConfigureWebTestClient  // 교재와 다름 (Boot 4)
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {
   "spring.cloud.stream.defaultBinder=rabbit",
   "logging.level.se.magnus=DEBUG"})
+// ★ 변경 끝
 class ReviewServiceApplicationTests extends MySqlTestBase {
 
   @Autowired
@@ -947,10 +1079,11 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
   @Autowired
   private ReviewRepository repository;
 
+  // ★ 추가 시작 (3줄)
   @Autowired
-  // ★ 추가 (HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트)
-  @Qualifier("messageProcessor")
+  @Qualifier("messageProcessor")  // ★ 참고: HTTP POST/DELETE 대신 이벤트를 직접 넣어 테스트
   private Consumer<Event<Integer, Review>> messageProcessor;
+  // ★ 추가 끝
 
   @BeforeEach
   void setupDb() {
@@ -964,9 +1097,14 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 
     assertEquals(0, repository.findByProductId(productId).size());
 
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyReview(productId, 1, OK);
+    // ★ 전: postAndVerifyReview(productId, 2, OK);
+    // ★ 전: postAndVerifyReview(productId, 3, OK);
     sendCreateReviewEvent(productId, 1);
     sendCreateReviewEvent(productId, 2);
     sendCreateReviewEvent(productId, 3);
+    // ★ 변경 끝
 
     assertEquals(3, repository.findByProductId(productId).size());
 
@@ -984,15 +1122,25 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 
     assertEquals(0, repository.count());
 
+    // ★ 변경 시작 (전 3줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyReview(productId, reviewId, OK)
+    // ★ 전: .jsonPath("$.productId").isEqualTo(productId)
+    // ★ 전: .jsonPath("$.reviewId").isEqualTo(reviewId);
     sendCreateReviewEvent(productId, reviewId);
+    // ★ 변경 끝
 
     assertEquals(1, repository.count());
 
+    // ★ 변경 시작 (전 3줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: postAndVerifyReview(productId, reviewId, UNPROCESSABLE_CONTENT)
+    // ★ 전: .jsonPath("$.path").isEqualTo("/review")
+    // ★ 전: .jsonPath("$.message").isEqualTo("Duplicate key, Product Id: 1, Review Id:1");
     InvalidInputException thrown = assertThrows(
       InvalidInputException.class,
       () -> sendCreateReviewEvent(productId, reviewId),
       "Expected a InvalidInputException here!");
     assertEquals("Duplicate key, Product Id: 1, Review Id:1", thrown.getMessage());
+    // ★ 변경 끝
 
     assertEquals(1, repository.count());
   }
@@ -1003,13 +1151,13 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
     int productId = 1;
     int reviewId = 1;
 
-    sendCreateReviewEvent(productId, reviewId);
+    sendCreateReviewEvent(productId, reviewId);  // ★ 변경 (전: postAndVerifyReview(productId, reviewId, OK);)
     assertEquals(1, repository.findByProductId(productId).size());
 
-    sendDeleteReviewEvent(productId);
+    sendDeleteReviewEvent(productId);  // ★ 변경 (전: deleteAndVerifyReviewsByProductId(productId, OK);)
     assertEquals(0, repository.findByProductId(productId).size());
 
-    sendDeleteReviewEvent(productId);
+    sendDeleteReviewEvent(productId);  // ★ 변경 (전: deleteAndVerifyReviewsByProductId(productId, OK);)
   }
 
   @Test
@@ -1040,7 +1188,7 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyReviewsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
+    getAndVerifyReviewsByProductId("?productId=" + productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyReviewsByProductId("?productId=" + productIdInvalid, UN...)
       .jsonPath("$.path").isEqualTo("/review")
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
@@ -1059,15 +1207,34 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
       .expectBody();
   }
 
-  private void sendCreateReviewEvent(int productId, int reviewId) {
+  private void sendCreateReviewEvent(int productId, int reviewId) {  // ★ 변경 (전: private WebTestClient.BodyContentSpec postAndVerifyReview(int produ...)
     Review review = new Review(productId, reviewId, "Author " + reviewId, "Subject " + reviewId, "Content " + reviewId, "SA");
+    // ★ 변경 시작 (전 8줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: return client.post()
+    // ★ 전: .uri("/review")
+    // ★ 전: .body(just(review), Review.class)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody();
     Event<Integer, Review> event = new Event<>(CREATE, productId, review);
     messageProcessor.accept(event);
+    // ★ 변경 끝
   }
 
+  // ★ 변경 시작 (전 7줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private WebTestClient.BodyContentSpec deleteAndVerifyReviewsByProductId(int productId, HttpStatus expectedStatus) {
+  // ★ 전: return client.delete()
+  // ★ 전: .uri("/review?productId=" + productId)
+  // ★ 전: .accept(APPLICATION_JSON)
+  // ★ 전: .exchange()
+  // ★ 전: .expectStatus().isEqualTo(expectedStatus)
+  // ★ 전: .expectBody();
   private void sendDeleteReviewEvent(int productId) {
     Event<Integer, Review> event = new Event<>(DELETE, productId, null);
     messageProcessor.accept(event);
+  // ★ 변경 끝
   }
 }
 ```

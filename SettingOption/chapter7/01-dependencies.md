@@ -1,6 +1,6 @@
 # 01. 의존성 추가 (build.gradle 5개)
 
-> 표기: `★ 추가` / `★ 변경` = 6장 코드 대비 바뀌는 줄, `교재와 다름 (...)` = Boot 4 때문에 교재 7장과 다르게 쓰는 부분.
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 | 프로젝트 | 추가/변경 | 이유 |
 |---|---|---|
@@ -36,7 +36,7 @@ java {
 
 ext {
 	mapstructVersion = '1.6.3'
-	springCloudVersion = '2025.1.4'  // ★ 추가 (교재: 2025.0.0)
+	springCloudVersion = '2025.1.4'  // ★ 추가 — 교재: 2025.0.0
 }
 
 repositories {
@@ -51,29 +51,41 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(":api")
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'  // ★ 변경 (전: spring-boot-starter-data-mongodb)
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
+	// ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+	// ★ 변경 끝
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+	// ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: compileOnly 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	compileOnly 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // 교재에는 없음 (6장부터)
+	// ★ 변경 끝
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive-test'  // ★ 변경 (전: spring-boot-starter-data-mongodb-test)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive-test'  // ★ 변경 (전: testImplementation 'org.springframework.boot:spring-boot-starter-da...)
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	// ★ 변경 시작 (전 2줄 → 7줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-mongodb'
 	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // 교재와 다름 (교재: org.testcontainers:junit-jupiter, 6장부터)
 	testImplementation 'org.testcontainers:testcontainers-mongodb'  // 교재와 다름 (교재: org.testcontainers:mongodb, 6장부터)
 }
 
-dependencyManagement {  // ★ 추가 (블록 전체)
+dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+	// ★ 변경 끝
 }
 
 tasks.named('test') {
@@ -106,7 +118,7 @@ java {
 
 ext {
 	mapstructVersion = '1.6.3'
-	springCloudVersion = '2025.1.4'  // ★ 추가 (교재: 2025.0.0)
+	springCloudVersion = '2025.1.4'  // ★ 추가 — 교재: 2025.0.0
 }
 
 repositories {
@@ -121,29 +133,41 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'  // ★ 변경 (전: spring-boot-starter-data-mongodb)
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
+	// ★ 변경 시작 (전 1줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+	// ★ 변경 끝
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+	// ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: compileOnly 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	compileOnly 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // 교재에는 없음 (6장부터)
+	// ★ 변경 끝
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive-test'  // ★ 변경 (전: spring-boot-starter-data-mongodb-test)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive-test'  // ★ 변경 (전: testImplementation 'org.springframework.boot:spring-boot-starter-da...)
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	// ★ 변경 시작 (전 2줄 → 7줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-mongodb'
 	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // 교재와 다름 (교재: org.testcontainers:junit-jupiter, 6장부터)
 	testImplementation 'org.testcontainers:testcontainers-mongodb'  // 교재와 다름 (교재: org.testcontainers:mongodb, 6장부터)
 }
 
-dependencyManagement {  // ★ 추가 (블록 전체)
+dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+	// ★ 변경 끝
 }
 
 tasks.named('test') {
@@ -176,7 +200,7 @@ java {
 
 ext {
 	mapstructVersion = '1.6.3'
-	springCloudVersion = '2025.1.4'  // ★ 추가 (교재: 2025.0.0)
+	springCloudVersion = '2025.1.4'  // ★ 추가 — 교재: 2025.0.0
 }
 
 repositories {
@@ -193,28 +217,39 @@ dependencies {
 	implementation project(':util')
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.mysql:mysql-connector-j'
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
+	// ★ 추가 시작 (2줄)
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+	// ★ 추가 끝
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
+	// ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: compileOnly 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok'
+	// ★ 전: annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	compileOnly 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok'  // 교재에는 없음 (6장부터)
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // 교재에는 없음 (6장부터)
+	// ★ 변경 끝
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'  // 교재에는 없음 (6장부터)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'  // 교재에는 없음 (6장부터)  // ★ 변경 (전: testImplementation 'org.springframework.boot:spring-boot-starter-da...)
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	// ★ 변경 시작 (전 2줄 → 7줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-junit-jupiter'
+	// ★ 전: testImplementation 'org.testcontainers:testcontainers-mysql'
 	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // 교재와 다름 (교재: org.testcontainers:junit-jupiter, 6장부터)
 	testImplementation 'org.testcontainers:testcontainers-mysql'  // 교재와 다름 (교재: org.testcontainers:mysql, 6장부터)
 }
 
-dependencyManagement {  // ★ 추가 (블록 전체)
+dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
+	// ★ 변경 끝
 }
 
 tasks.named('test') {
@@ -243,9 +278,11 @@ java {
 	}
 }
 
+// ★ 추가 시작 (3줄)
 ext {
 	springCloudVersion = '2025.1.4'  // (교재: 2025.0.0)
 }
+// ★ 추가 끝
 
 repositories {
 	mavenCentral()
@@ -260,18 +297,22 @@ dependencies {
 	implementation project(':api')
 	implementation project(':util')
 	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.3'
-	implementation 'org.springframework.boot:spring-boot-starter-webclient'  // ★ 추가 (교재에는 없음, Boot 4: WebClient.Builder 제공)
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'  // ★ 추가
-	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'  // ★ 추가
-	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'  // ★ 추가
-	  
+	// ★ 추가 시작 (4줄) — 교재에는 없음, Boot 4: WebClient.Builder 제공
+	implementation 'org.springframework.boot:spring-boot-starter-webclient'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
+	implementation 'org.springframework.cloud:spring-cloud-starter-stream-kafka'
+	testImplementation 'org.springframework.cloud:spring-cloud-stream-test-binder'
+	// ★ 추가 끝
+
 }
 
-dependencyManagement {  // ★ 추가 (블록 전체)
+// ★ 추가 시작 (5줄)
+dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
 }
+// ★ 추가 끝
 
 tasks.named('test') {
 	useJUnitPlatform()
@@ -311,7 +352,7 @@ dependencies {
     implementation project(':api')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.platform:junit-platform-launcher'  // ★ 추가 (ReactorTests 실행에 필요)
+    testImplementation 'org.junit.platform:junit-platform-launcher'  // ★ 추가
     compileOnly platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     compileOnly 'org.projectlombok:lombok'

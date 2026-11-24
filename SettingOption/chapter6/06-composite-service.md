@@ -1,6 +1,6 @@
 # 06. 복합 서비스 확장 (생성/삭제)
 
-> 표기: `★ 추가` / `★ 변경` = 5장 코드 대비, `(교재: ...)` = 교재 6장과 다르게 쓰는 부분
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 composite는 DB가 없다. 대신 **POST로 받은 묶음(ProductAggregate)을 세 조각으로 나눠** 각 핵심 서비스에 POST하고, DELETE도 세 서비스에 차례로 보낸다.
 
@@ -78,12 +78,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;  // ★ 변경 (GetMapping, PathVariable → *)
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import org.springframework.web.bind.annotation.GetMapping;
+// ★ 전: import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+// ★ 변경 끝
 
 @Tag(name = "ProductComposite", description = "REST API for composite product information.")
 public interface ProductCompositeService {
 
-  // ★ 추가 (POST: 생성)
+  // ★ 추가 시작 (11줄) — POST: 생성
   @Operation(
     summary = "${api.product-composite.create-composite-product.description}",
     description = "${api.product-composite.create-composite-product.notes}")
@@ -95,6 +99,7 @@ public interface ProductCompositeService {
     value    = "/product-composite",
     consumes = "application/json")
   void createProduct(@RequestBody ProductAggregate body);
+  // ★ 추가 끝
 
   @Operation(
     summary = "${api.product-composite.get-composite-product.description}",
@@ -110,7 +115,7 @@ public interface ProductCompositeService {
     produces = "application/json")
   ProductAggregate getProduct(@PathVariable int productId);
 
-  // ★ 추가 (DELETE: 삭제)
+  // ★ 추가 시작 (9줄) — DELETE: 삭제
   @Operation(
     summary = "${api.product-composite.delete-composite-product.description}",
     description = "${api.product-composite.delete-composite-product.notes}")
@@ -120,6 +125,7 @@ public interface ProductCompositeService {
   })
   @DeleteMapping(value = "/product-composite/{productId}")
   void deleteProduct(@PathVariable int productId);
+  // ★ 추가 끝
 }
 ```
 
@@ -135,8 +141,8 @@ package se.magnus.microservices.composite.product.services;
 
 import static org.springframework.http.HttpMethod.GET;
 
-import tools.jackson.core.JacksonException;  // ★ 변경 (교재: java.io.IOException)
-import tools.jackson.databind.ObjectMapper;  // ★ 변경 (교재: com.fasterxml.jackson.databind.ObjectMapper)
+import tools.jackson.core.JacksonException;  // ★ 참고: 교재: java.io.IOException
+import tools.jackson.databind.ObjectMapper;  // ★ 참고: 교재: com.fasterxml.jackson.databind.ObjectMapper
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -182,11 +188,17 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     this.restTemplate = restTemplate;
     this.mapper = mapper;
 
-    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";  // ★ 변경: 끝의 "/" 삭제
-    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";  // ★ 변경: "?productId=" 삭제
-    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";  // ★ 변경: "?productId=" 삭제
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product/";
+    // ★ 전: recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation?productId=";
+    // ★ 전: reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review?productId=";
+    productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product";
+    recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation";
+    reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review";
+    // ★ 변경 끝
   }
 
+  // ★ 추가 시작 (13줄)
   @Override
   public Product createProduct(Product body) {
 
@@ -205,11 +217,16 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   }
 
   @Override
+  // ★ 추가 끝
   public Product getProduct(int productId) {
 
     try {
+      // ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: String url = productServiceUrl + productId;
+      // ★ 전: LOG.debug("Will call getProduct API on URL: {}", url);
       String url = productServiceUrl + "/" + productId;
       LOG.debug("Will call the getProduct API on URL: {}", url);
+      // ★ 변경 끝
 
       Product product = restTemplate.getForObject(url, Product.class);
       LOG.debug("Found a product with id: {}", product.getProductId());
@@ -217,13 +234,32 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
       return product;
 
     } catch (HttpClientErrorException ex) {
+      // ★ 변경 시작 (전 10줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: switch (HttpStatus.resolve(ex.getStatusCode().value())) {
+      // ★ 전: case NOT_FOUND:
+      // ★ 전: throw new NotFoundException(getErrorMessage(ex));
+      // ★ 전: case UNPROCESSABLE_CONTENT:
+      // ★ 전: throw new InvalidInputException(getErrorMessage(ex));
+      // ★ 전: default:
+      // ★ 전: LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
+      // ★ 전: LOG.warn("Error body: {}", ex.getResponseBodyAsString());
+      // ★ 전: throw ex;
+      // ★ 전: }
       throw handleHttpClientException(ex);
+      // ★ 변경 끝
     }
   }
 
+  // ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+  // ★ 전: private String getErrorMessage(HttpClientErrorException ex) {
   @Override
   public void deleteProduct(int productId) {
+  // ★ 변경 끝
     try {
+      // ★ 변경 시작 (전 3줄 → 5줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+      // ★ 전: return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
+      // ★ 전: } catch (JacksonException ioex) {
+      // ★ 전: return ex.getMessage();
       String url = productServiceUrl + "/" + productId;
       LOG.debug("Will call the deleteProduct API on URL: {}", url);
 
@@ -231,9 +267,11 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     } catch (HttpClientErrorException ex) {
       throw handleHttpClientException(ex);
+      // ★ 변경 끝
     }
   }
 
+  // ★ 추가 시작 (13줄)
   @Override
   public Recommendation createRecommendation(Recommendation body) {
 
@@ -252,12 +290,13 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   }
 
   @Override
+  // ★ 추가 끝
   public List<Recommendation> getRecommendations(int productId) {
 
     try {
-      String url = recommendationServiceUrl + "?productId=" + productId;
+      String url = recommendationServiceUrl + "?productId=" + productId;  // ★ 변경 (전: String url = recommendationServiceUrl + productId;)
 
-      LOG.debug("Will call the getRecommendations API on URL: {}", url);
+      LOG.debug("Will call the getRecommendations API on URL: {}", url);  // ★ 변경 (전: LOG.debug("Will call getRecommendations API on URL: {}", url);)
       List<Recommendation> recommendations = restTemplate
         .exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() {})
         .getBody();
@@ -271,6 +310,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
   }
 
+  // ★ 추가 시작 (23줄)
   @Override
   public void deleteRecommendations(int productId) {
     try {
@@ -302,12 +342,13 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   }
 
   @Override
+  // ★ 추가 끝
   public List<Review> getReviews(int productId) {
 
     try {
-      String url = reviewServiceUrl + "?productId=" + productId;
+      String url = reviewServiceUrl + "?productId=" + productId;  // ★ 변경 (전: String url = reviewServiceUrl + productId;)
 
-      LOG.debug("Will call the getReviews API on URL: {}", url);
+      LOG.debug("Will call the getReviews API on URL: {}", url);  // ★ 변경 (전: LOG.debug("Will call getReviews API on URL: {}", url);)
       List<Review> reviews = restTemplate
         .exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() {})
         .getBody();
@@ -321,6 +362,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
     }
   }
 
+  // ★ 추가 시작 (8줄)
   @Override
   public void deleteReviews(int productId) {
     try {
@@ -331,7 +373,9 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 
     } catch (HttpClientErrorException ex) {
       throw handleHttpClientException(ex);
+  // ★ 추가 끝
     }
+  // ★ 추가 시작 (21줄)
   }
 
   private RuntimeException handleHttpClientException(HttpClientErrorException ex) {
@@ -340,7 +384,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
       case NOT_FOUND:
         return new NotFoundException(getErrorMessage(ex));
 
-      case UNPROCESSABLE_CONTENT:  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+      case UNPROCESSABLE_CONTENT:  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
         return new InvalidInputException(getErrorMessage(ex));
 
       default:
@@ -353,11 +397,12 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   private String getErrorMessage(HttpClientErrorException ex) {
     try {
       return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-    } catch (JacksonException ioex) {  // ★ 변경 (교재: IOException)
+    } catch (JacksonException ioex) {  // ★ 참고: 교재: IOException
       return ex.getMessage();
     }
   }
 }
+  // ★ 추가 끝
 ```
 
 - URL 끝을 `/product`, `/recommendation`, `/review`로 바꾼 이유: POST는 이 주소 그대로 쓰고, GET/DELETE는 메서드 안에서 `"/" + productId` 또는 `"?productId=" + productId`를 붙인다.
@@ -373,8 +418,10 @@ package se.magnus.microservices.composite.product.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
+// ★ 추가 시작 (2줄)
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+// ★ 추가 끝
 import org.springframework.web.bind.annotation.RestController;
 import se.magnus.api.composite.product.*;
 import se.magnus.api.core.product.Product;
@@ -386,18 +433,19 @@ import se.magnus.util.http.ServiceUtil;
 @RestController
 public class ProductCompositeServiceImpl implements ProductCompositeService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeServiceImpl.class);  // ★ 추가
 
   private final ServiceUtil serviceUtil;
   private ProductCompositeIntegration integration;
 
   public ProductCompositeServiceImpl(
     ServiceUtil serviceUtil, ProductCompositeIntegration integration) {
-    
+
     this.serviceUtil = serviceUtil;
     this.integration = integration;
   }
 
+  // ★ 추가 시작 (24줄)
   @Override
   public void createProduct(ProductAggregate body) {
 
@@ -429,11 +477,12 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
       throw re;
     }
   }
+  // ★ 추가 끝
 
   @Override
   public ProductAggregate getProduct(int productId) {
 
-    LOG.debug("getCompositeProduct: lookup a product aggregate for productId: {}", productId);
+    LOG.debug("getCompositeProduct: lookup a product aggregate for productId: {}", productId);  // ★ 추가
 
     Product product = integration.getProduct(productId);
     if (product == null) {
@@ -444,11 +493,12 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
     List<Review> reviews = integration.getReviews(productId);
 
-    LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);
+    LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);  // ★ 추가
 
     return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
   }
 
+  // ★ 추가 시작 (8줄)
   @Override
   public void deleteProduct(int productId) {
 
@@ -462,6 +512,7 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
 
     LOG.debug("deleteCompositeProduct: aggregate entities deleted for productId: {}", productId);
   }
+  // ★ 추가 끝
 
   private ProductAggregate createProductAggregate(
     Product product,
@@ -473,14 +524,24 @@ public class ProductCompositeServiceImpl implements ProductCompositeService {
     String name = product.getName();
     int weight = product.getWeight();
 
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: List<RecommendationSummary> recommendationSummaries =
+    // ★ 전: (recommendations == null) ? null : recommendations.stream()
+    // ★ 전: .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate()))
     List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
       recommendations.stream()
         .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
+    // ★ 변경 끝
         .collect(Collectors.toList());
 
+    // ★ 변경 시작 (전 3줄 → 3줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: List<ReviewSummary> reviewSummaries =
+    // ★ 전: (reviews == null) ? null : reviews.stream()
+    // ★ 전: .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
     List<ReviewSummary> reviewSummaries = (reviews == null) ? null :
       reviews.stream()
         .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
+    // ★ 변경 끝
         .collect(Collectors.toList());
 
     String productAddress = product.getServiceAddress();
@@ -548,7 +609,6 @@ api:
         1. If no product information is found, a **404 - Not Found** error will be returned
         1. In no recommendations or reviews are found for a product, a partial response will be returned
 
-    # ★ 추가 (create-composite-product, delete-composite-product 블록)
     create-composite-product:
       description: Creates a composite product
       notes: |
@@ -566,8 +626,12 @@ api:
         This means that a delete request of a non-existing product will return **200 Ok**.
 
 server.port: 7001
+# ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: spring.web.error.include-message: always
+# ★ 전: spring.jackson.mapper.allow-final-fields-as-mutators: true
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)
 spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 3장부터 유지)
+# ★ 변경 끝
 
 app:
   product-service:
@@ -602,6 +666,8 @@ app:
     port: 8080
 ```
 
+문자열·블록 안이라 ★를 달지 못한 변경: 변경 1줄(첫 줄: `1. Product information`), 전 1줄(첫 줄: `1. Base product information`); 변경 2줄(첫 줄: `1. If no product information is found, a **404 ...`), 전 1줄(첫 줄: `In the following cases, only a partial response...`); 변경 4줄(첫 줄: `create-composite-product:`), 전 1줄(첫 줄: `200 - Ok, but no recommendations will be returned`); 변경 2줄(첫 줄: `1. If a product with the same productId as spec...`), 전 1줄(첫 줄: `200 - Ok, but no reviews will be returned`); 변경 5줄(첫 줄: `delete-composite-product:`), 전 1줄(첫 줄: `400 - A **Bad Request** error will be returned`); 변경 1줄(첫 줄: `This means that a delete request of a non-exist...`), 전 2줄(첫 줄: `404 - A **Not Found** error will be returned`)
+
 ## 6. 테스트 (전체 교체)
 ```bash
 code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java
@@ -613,21 +679,27 @@ package se.magnus.microservices.composite.product;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+// ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+// ★ 전: import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;
+// ★ 전: import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 import static org.springframework.http.HttpStatus.*;
+// ★ 변경 끝
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static reactor.core.publisher.Mono.just;
+import static reactor.core.publisher.Mono.just;  // ★ 추가
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;  // ★ 추가
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
+// ★ 추가 시작 (3줄)
 import se.magnus.api.composite.product.ProductAggregate;
 import se.magnus.api.composite.product.RecommendationSummary;
 import se.magnus.api.composite.product.ReviewSummary;
+// ★ 추가 끝
 import se.magnus.api.core.product.Product;
 import se.magnus.api.core.recommendation.Recommendation;
 import se.magnus.api.core.review.Review;
@@ -636,7 +708,7 @@ import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // Boot 4 (3장부터 유지)
+@AutoConfigureWebTestClient  // Boot 4 (3장부터 유지)  // ★ 변경 (전: @AutoConfigureWebTestClient)
 class ProductCompositeServiceApplicationTests {
 
   private static final int PRODUCT_ID_OK = 1;
@@ -667,6 +739,7 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void contextLoads() {}
 
+  // ★ 추가 시작 (21줄)
   @Test
   void createCompositeProduct1() {
 
@@ -695,11 +768,21 @@ class ProductCompositeServiceApplicationTests {
     deleteAndVerifyProduct(compositeProduct.getProductId(), OK);
     deleteAndVerifyProduct(compositeProduct.getProductId(), OK);
   }
+  // ★ 추가 끝
 
   @Test
   void getProductById() {
 
+    // ★ 변경 시작 (전 7줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: client.get()
+    // ★ 전: .uri("/product-composite/" + PRODUCT_ID_OK)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isOk()
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody()
     getAndVerifyProduct(PRODUCT_ID_OK, OK)
+    // ★ 변경 끝
       .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
       .jsonPath("$.recommendations.length()").isEqualTo(1)
       .jsonPath("$.reviews.length()").isEqualTo(1);
@@ -708,7 +791,16 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void getProductNotFound() {
 
+    // ★ 변경 시작 (전 7줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: client.get()
+    // ★ 전: .uri("/product-composite/" + PRODUCT_ID_NOT_FOUND)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isNotFound()
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody()
     getAndVerifyProduct(PRODUCT_ID_NOT_FOUND, NOT_FOUND)
+    // ★ 변경 끝
       .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_NOT_FOUND)
       .jsonPath("$.message").isEqualTo("NOT FOUND: " + PRODUCT_ID_NOT_FOUND);
   }
@@ -716,11 +808,21 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void getProductInvalidInput() {
 
-    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+    // ★ 변경 시작 (전 7줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+    // ★ 전: client.get()
+    // ★ 전: .uri("/product-composite/" + PRODUCT_ID_INVALID)
+    // ★ 전: .accept(APPLICATION_JSON)
+    // ★ 전: .exchange()
+    // ★ 전: .expectStatus().isEqualTo(UNPROCESSABLE_CONTENT)
+    // ★ 전: .expectHeader().contentType(APPLICATION_JSON)
+    // ★ 전: .expectBody()
+    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재: UNPROCESSABLE_ENTITY
+    // ★ 변경 끝
       .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
       .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
   }
 
+  // ★ 추가 시작 (8줄)
   private WebTestClient.BodyContentSpec getAndVerifyProduct(int productId, HttpStatus expectedStatus) {
     return client.get()
       .uri("/product-composite/" + productId)
@@ -729,8 +831,10 @@ class ProductCompositeServiceApplicationTests {
       .expectStatus().isEqualTo(expectedStatus)
       .expectHeader().contentType(APPLICATION_JSON)
       .expectBody();
+  // ★ 추가 끝
   }
 
+  // ★ 추가 시작 (14줄)
   private void postAndVerifyProduct(ProductAggregate compositeProduct, HttpStatus expectedStatus) {
     client.post()
       .uri("/product-composite")
@@ -746,6 +850,7 @@ class ProductCompositeServiceApplicationTests {
       .expectStatus().isEqualTo(expectedStatus);
   }
 }
+  // ★ 추가 끝
 ```
 
 composite 테스트는 Integration을 `@MockitoBean`으로 가짜로 바꾸므로 **DB도 도커도 필요 없다.**

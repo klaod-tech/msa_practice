@@ -1,6 +1,6 @@
 # 06. 복합 서비스 (product-composite-service)
 
-> 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, `★ 삭제` = 지우는 줄, 표시 없는 줄 = 이미 있는 줄(넣을 위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 ## 구조
 ```
@@ -36,7 +36,7 @@ plugins {
 	id 'org.springframework.boot' version '4.0.9'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
-jar { enabled = false }                // ★ 추가 ① (한 줄로 써도 같음, dependencies 블록 밖에)
+jar { enabled = false }  // ★ 추가
 group = 'se.magnus.microservices.composite.product'
 version = '1.0.0-SNAPSHOT'
 
@@ -56,8 +56,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation project(':api')     // ★ 추가 ②
-	implementation project(':util')    // ★ 추가 ②
+	// ★ 추가 시작 (2줄)
+	implementation project(':api')
+	implementation project(':util')
+	// ★ 추가 끝
 }
 
 tasks.named('test') {
@@ -75,18 +77,22 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```java
 package se.magnus.microservices.composite.product;
 
-import java.util.List;                                                          // ★ 추가 (Boot 4 대응)
+import java.util.List;  // ★ 추가 — Boot 4 대응
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;                             // ★ 추가
-import org.springframework.context.annotation.ComponentScan;                    // ★ 추가
-import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter; // ★ 추가 (Boot 4 대응)
-import org.springframework.web.client.RestTemplate;                             // ★ 추가
+// ★ 추가 시작 (4줄)
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;  // ★ 참고: Boot 4 대응
+import org.springframework.web.client.RestTemplate;
+// ★ 추가 끝
 
-import tools.jackson.databind.json.JsonMapper;                                  // ★ 추가 (Boot 4 대응)
+// ★ 추가 시작 (2줄) — Boot 4 대응
+import tools.jackson.databind.json.JsonMapper;
 
-@ComponentScan("se.magnus")                                                     // ★ 추가
+@ComponentScan("se.magnus")
+// ★ 추가 끝
 @SpringBootApplication
 public class ProductCompositeServiceApplication {
 
@@ -94,11 +100,13 @@ public class ProductCompositeServiceApplication {
 		SpringApplication.run(ProductCompositeServiceApplication.class, args);
 	}
 
-	@Bean                                                                       // ★ 추가
-	RestTemplate restTemplate(JsonMapper jsonMapper) {                          // ★ 추가 (교재: restTemplate())
-		return new RestTemplate(List.of(new JacksonJsonHttpMessageConverter(jsonMapper)));   // ★ 추가 (교재: return new RestTemplate();)
-	}                                                                           // ★ 추가
-}
+	// ★ 추가 시작 (3줄)
+	@Bean
+	RestTemplate restTemplate(JsonMapper jsonMapper) {  // ★ 참고: 교재: restTemplate()
+		return new RestTemplate(List.of(new JacksonJsonHttpMessageConverter(jsonMapper)));  // ★ 참고: 교재: return new RestTemplate();
+	// ★ 추가 끝
+	}
+}  // ★ 추가
 ```
 교재는 `RestTemplate restTemplate() { return new RestTemplate(); }`이다. Boot 4에서 이대로 쓰면 응답 값이 전부 null/0이 된다 → 아래 [5. final 필드 역직렬화 문제](#5-final-필드-역직렬화-문제-boot-4에서만-발생) 참고.
 

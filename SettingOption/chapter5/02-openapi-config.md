@@ -1,6 +1,6 @@
 # 02. OpenAPI 구성 (Application 클래스 + application.yml)
 
-> 표기: `★` = 교재와 다른 줄 (괄호 안은 교재 원래 값)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 product-composite-service에서 springdoc-openapi를 활성화하려면 두 파일을 바꾼다.
 - `ProductCompositeServiceApplication.java`: API 문서의 공통 정보(제목, 버전, 연락처 등)를 담은 **`OpenAPI` 빈**
@@ -20,7 +20,7 @@ package se.magnus.microservices.composite.product;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value;  // ★ 추가
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -28,17 +28,20 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+// ★ 추가 시작 (5줄)
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+// ★ 추가 끝
 import tools.jackson.databind.json.JsonMapper;
 
 @ComponentScan("se.magnus")
 @SpringBootApplication
 public class ProductCompositeServiceApplication {
 
+	// ★ 추가 시작 (11줄)
 	@Value("${api.common.version}")         String apiVersion;
 	@Value("${api.common.title}")           String apiTitle;
 	@Value("${api.common.description}")     String apiDescription;
@@ -50,6 +53,7 @@ public class ProductCompositeServiceApplication {
 	@Value("${api.common.contact.name}")    String apiContactName;
 	@Value("${api.common.contact.url}")     String apiContactUrl;
 	@Value("${api.common.contact.email}")   String apiContactEmail;
+	// ★ 추가 끝
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProductCompositeServiceApplication.class, args);
@@ -60,6 +64,7 @@ public class ProductCompositeServiceApplication {
 		return new RestTemplate(List.of(new JacksonJsonHttpMessageConverter(jsonMapper)));
 	}
 
+	// ★ 추가 시작 (17줄)
 	@Bean
 	public OpenAPI getOpenApiDocumentation() {
 		return new OpenAPI()
@@ -77,8 +82,9 @@ public class ProductCompositeServiceApplication {
 			.externalDocs(new ExternalDocumentation()
 				.description(apiExternalDocDesc)
 				.url(apiExternalDocUrl));
+	// ★ 추가 끝
 	}
-}
+}  // ★ 추가
 ```
 
 | 부분 | 하는 일 |
@@ -104,6 +110,7 @@ code microservices/product-composite-service/src/main/resources/application.yml
 ```
 전체를 아래로 교체
 ```yaml
+# ★ 추가 시작 (39줄)
 springdoc:
   swagger-ui.path: /openapi/swagger-ui.html
   api-docs.path: /openapi/v3/api-docs
@@ -155,10 +162,11 @@ api:
         404 - A **Not Found** error will be returned
 
         422 - An **Unprocessable Entity** error will be returned
+# ★ 추가 끝
 
 server.port: 7001
-spring.web.error.include-message: always                      # ★ Boot 4 (교재: server.error.include-message)
-spring.jackson.mapper.allow-final-fields-as-mutators: true    # ★ Boot 4 (교재에 없음, 4장 06에서 추가)
+spring.web.error.include-message: always  # ★ 참고: Boot 4 (교재: server.error.include-message)
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 참고: Boot 4 (교재에 없음, 4장 06에서 추가)
 
 app:
   product-service:

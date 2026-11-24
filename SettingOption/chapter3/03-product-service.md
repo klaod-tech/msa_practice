@@ -1,6 +1,6 @@
 # 03. product-service 구현 + 단독 실행 (교재 68~70쪽)
 
-> 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(넣을 위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 ## 1. `microservices/product-service/build.gradle` 수정
 ```bash
@@ -16,9 +16,11 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
-jar {                          // ★ 추가 ①
-    enabled = false            // ★ 추가 ①
-}                              // ★ 추가 ①
+// ★ 추가 시작 (3줄)
+jar {
+    enabled = false
+}
+// ★ 추가 끝
 
 group = 'se.magnus.microservices.core.product'
 version = '1.0.0-SNAPSHOT'
@@ -39,8 +41,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation project(':api')     // ★ 추가 ②
-	implementation project(':util')    // ★ 추가 ②
+	// ★ 추가 시작 (2줄)
+	implementation project(':api')
+	implementation project(':util')
+	// ★ 추가 끝
 }
 
 tasks.named('test') {
@@ -60,10 +64,10 @@ package se.magnus.microservices.core.product;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;      // ★ 추가
+import org.springframework.context.annotation.ComponentScan;  // ★ 추가
 
 @SpringBootApplication
-@ComponentScan("se.magnus")                                         // ★ 추가
+@ComponentScan("se.magnus")  // ★ 추가
 public class ProductServiceApplication {
 
 	public static void main(String[] args) {

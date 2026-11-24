@@ -1,6 +1,6 @@
 # 07. 도커 컴포즈에 DB 추가, 전체 테스트, DB 직접 조회
 
-> 표기: `★ 추가` / `★ 변경` = 5장 대비. 이 단계의 파일은 **교재 6장과 똑같다**(Boot 4 때문에 바뀌는 것 없음).
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 ## 1. docker-compose.yml (전체)
 ```bash
@@ -14,27 +14,33 @@ services:
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-    depends_on:  # ★ 추가
+    # ★ 추가 시작 (3줄)
+    depends_on:
       mongodb:
         condition: service_healthy
+    # ★ 추가 끝
 
   recommendation:
     build: microservices/recommendation-service
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-    depends_on:  # ★ 추가
+    # ★ 추가 시작 (3줄)
+    depends_on:
       mongodb:
         condition: service_healthy
+    # ★ 추가 끝
 
   review:
     build: microservices/review-service
     mem_limit: 512m
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-    depends_on:  # ★ 추가
+    # ★ 추가 시작 (3줄)
+    depends_on:
       mysql:
         condition: service_healthy
+    # ★ 추가 끝
 
   product-composite:
     build: microservices/product-composite-service
@@ -44,7 +50,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
-  # ★ 추가 (mongodb 서비스 전체)
+  # ★ 추가 시작 (26줄)
   mongodb:
     image: mongo:8.0.5
     mem_limit: 512m
@@ -54,10 +60,9 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 5s
-      timeout: 10s   # ★ 변경 (교재: 2s)
+      timeout: 10s  # ★ 참고: 교재: 2s
       retries: 60
 
-  # ★ 추가 (mysql 서비스 전체)
   mysql:
     image: mysql:9.2.0
     mem_limit: 512m
@@ -71,8 +76,9 @@ services:
     healthcheck:
       test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
       interval: 5s
-      timeout: 10s   # ★ 변경 (교재: 2s)
+      timeout: 10s  # ★ 참고: 교재: 2s
       retries: 60
+  # ★ 추가 끝
 ```
 
 | 항목 | 뜻 |
@@ -167,7 +173,7 @@ function waitForService() {
   echo "DONE, continues..."
 }
 
-# ★ 추가 (recreateComposite, setupTestdata 함수 두 개)
+# ★ 추가 시작 (36줄)
 function recreateComposite() {
   local productId=$1
   local composite=$2
@@ -210,6 +216,7 @@ function setupTestdata() {
   recreateComposite "$PROD_ID_REVS_RECS" "$body"
 
 }
+# ★ 추가 끝
 
 set -e
 
@@ -227,11 +234,12 @@ then
   docker compose up -d
 fi
 
-# ★ 변경 (교재 5장: waitForService curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS)
+# ★ 변경 시작 (전 1줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 전: waitForService curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS
 waitForService curl -X DELETE http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND
 
-# ★ 추가
 setupTestdata
+# ★ 변경 끝
 
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)

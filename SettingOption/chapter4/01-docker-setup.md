@@ -14,8 +14,8 @@ Windows
 - Ubuntu 안에 Docker를 따로 설치하지 않는다. Ubuntu의 `docker`는 Docker Desktop이 넣어 준 프로그램이다.
   ```bash
   ls -l /usr/bin/docker
-  # /usr/bin/docker -> /mnt/wsl/docker-desktop/cli-tools/usr/bin/docker
   ```
+  `-> /mnt/wsl/docker-desktop/...`로 나오면 Docker Desktop이 넣어 준 것이다.
 
 ---
 

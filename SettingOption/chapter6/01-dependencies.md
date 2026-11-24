@@ -1,6 +1,6 @@
 # 01. 의존성 추가 (build.gradle 3개)
 
-> 표기: `★ 추가` = 새로 넣는 줄, `(교재: ...)` = 교재 6장과 다르게 쓰는 값, 표시 없는 줄 = 이미 있는 줄(위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 DB를 쓰는 건 **핵심 서비스 3개**다. composite와 api, util은 이번 단계에서 의존성이 바뀌지 않는다.
 
@@ -34,10 +34,11 @@ java {
 	}
 }
 
-// ★ 추가 (ext 블록 전체)
+// ★ 추가 시작 (3줄)
 ext {
 	mapstructVersion = '1.6.3'
 }
+// ★ 추가 끝
 
 repositories {
 	mavenCentral()
@@ -51,21 +52,23 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(":api")
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'  // ★ 추가
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"  // ★ 추가
+	// ★ 추가 시작 (12줄)
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
-	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-	compileOnly 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 추가 (교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함)
+	compileOnly 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 참고: 교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'  // ★ 추가 (교재에는 없음, Boot 4에서 필요)
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'  // ★ 추가
-	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 추가 (교재: org.testcontainers:junit-jupiter)
-	testImplementation 'org.testcontainers:testcontainers-mongodb'  // ★ 추가 (교재: org.testcontainers:mongodb)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'  // ★ 참고: 교재에는 없음, Boot 4에서 필요
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 참고: 교재: org.testcontainers:junit-jupiter
+	testImplementation 'org.testcontainers:testcontainers-mongodb'  // ★ 참고: 교재: org.testcontainers:mongodb
+	// ★ 추가 끝
 }
 
 tasks.named('test') {
@@ -96,10 +99,11 @@ java {
 	}
 }
 
-// ★ 추가 (ext 블록 전체)
+// ★ 추가 시작 (3줄)
 ext {
 	mapstructVersion = '1.6.3'
 }
+// ★ 추가 끝
 
 repositories {
 	mavenCentral()
@@ -113,21 +117,23 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'  // ★ 추가
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"  // ★ 추가
+	// ★ 추가 시작 (12줄)
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
-	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-	compileOnly 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 추가 (교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함)
+	compileOnly 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 참고: 교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'  // ★ 추가 (교재에는 없음, Boot 4에서 필요)
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'  // ★ 추가
-	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 추가 (교재: org.testcontainers:junit-jupiter)
-	testImplementation 'org.testcontainers:testcontainers-mongodb'  // ★ 추가 (교재: org.testcontainers:mongodb)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-mongodb-test'  // ★ 참고: 교재에는 없음, Boot 4에서 필요
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 참고: 교재: org.testcontainers:junit-jupiter
+	testImplementation 'org.testcontainers:testcontainers-mongodb'  // ★ 참고: 교재: org.testcontainers:mongodb
+	// ★ 추가 끝
 }
 
 tasks.named('test') {
@@ -158,10 +164,11 @@ java {
 	}
 }
 
-// ★ 추가 (ext 블록 전체)
+// ★ 추가 시작 (3줄)
 ext {
 	mapstructVersion = '1.6.3'
 }
+// ★ 추가 끝
 
 repositories {
 	mavenCentral()
@@ -175,22 +182,24 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'  // ★ 추가
-	implementation 'com.mysql:mysql-connector-j'  // ★ 추가
-	implementation "org.mapstruct:mapstruct:${mapstructVersion}"  // ★ 추가
+	// ★ 추가 시작 (13줄)
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'com.mysql:mysql-connector-j'
+	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 
-	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
-	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"  // ★ 추가
+	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-	compileOnly 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok'  // ★ 추가 (교재에는 없음, Lombok 엔티티용)
-	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 추가 (교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함)
+	compileOnly 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok'  // ★ 참고: 교재에는 없음, Lombok 엔티티용
+	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'  // ★ 참고: 교재에는 없음, Lombok 엔티티용: MapStruct가 Lombok 결과를 기다리게 함
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'  // ★ 추가 (교재에는 없음, Boot 4에서 필요)
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'  // ★ 추가
-	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 추가 (교재: org.testcontainers:junit-jupiter)
-	testImplementation 'org.testcontainers:testcontainers-mysql'  // ★ 추가 (교재: org.testcontainers:mysql)
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'  // ★ 참고: 교재에는 없음, Boot 4에서 필요
+	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+	testImplementation 'org.testcontainers:testcontainers-junit-jupiter'  // ★ 참고: 교재: org.testcontainers:junit-jupiter
+	testImplementation 'org.testcontainers:testcontainers-mysql'  // ★ 참고: 교재: org.testcontainers:mysql
+	// ★ 추가 끝
 }
 
 tasks.named('test') {
@@ -214,10 +223,9 @@ tasks.named('test') {
 ### ① Testcontainers 아티팩트 이름 (교재: `junit-jupiter`, `mongodb`, `mysql`)
 Spring Boot 4.0.9는 **Testcontainers 2.0.5**를 관리한다. 2.0부터 모듈 이름 앞에 `testcontainers-`가 붙었다. 교재 이름을 그대로 쓰면 버전을 못 찾는다.
 ```bash
-# 우리 이름: 2.0.5로 잡힘
 ./gradlew -q :microservices:product-service:dependencies --configuration testRuntimeClasspath | grep "testcontainers-mongodb"
-# +--- org.testcontainers:testcontainers-mongodb -> 2.0.5
 ```
+결과에 `testcontainers-mongodb -> 2.0.5`가 나오면 우리 이름으로 버전이 잡힌 것이다.
 교재 이름(`org.testcontainers:mongodb`)으로 바꿔서 같은 명령을 돌려 보면 `org.testcontainers:mongodb FAILED`가 나온다(확인함).
 
 ### ② 테스트 스타터 추가 (교재에는 없음)

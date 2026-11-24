@@ -1,6 +1,6 @@
 # 05. recommendation, review 서비스 구현
 
-> 표기: `★ 추가` = 새로 넣는 줄, `★ 변경` = 바꾸는 줄, 표시 없는 줄 = 이미 있는 줄(넣을 위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 product-service([03](03-product-service.md))와 **똑같은 패턴**이다. 예외 클래스와 util이 이미 있으므로 ServiceImpl은 교재 소스를 그대로 쓴다.
 아래는 recommendation 기준이다. **review는 `recommendation` → `review`, 포트 `7003` → `7004`로 바꿔서 똑같이 한다.**
@@ -25,9 +25,11 @@ plugins {
 	id 'org.springframework.boot' version '4.0.9'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
-jar {                          // ★ 추가 ①
-	enabled = false            // ★ 추가 ①
-}                              // ★ 추가 ①
+// ★ 추가 시작 (3줄)
+jar {
+	enabled = false
+}
+// ★ 추가 끝
 group = 'se.magnus.microservices.core.recommendation'
 version = '1.0.0-SNAPSHOT'
 
@@ -47,8 +49,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation project(':api')     // ★ 추가 ②
-	implementation project(':util')    // ★ 추가 ②
+	// ★ 추가 시작 (2줄)
+	implementation project(':api')
+	implementation project(':util')
+	// ★ 추가 끝
 }
 
 tasks.named('test') {

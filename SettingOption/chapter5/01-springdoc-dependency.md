@@ -1,6 +1,6 @@
 # 01. springdoc-openapi 의존성 추가
 
-> 표기: `★ 추가` = 새로 넣는 줄 (괄호 안은 교재 원래 값), 표시 없는 줄 = 이미 있는 줄(위치 확인용)
+> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
 `implementation` 줄은 **application.yml이 아니라 build.gradle**에 넣는다(Gradle 의존성 문법). 넣는 곳은 **서로 다른 build.gradle 두 개**다.
 
@@ -58,8 +58,8 @@ springdoc은 Spring Boot 메이저 버전마다 맞는 버전대가 따로 있�
 Boot 4.0.x 줄의 최신인 **3.0.3**을 쓴다. 확인 방법:
 ```bash
 curl -s https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.0.3/springdoc-openapi-3.0.3.pom | grep -A3 "<parent>"
-# <artifactId>spring-boot-starter-parent</artifactId> <version>4.0.5</version>
 ```
+결과에 `spring-boot-starter-parent` `4.0.5`가 보이면 Boot 4.0.x용이다.
 - 교재 테스트(test-em-all.bash)가 기대하는 OpenAPI 버전 `"3.1.0"`은 3.0.3의 기본값(`springdoc.api-docs.version` = `openapi-3-1`)과 같다.
 - 경로(`/openapi/swagger-ui.html` 등)와 애너테이션 패키지(`io.swagger.v3.oas...`)는 교재 그대로다.
 
