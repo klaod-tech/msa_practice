@@ -4,6 +4,21 @@
 > 끝나면 `~/msa`에 서비스 4개의 뼈대가 생기고 `./gradlew build`가 성공한다. 이어서 [../chapter3/README.md](../chapter3/README.md)로 간다.
 > 막히면 [troubleshooting.md](troubleshooting.md).
 
+## 0. 어느 터미널에서 시작하나
+**Ubuntu 24.04 터미널**에서 시작한다. Windows PowerShell이나 cmd가 아니다.
+- 여는 법: Windows 시작 메뉴에서 **`Ubuntu 24.04`** 실행 (또는 Windows Terminal에서 `Ubuntu-24.04` 탭)
+- 열리면 홈 폴더(`~` = `/home/leo`)에 있다. 프롬프트가 `leo@...:~$`처럼 `~$`로 끝나면 맞다.
+- 확인:
+  ```bash
+  pwd            # /home/leo
+  lsb_release -d # Ubuntu 24.04
+  ```
+
+**2절에서 `code .`로 VS Code를 연 다음부터는 VS Code 안의 터미널을 쓴다.**
+- `` Ctrl+` `` (백틱, 숫자 1 왼쪽 키)로 열거나, 메뉴 **Terminal → New Terminal**.
+- 이 터미널은 처음부터 실습 폴더(`~/msa`)에서 열리고 Ubuntu(WSL)로 동작한다. 이후 모든 장의 명령(`code 파일`, `./gradlew build`, `docker compose ...`)을 여기서 입력한다.
+- 터미널 위치가 헷갈리면 언제든 `cd ~/msa`를 먼저 친다(다른 이름으로 만들었으면 그 폴더).
+
 ## 1. 환경 확인, 실습 폴더 생성
 ### 환경 확인
 ```bash
@@ -21,10 +36,12 @@ cd ~/msa
 - `~/msa`가 이미 있으면(지금 이 PC처럼) 다른 이름(예: `~/msa2`)으로 만들고, 이후 모든 문서의 `~/msa`를 그 이름으로 바꿔 읽는다. 기존 `~/msa`는 건드리지 않는다.
 
 ## 2. VS Code로 열기
+아직 Ubuntu 터미널에서 입력한다.
 ```bash
 cd ~/msa
 code .
 ```
+- VS Code가 열리면 `` Ctrl+` ``로 VS Code 터미널을 열고, **이제부터는 그 터미널을 쓴다**(0절). 처음 연 Ubuntu 터미널은 닫아도 된다.
 - 왼쪽 아래에 `WSL: Ubuntu-24.04`가 보이면 WSL에 연결된 상태다.
 - 이후 문서의 `code 파일경로`는 이 창에서 파일을 연다. `code`로 연 탭은 `Ctrl+S`로 저장해야 파일이 생긴다.
 - `.java` 파일에서 자동 완성이 이상하면 Java 확장이 WSL 쪽에 없는 것이다 → [01](../chapter1/01-ubuntu-environment.md)의 1절 "VS Code".
