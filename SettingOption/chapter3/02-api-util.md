@@ -455,16 +455,57 @@ public interface ProductCompositeService {
 ---
 
 ## 7. `util/.../http/ServiceUtil.java` (새 파일, 교재 소스 그대로)
-본문에는 코드가 없고 "`$BOOK_HOME/Chapter03/2-basic-rest-services/util`에서 확인"하라고만 되어 있다.
-방법 1 — 아래 파일을 열어서 교재 소스를 보며 작성
+교재 본문에는 코드가 없고 교재 소스에만 있다. 교재 소스와 같은 내용이다.
 ```bash
 code util/src/main/java/se/magnus/util/http/ServiceUtil.java
 ```
+아래 내용 전체 입력
 
-방법 2 — 복사
-```bash
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/util/src/main/java/se/magnus/util/http/ServiceUtil.java \
-   util/src/main/java/se/magnus/util/http/ServiceUtil.java
+```java
+package se.magnus.util.http;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ServiceUtil {
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceUtil.class);
+
+    private final String port;
+
+    private String serviceAddress = null;
+
+    public ServiceUtil(@Value("${server.port}") String port) {
+        this.port = port;
+    }
+
+    public String getServiceAddress() {
+        if (serviceAddress == null) {
+            serviceAddress = findMyHostname() + "/" + findMyIpAddress() + ":" + port;
+        }
+        return serviceAddress;
+    }
+
+    private String findMyHostname() {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            return "unknown host name";
+        }
+    }
+
+    private String findMyIpAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            return "unknown IP address";
+        }
+    }
+}
 ```
 파일 이름 오타(`SericeUtil`) 주의. 파일 이름과 클래스 이름이 다르면 컴파일 오류가 난다.
 | 부분 | 역할 |
