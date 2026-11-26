@@ -1140,7 +1140,7 @@ code microservices/product-composite-service/src/test/resources/application.yml
 ```
 아래처럼 맞추기 (전체 파일)
 ```yaml
-# ★ 삭제: spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 변경 (전: spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다...)
 api:
 
   common:

@@ -461,9 +461,10 @@ code microservices/product-service/src/test/resources/application.yml
 ```
 아래처럼 맞추기 (전체 파일)
 ```yaml
-# ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
 # ★ 전: spring.web.error.include-message: always  # 교재와 다름 (교재: server.error.include-message)
 # ★ 전: spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 spring.web.error.include-message: always
 # ★ 변경 끝
 
@@ -964,9 +965,10 @@ code microservices/recommendation-service/src/test/resources/application.yml
 ```
 아래처럼 맞추기 (전체 파일)
 ```yaml
-# ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
 # ★ 전: spring.web.error.include-message: always  # 교재와 다름 (교재: server.error.include-message)
 # ★ 전: spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 spring.web.error.include-message: always
 # ★ 변경 끝
 
@@ -1300,9 +1302,10 @@ code microservices/review-service/src/test/resources/application.yml
 ```
 아래처럼 맞추기 (전체 파일)
 ```yaml
-# ★ 변경 시작 (전 2줄 → 1줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
+# ★ 변경 시작 (전 2줄 → 2줄) — "전:" 줄은 지우고 그 아래 줄로 바꾼다
 # ★ 전: spring.web.error.include-message: always  # 교재와 다름 (교재: server.error.include-message)
 # ★ 전: spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+spring.jackson.mapper.allow-final-fields-as-mutators: true
 spring.web.error.include-message: always
 # ★ 변경 끝
 

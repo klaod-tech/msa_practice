@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 17장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4** (3부 도구 버전은 [1장 4절](../chapter1/01-ubuntu-environment.md))
-> 이전: [../chapter16/README.md](../chapter16/README.md) / 다음: [../chapter18/README.md](../chapter18/README.md) / 상태: **문서 재현 확인 / 실행 검증 중**
+> 이전: [../chapter16/README.md](../chapter16/README.md) / 다음: [../chapter18/README.md](../chapter18/README.md) / 상태: **검증 완료**
 
 ## 문서 읽는 법
 - 모든 명령은 작업 폴더(`~/msa`)에서 실행한다.
@@ -37,7 +37,8 @@
 
 ## 검증
 - 16장까지 SettingOption 문서를 따라 한 상태에 이 장 문서의 코드 블록을 글자 그대로 적용하면, 검증용으로 만든 17장 코드와 똑같이 만들어지는 것을 비교로 확인했다(`RESULT OK`).
-- 컴파일 통과. docker compose 빌드·test-em-all과 minikube 배포 테스트는 진행 중이다(결과가 나오면 이 칸에 적는다).
+- 도커 컴포즈: `./gradlew build` → `docker compose build` → `./test-em-all.bash start stop` 통과(`End, all tests OK`).
+- 쿠버네티스: minikube(WSL + Docker Desktop): Ingress + cert-manager → `ingress-nginx-controller 8443:443` port-forward → `HOST=minikube.me PORT=8443 USE_K8S=true ./test-em-all.bash` — 통과. (`End, all tests OK`)
 
 ## 교재(Boot 3.5)와 다른 점
 따라 할 단계는 아니고, 교재 본문과 코드가 왜 다른지 볼 때 참고한다.

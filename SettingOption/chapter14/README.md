@@ -2,7 +2,7 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 14장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Spring Cloud 2025.1.4 / Zipkin 3.5.0**
-> 이전: [../chapter13/README.md](../chapter13/README.md) / 다음: [../chapter15/README.md](../chapter15/README.md) / 상태: **문서 재현 확인 / 실행 검증 중**
+> 이전: [../chapter13/README.md](../chapter13/README.md) / 다음: [../chapter15/README.md](../chapter15/README.md) / 상태: **검증 완료**
 
 ## 문서 읽는 법
 - 모든 명령은 `~/msa`에서 실행한다.
@@ -37,6 +37,7 @@
 | AOP 의존성 | `spring-boot-starter-aop` (12장부터) | `spring-boot-starter-aspectj` (12장부터 유지) | - |
 
 ## 검증한 것 / 안 한 것
+- (2026-11-26) 빈 폴더에서 2~14장 SettingOption 문서를 글자 그대로 재현한 코드로 `./gradlew build` → `docker compose build` → `./test-em-all.bash start stop`을 돌려 9~14장 모두 `End, all tests OK`를 확인했다.
 - 저장소의 13장 완료 커밋에 이 문서의 코드 블록만 적용해 14장 상태를 만들었고, 검증한 파일과 똑같이 만들어지는 것을 비교로 확인했다.
 - 테스트 60개 통과(composite 8, product 13, recommendation 15, review 15, authorization-server 4, config-server 1, eureka-server 3, gateway 1).
 - **임시 폴더에서 compose 전체를 띄워** 확인했다(13장까지는 jar만 띄웠던 것을 이번에는 compose까지):
