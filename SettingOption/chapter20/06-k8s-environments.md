@@ -1,0 +1,62 @@
+# 06. 헬름 환경 차트
+
+> 시작: 19장까지 따라 한 상태 / 결과: 20장 코드(우리 Lombok 데이터 클래스 유지, 교재 영어 주석은 뺌).
+> 표기: 한 줄은 줄 끝 `★ 추가` / `★ 변경 (전: ...)`, 여러 줄은 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(안의 `★ 전:`은 지울 옛 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(안의 `★ 지움:` 줄을 지운다). `★` 줄은 안내용이라 치지 않아도 된다. Ctrl+F로 `★`를 찾으면 바뀐 곳만 볼 수 있다.
+
+환경 차트 정리.
+
+## 6-1. `kubernetes/helm/environments/istio-system/templates/expose-mail.yml` (새 파일)
+```bash
+code kubernetes/helm/environments/istio-system/templates/expose-mail.yml
+```
+붙여넣기 (새 파일)
+```yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: mail-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - "mail.minikube.me"
+    port:
+      number: 443
+      name: https-mail
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: hands-on-certificate
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: mail-vs
+  namespace: istio-system
+spec:
+  hosts:
+  - "mail.minikube.me"
+  gateways:
+  - mail-gateway
+  http:
+  - route:
+    - destination:
+        host: mail-server
+        port:
+          number: 1080
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: mail
+  namespace: istio-system
+spec:
+  host: mail-server
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+```
+
+다음: [07-kubernetes.md](07-kubernetes.md)
