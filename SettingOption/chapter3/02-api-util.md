@@ -200,9 +200,9 @@ public class Product {
 | `core/recommendation/Recommendation.java` | `se.magnus.api.core.recommendation` | `int productId, int recommendationId, String author, int rate, String content, String serviceAddress` |
 | `core/review/Review.java` | `se.magnus.api.core.review` | `int productId, int reviewId, String author, String subject, String content, String serviceAddress` |
 | `composite/product/ProductAggregate.java` | `se.magnus.api.composite.product` | `int productId, String name, int weight, List<RecommendationSummary> recommendations, List<ReviewSummary> reviews, ServiceAddresses serviceAddresses` (+ `import java.util.List;`) |
-| `composite/product/RecommendationSummary.java` | 〃 | 교재 소스의 필드 순서대로 |
-| `composite/product/ReviewSummary.java` | 〃 | 교재 소스의 필드 순서대로 |
-| `composite/product/ServiceAddresses.java` | 〃 | 교재 소스의 필드 순서대로 |
+| `composite/product/RecommendationSummary.java` | 〃 | `int recommendationId, String author, int rate` |
+| `composite/product/ReviewSummary.java` | 〃 | `int reviewId, String author, String subject` |
+| `composite/product/ServiceAddresses.java` | 〃 | `String cmp, String pro, String rev, String rec` |
 
 파일마다 따로 열어서 아래 전체 코드를 입력한다. 모양은 같고 **클래스 이름, package, 필드만 다르다.**
 
