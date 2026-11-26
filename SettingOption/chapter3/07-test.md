@@ -24,6 +24,19 @@ java -jar microservices/review-service/build/libs/*.jar &
 - `Started ...Application`이 **4번** 나올 때까지 기다린다. 로그가 섞여 출력되면 Enter를 눌러 프롬프트를 되찾는다.
 - 다 떴는지 포트로 확인: `ss -ltnp | grep 700`
 
+### 브라우저로 서비스별 확인
+서비스가 다 뜨면 브라우저 주소창에 붙여 넣어 각자 화면에서 확인한다. 주소 끝까지(`/product/1` 등) 넣어야 한다. `http://localhost:7002/`처럼 뒤를 비우면 그 주소를 처리하는 API가 없어서 **Whitelabel Error Page(404)**가 나온다(정상).
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product-composite | 7001 | http://localhost:7001/product-composite/1 | 상품 + 추천 3개 + 리뷰 3개 + `serviceAddresses` 4개(`cmp`, `pro`, `rec`, `rev`) |
+| product | 7002 | http://localhost:7002/product/1 | `productId` 1, `name` `name-1`, `weight` 123 |
+| recommendation | 7003 | http://localhost:7003/recommendation?productId=1 | 추천 3개 (`Author 1`~`3`) |
+| review | 7004 | http://localhost:7004/review?productId=1 | 리뷰 3개 (`Subject 1`~`3`) |
+
+- composite에서 추천이나 리뷰가 `[]`이고 `rec`/`rev`가 `""`이면, 그 서비스 주소를 바로 열어 본다. 거기서 404(`No static resource ...`)가 나면 그 서비스의 `ServiceImpl`에 `@RestController`가 빠졌거나 저장이 안 된 것이다.
+- Chrome에서 `pretty print 적용`을 체크하면 JSON이 줄바꿈되어 보기 쉽다.
+
 ### 호출과 결과
 | 명령 | 결과 |
 |---|---|

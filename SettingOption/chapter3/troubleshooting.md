@@ -26,6 +26,7 @@
 | `./test-em-all.bash: Permission denied` | 실행 권한 없음 | `chmod +x test-em-all.bash` | 07 |
 | 같은 포트로 두 서비스가 충돌 | yml 복사 후 이름·포트를 안 바꿈 | 서비스별 포트 확인 | 05 |
 | 루트에 만든 application.yml이 모든 서비스에 적용될 위험 | Spring Boot는 실행 위치의 `./application.yml`도 읽음 | 각 서비스 `src/main/resources/`에만 둔다 | 03 |
+| composite 응답에서 리뷰(또는 추천)만 `[]`, `rev`(`rec`)가 `""` | 그 서비스의 `ServiceImpl`에 `@RestController`가 없어 `/review`(`/recommendation`) 주소가 등록되지 않음. composite는 오류 시 빈 목록을 돌려준다 | `http://localhost:7004/review?productId=1`이 404인지 확인 → `@RestController` + import 추가 → 다시 빌드·실행 | 05, 07 |
 
 ## 설정 (오류 없이 조용히 틀리는 것)
 | 증상 | 원인 | 해결 | 문서 |
