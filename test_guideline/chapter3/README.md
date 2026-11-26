@@ -2,7 +2,7 @@
 
 > 기준 코드: 교수님 저장소 [spring-microservice-boot4](https://github.com/NohYounghoon3651/spring-microservice-boot4) `Chapter03/2-basic-rest-services`
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 / Gradle 8.14.6**
-> 이전: [환경 설정 01](../../SettingOption/setting/01-ubuntu-environment.md) / 다음: [../chapter4/README.md](../chapter4/README.md) / 상태: **검증 완료**
+> 이전: [환경 설정 01](../../SettingOption/chapter1/01-ubuntu-environment.md) / 다음: [../chapter4/README.md](../chapter4/README.md) / 상태: **검증 완료**
 
 ## 문서 읽는 법
 - 모든 명령은 작업 폴더(`~/msa`)에서 실행한다.

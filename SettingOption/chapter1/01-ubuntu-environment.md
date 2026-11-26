@@ -1,8 +1,8 @@
 # 01. Ubuntu 환경 설정 (처음 한 번만)
 
 > 교재 22장. WSL2 + Ubuntu 24.04, Docker Desktop, VS Code, Java 21, Spring CLI 등 도구를 설치한다.
-> **이미 설치되어 있으면 건너뛰고 [02-project-folder.md](02-project-folder.md)부터 시작한다.** (`~/msa` 폴더만 새로 만드는 경우)
-> 막히면 [troubleshooting.md](troubleshooting.md)의 "01" 표.
+> **이미 설치되어 있으면 건너뛰고 [02-project-folder.md](../chapter2/02-project-folder.md)부터 시작한다.** (`~/msa` 폴더만 새로 만드는 경우)
+> 막히면 [troubleshooting.md](troubleshooting.md).
 
 ## 1. Windows 쪽 준비 (WSL2, Docker Desktop, VS Code)
 > 이 부분은 명령 기록이 남아 있지 않다. 지금 상태로 확인된 결과만 적는다.
@@ -131,4 +131,4 @@ code .
 - 교재 소스는 **Java 24 / Spring Boot 3.5.0** 기준이다. 실습 레포(`~/msa`)로 가져올 때는 버전을 맞춰서 바꾼다.
 
 ---
-다음: [02-project-folder.md](02-project-folder.md)
+다음: [02-project-folder.md](../chapter2/02-project-folder.md)

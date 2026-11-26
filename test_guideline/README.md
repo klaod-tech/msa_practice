@@ -70,7 +70,7 @@ sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443
 
 | 부 | 장 | 문서 | 시작 → 결과 | 상태 |
 |---|---|---|---|---|
-| - | 환경 | [../SettingOption/setting/01-ubuntu-environment.md](../SettingOption/setting/01-ubuntu-environment.md) | WSL, Docker, Java, Spring CLI, kubectl 등 | 설치 완료 |
+| - | 환경 | [../SettingOption/chapter1/01-ubuntu-environment.md](../SettingOption/chapter1/01-ubuntu-environment.md) | WSL, Docker, Java, Spring CLI, kubectl 등 | 설치 완료 |
 | 1부 | 3 | [chapter3](chapter3/README.md) | 빈 폴더 → Chapter03/2-basic-rest-services | 검증 완료 |
 | 1부 | 4 | [chapter4](chapter4/README.md) | Chapter03/2-basic-rest-services → Chapter04 | 검증 완료 |
 | 1부 | 5 | [chapter5](chapter5/README.md) | Chapter04 → Chapter05 | 검증 완료 |

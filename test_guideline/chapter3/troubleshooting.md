@@ -2,7 +2,7 @@
 
 ## `./create-projects.bash`가 `spring: command not found`
 **원인:** Spring Boot CLI가 없거나 이 터미널에 SDKMAN이 안 올라왔다.
-**해결:** [SDKMAN, Java, Spring CLI 설치](../../SettingOption/setting/01-ubuntu-environment.md). 새 터미널을 열거나 `source ~/.sdkman/bin/sdkman-init.sh`.
+**해결:** [SDKMAN, Java, Spring CLI 설치](../../SettingOption/chapter1/01-ubuntu-environment.md). 새 터미널을 열거나 `source ~/.sdkman/bin/sdkman-init.sh`.
 
 ## `./test-em-all.bash`가 `curl: (7) Failed to connect`
 **원인:** 서비스 4개가 아직 다 뜨지 않았다.

@@ -2,7 +2,7 @@
 
 > 교재 3장 시작 부분. **시험·새로 시작할 때는 여기서부터.** 01의 도구가 설치되어 있어야 한다.
 > 끝나면 `~/msa`에 서비스 4개의 뼈대가 생기고 `./gradlew build`가 성공한다. 이어서 [../chapter3/README.md](../chapter3/README.md)로 간다.
-> 막히면 [troubleshooting.md](troubleshooting.md)의 "02" 표.
+> 막히면 [troubleshooting.md](troubleshooting.md).
 
 ## 1. 환경 확인, 실습 폴더 생성
 ### 환경 확인
@@ -27,7 +27,7 @@ code .
 ```
 - 왼쪽 아래에 `WSL: Ubuntu-24.04`가 보이면 WSL에 연결된 상태다.
 - 이후 문서의 `code 파일경로`는 이 창에서 파일을 연다. `code`로 연 탭은 `Ctrl+S`로 저장해야 파일이 생긴다.
-- `.java` 파일에서 자동 완성이 이상하면 Java 확장이 WSL 쪽에 없는 것이다 → 01의 1절 "VS Code".
+- `.java` 파일에서 자동 완성이 이상하면 Java 확장이 WSL 쪽에 없는 것이다 → [01](../chapter1/01-ubuntu-environment.md)의 1절 "VS Code".
 - 코드가 맞는데 빨간 줄이 남으면 → [../chapter3/00-background.md](../chapter3/00-background.md) 맨 위 "VS Code에 빨간 줄이 남을 때".
 
 ## 3. 서비스 4개 생성 (`create-projects.bash`)

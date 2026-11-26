@@ -23,7 +23,7 @@ cd ~/msa
 ---
 
 ## 1. 시작 상태 (환경 설정까지)
-[../setting/README.md](../setting/README.md)에서 Java 21, Gradle, VS Code만 준비했다. 코드는 아직 없다.
+[1장](../chapter1/README.md)·[2장](../chapter2/README.md)에서 Java 21, Gradle, VS Code만 준비했다. 코드는 아직 없다.
 
 ## 2. 3장이 끝나면
 ```
