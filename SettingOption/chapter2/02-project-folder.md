@@ -153,7 +153,7 @@ find microservices/product-service -type f -not -path "*/build/*"
 git init -b main
 git add .
 git status
-git commit -m "Chapter03: 기본 골격 마이크로서비스 생성"
+git commit -m "Chapter02: 기본 골격 마이크로서비스 생성"
 git remote add origin https://github.com/klaod-tech/msa_practice.git
 git config --global credential.helper store
 git push -u origin main

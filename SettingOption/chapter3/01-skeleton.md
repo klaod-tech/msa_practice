@@ -6,6 +6,6 @@
 2. 루트 `settings.gradle`에 서비스 4개를 `include`한다. 각 서비스 안의 `settings.gradle`은 루트에서 빌드할 때 무시되므로 그대로 둔다.
 3. Gradle 래퍼(`gradlew`, `gradle/`)를 루트로 복사하고, 각 서비스에 남은 래퍼는 삭제한다.
 4. `./gradlew build`로 빌드한다.
-5. 커밋: `Chapter03: 기본 골격 마이크로서비스 생성`
+5. 커밋: `Chapter02: 기본 골격 마이크로서비스 생성`
 
 다음: [02-api-util.md](02-api-util.md)
