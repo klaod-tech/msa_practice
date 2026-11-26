@@ -379,24 +379,78 @@ public interface ProductService {
 }
 ```
 
-### 나머지 인터페이스 (교재 소스 그대로)
-방법 1 — 직접 작성 (교재 소스를 보며 입력)
+나머지 3개도 `ProductService.java`와 같은 모양의 인터페이스다.
+
+### `api/.../core/recommendation/RecommendationService.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/core/recommendation/RecommendationService.java
+```
+아래 내용 전체 입력
+
+```java
+package se.magnus.api.core.recommendation;
+
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+public interface RecommendationService {
+    @GetMapping(
+        value = "/recommendation",
+        produces = "application/json"
+    )
+    List<Recommendation> getRecommendations(
+        @RequestParam(value = "productId", required = true) int productId);
+}
+```
+- 주소가 `/recommendation?productId=1`처럼 **쿼리 파라미터**라서 `@PathVariable` 대신 `@RequestParam`을 쓴다.
+- 상품 하나에 추천이 여러 개라 `List<Recommendation>`을 돌려준다(`import java.util.List;`).
+
+### `api/.../core/review/ReviewService.java` (전체)
+```bash
 code api/src/main/java/se/magnus/api/core/review/ReviewService.java
+```
+아래 내용 전체 입력
+
+```java
+package se.magnus.api.core.review;
+
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+public interface ReviewService {
+    @GetMapping(
+        value = "/review",
+        produces = "application/json"
+    )
+    List<Review> getReviews(
+        @RequestParam(value = "productId", required = true) int productId);
+}
+```
+- RecommendationService와 같은 모양이고 주소(`/review`)와 타입(`Review`)만 다르다.
+
+### `api/.../composite/product/ProductCompositeService.java` (전체)
+```bash
 code api/src/main/java/se/magnus/api/composite/product/ProductCompositeService.java
 ```
-열린 파일마다 작성
+아래 내용 전체 입력
 
-방법 2 — 복사 (교재 소스 파일을 그대로 가져옴)
-```bash
-cd ~/msa
-B=$BOOK_HOME/Chapter03/2-basic-rest-services/api/src/main/java/se/magnus/api
-cp $B/core/recommendation/RecommendationService.java api/src/main/java/se/magnus/api/core/recommendation/
-cp $B/core/review/ReviewService.java                 api/src/main/java/se/magnus/api/core/review/
-cp $B/composite/product/ProductCompositeService.java api/src/main/java/se/magnus/api/composite/product/
+```java
+package se.magnus.api.composite.product;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+public interface ProductCompositeService {
+    @GetMapping(
+        value = "/product-composite/{productId}",
+        produces = "application/json"
+    )
+    ProductAggregate getProduct(@PathVariable int productId);
+}
 ```
-교재 소스를 옆에 띄워 보려면 `code $B/core/review/ReviewService.java`처럼 연다.
+- composite의 주소는 `/product-composite/{productId}`이고, 합친 응답 `ProductAggregate`를 돌려준다.
 
 ---
 
