@@ -58,58 +58,123 @@ composite는 정상이고, 호출 대상 서비스가 안 떠 있다는 뜻이�
 ## 2. 자동화 테스트 (84쪽)
 curl로 손으로 확인하던 것을 코드로 자동 확인한다. `./gradlew build` 때마다 실행되어, 코드가 망가지면 바로 알려 준다.
 
-파일: `microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java` (교재 소스를 가져와 수정)
+파일: `microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java`
 
 ### 개념
 - `WebTestClient`: 테스트용 curl이다. `jsonPath("$.productId")`는 `jq .productId`와 같은 역할이다.
 - `@MockitoBean ProductCompositeIntegration`: Integration을 **가짜(Mock)로 바꿔치기**한다. 그래서 핵심 서비스 3개를 띄우지 않고 composite 하나만 테스트한다.
 - `when(...getRecommendations(1)).thenReturn(singletonList(...))`처럼 가짜가 1개만 돌려주도록 정해 두었으므로, 테스트에서 추천·리뷰는 **1개**씩이다(curl에서는 3개).
 
-### 파일 준비
-`spring init`이 만든 테스트 파일(`contextLoads()`만 있음)을 교재 소스로 **통째로 덮어쓴 뒤** 세 군데를 고친다.
-```bash
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/
-```
+### 파일 작성
+### `product-composite-service/src/test/.../ProductCompositeServiceApplicationTests.java` (전체)
 ```bash
 code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java
 ```
-아래 **세 군데 수정**
-> 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
+`spring init`이 만든 내용(`contextLoads()`만 있음)을 **모두 지우고** 아래 내용 전체 입력
 
-### ① static import (파일 맨 위, 3~8번 줄)
 ```java
+package se.magnus.microservices.composite.product;
+
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;     // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_CONTENT;     // ★ 참고: 교재: UNPROCESSABLE_ENTITY
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-```
-- 내 파일에는 `UNPROCESSABLE_ENTITY` import가 아직 7번 줄에 남아 있다(쓰이지 않음). 지워도 된다.
-- `APPLICATION_JSON`은 교재 소스에 이미 이렇게 되어 있다. **본문의 `APPLICATION_JSON_UTF8`은 Spring 7에서 삭제된 상수**라 쓰면 안 된다.
 
-### ② 일반 import + 클래스 애너테이션 (13~26번 줄)
-```java
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;   // ★ 추가
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;   // ★ 참고: 교재에 없음 (Boot 4)
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-...
+import org.springframework.test.web.reactive.server.WebTestClient;
+import se.magnus.api.core.product.Product;
+import se.magnus.api.core.recommendation.Recommendation;
+import se.magnus.api.core.review.Review;
+import se.magnus.api.exceptions.InvalidInputException;
+import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient                                                                // ★ 추가
+@AutoConfigureWebTestClient                                                                // ★ 참고: 교재에 없음 (Boot 4)
 class ProductCompositeServiceApplicationTests {
-```
-`@AutoConfigureWebTestClient`가 없으면 테스트 4개가 모두 `No qualifying bean of type 'org.springframework.test.web.reactive.server.WebTestClient'`로 실패한다. Boot 4에서 WebTestClient 설정이 별도 모듈(`spring-boot-webtestclient`)로 분리됐기 때문이다.
 
-### ③ `getProductInvalidInput()` 안 (마지막 테스트, 92번 줄)
-```java
-    client.get()
-      .uri("/product-composite/" + PRODUCT_ID_INVALID)
-      .accept(APPLICATION_JSON)
-      .exchange()
-      .expectStatus().isEqualTo(UNPROCESSABLE_CONTENT)        // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
-      .expectHeader().contentType(APPLICATION_JSON)
+    private static final int PRODUCT_ID_OK = 1;
+    private static final int PRODUCT_ID_NOT_FOUND = 2;
+    private static final int PRODUCT_ID_INVALID = 3;
+
+    @Autowired private WebTestClient client;
+
+    @MockitoBean private ProductCompositeIntegration compositeIntegration;
+
+    @BeforeEach
+    void setUp() {
+
+        when(compositeIntegration.getProduct(PRODUCT_ID_OK))
+            .thenReturn(new Product(PRODUCT_ID_OK, "name", 1, "mock-address"));
+        when(compositeIntegration.getRecommendations(PRODUCT_ID_OK))
+            .thenReturn(singletonList(new Recommendation(PRODUCT_ID_OK, 1, "author", 1, "content", "mock address")));
+        when(compositeIntegration.getReviews(PRODUCT_ID_OK))
+            .thenReturn(singletonList(new Review(PRODUCT_ID_OK, 1, "author", "subject", "content", "mock address")));
+
+        when(compositeIntegration.getProduct(PRODUCT_ID_NOT_FOUND))
+            .thenThrow(new NotFoundException("NOT FOUND: " + PRODUCT_ID_NOT_FOUND));
+
+        when(compositeIntegration.getProduct(PRODUCT_ID_INVALID))
+            .thenThrow(new InvalidInputException("INVALID: " + PRODUCT_ID_INVALID));
+    }
+
+    @Test
+    void contextLoads() {}
+
+    @Test
+    void getProductById() {
+
+        client.get()
+            .uri("/product-composite/" + PRODUCT_ID_OK)
+            .accept(APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectHeader().contentType(APPLICATION_JSON)
+            .expectBody()
+                .jsonPath("$.productId").isEqualTo(PRODUCT_ID_OK)
+                .jsonPath("$.recommendations.length()").isEqualTo(1)
+                .jsonPath("$.reviews.length()").isEqualTo(1);
+    }
+
+    @Test
+    void getProductNotFound() {
+
+        client.get()
+            .uri("/product-composite/" + PRODUCT_ID_NOT_FOUND)
+            .accept(APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isNotFound()
+            .expectHeader().contentType(APPLICATION_JSON)
+            .expectBody()
+                .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_NOT_FOUND)
+                .jsonPath("$.message").isEqualTo("NOT FOUND: " + PRODUCT_ID_NOT_FOUND);
+    }
+
+    @Test
+    void getProductInvalidInput() {
+
+        client.get()
+            .uri("/product-composite/" + PRODUCT_ID_INVALID)
+            .accept(APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isEqualTo(UNPROCESSABLE_CONTENT)        // ★ 참고: 교재: UNPROCESSABLE_ENTITY
+            .expectHeader().contentType(APPLICATION_JSON)
+            .expectBody()
+                .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
+                .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
+    }
+}
 ```
+- `★ 참고` 줄이 교재와 다른 곳이다(줄 끝 `// ★ ...`는 입력하지 않는다).
+- `UNPROCESSABLE_ENTITY` → `UNPROCESSABLE_CONTENT` (import와 마지막 테스트 두 곳). Spring 7에서 ENTITY는 deprecated.
+- `@AutoConfigureWebTestClient`와 그 import: 없으면 테스트 4개가 모두 `No qualifying bean of type 'org.springframework.test.web.reactive.server.WebTestClient'`로 실패한다. Boot 4에서 WebTestClient 설정이 별도 모듈(`spring-boot-webtestclient`)로 분리됐기 때문이다.
+- `APPLICATION_JSON`을 쓴다. **교재 본문의 `APPLICATION_JSON_UTF8`은 Spring 7에서 삭제된 상수**라 쓰면 안 된다.
 
 ### 실행
 ```bash
@@ -129,21 +194,95 @@ class ProductCompositeServiceApplicationTests {
 ---
 
 ## 3. `test-em-all.bash` (전체 시스템 테스트)
-1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다.
-방법 1 — 아래 파일을 열어서 교재 소스를 보며 작성
+1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다. 교재 소스와 같은 내용이다(영어 설명 주석만 뺐다).
 ```bash
 code test-em-all.bash
 ```
+아래 내용 전체 입력
 
-방법 2 — 복사
 ```bash
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash .
+#!/usr/bin/env bash
+: ${HOST=localhost}
+: ${PORT=7001}
+: ${PROD_ID_REVS_RECS=1}
+: ${PROD_ID_NOT_FOUND=13}
+: ${PROD_ID_NO_RECS=113}
+: ${PROD_ID_NO_REVS=213}
+
+function assertCurl() {
+
+  local expectedHttpCode=$1
+  local curlCmd="$2 -w \"%{http_code}\""
+  local result=$(eval $curlCmd)
+  local httpCode="${result:(-3)}"
+  RESPONSE='' && (( ${#result} > 3 )) && RESPONSE="${result%???}"
+
+  if [ "$httpCode" = "$expectedHttpCode" ]
+  then
+    if [ "$httpCode" = "200" ]
+    then
+      echo "Test OK (HTTP Code: $httpCode)"
+    else
+      echo "Test OK (HTTP Code: $httpCode, $RESPONSE)"
+    fi
+  else
+    echo  "Test FAILED, EXPECTED HTTP Code: $expectedHttpCode, GOT: $httpCode, WILL ABORT!"
+    echo  "- Failing command: $curlCmd"
+    echo  "- Response Body: $RESPONSE"
+    exit 1
+  fi
+}
+
+function assertEqual() {
+
+  local expected=$1
+  local actual=$2
+
+  if [ "$actual" = "$expected" ]
+  then
+    echo "Test OK (actual value: $actual)"
+  else
+    echo "Test FAILED, EXPECTED VALUE: $expected, ACTUAL VALUE: $actual, WILL ABORT"
+    exit 1
+  fi
+}
+
+set -e
+
+echo "HOST=${HOST}"
+echo "PORT=${PORT}"
+
+assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
+assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)
+assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
+assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
+
+assertCurl 404 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NOT_FOUND -s"
+assertEqual "No product found for productId: $PROD_ID_NOT_FOUND" "$(echo $RESPONSE | jq -r .message)"
+
+assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NO_RECS -s"
+assertEqual $PROD_ID_NO_RECS $(echo $RESPONSE | jq .productId)
+assertEqual 0 $(echo $RESPONSE | jq ".recommendations | length")
+assertEqual 3 $(echo $RESPONSE | jq ".reviews | length")
+
+assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_NO_REVS -s"
+assertEqual $PROD_ID_NO_REVS $(echo $RESPONSE | jq .productId)
+assertEqual 3 $(echo $RESPONSE | jq ".recommendations | length")
+assertEqual 0 $(echo $RESPONSE | jq ".reviews | length")
+
+assertCurl 422 "curl http://$HOST:$PORT/product-composite/-1 -s"
+assertEqual "\"Invalid productId: -1\"" "$(echo $RESPONSE | jq .message)"
+
+assertCurl 400 "curl http://$HOST:$PORT/product-composite/invalidProductId -s"
+assertEqual "\"Type mismatch.\"" "$(echo $RESPONSE | jq .message)"
+
+echo "End, all tests OK:" `date`
 ```
-어느 방법이든 실행 권한을 준다.
+실행 권한을 준다.
 ```bash
 chmod +x test-em-all.bash
 ```
-교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/test-em-all.bash`)를 **그대로** 쓴다. 기본 포트가 7001이고, 상태 코드와 `message`만 비교하므로 Boot 4에서도 고칠 부분이 없다(422의 `error` 문구는 검사하지 않음).
+기본 포트가 7001이고, 상태 코드와 `message`만 비교하므로 Boot 4에서도 고칠 부분이 없다(422의 `error` 문구는 검사하지 않음).
 
 ### 구조
 - `assertCurl 기대코드 "curl ..."`: curl을 실행해 HTTP 상태 코드를 비교하고, 본문을 `$RESPONSE`에 저장한다.

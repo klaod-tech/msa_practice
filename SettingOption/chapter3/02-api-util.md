@@ -72,7 +72,7 @@ code api/build.gradle
 ```
 아래 내용 전체 입력
 
-교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/api/build.gradle`)를 가져와 **Java 24 → 21, Boot 3.5.0 → 4.0.9**로 바꾸고 롬복 4줄을 추가했다.
+교재 소스와 비교하면 **Java 24 → 21, Boot 3.5.0 → 4.0.9**로 바꾸고 롬복 4줄을 추가한 것이다.
 ```groovy
 plugins {
     id 'io.spring.dependency-management' version '1.1.7'

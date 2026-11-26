@@ -35,25 +35,52 @@ cp microservices/product-service/Dockerfile microservices/product-composite-serv
 
 > 기본 형태가 궁금하면 참고: `code microservices/product-service/src/main/resources/application.yml` (맨 끝 4줄이 03에서 넣은 docker 프로파일)
 
+### `recommendation-service/.../application.yml`
 ```bash
 code microservices/recommendation-service/src/main/resources/application.yml
 ```
 **맨 끝에** 4줄 추가
-```bash
-code microservices/review-service/src/main/resources/application.yml
-```
-**맨 끝에** 4줄 추가
 ```yaml
+spring.application.name: recommendation-service
+server.port: 7003
+spring.web.error.include-message: always
+
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
 
----                                              # ★ 추가
-spring.config.activate.on-profile: docker        # ★ 추가
-                                                 # ★ 추가
-server.port: 8080                                # ★ 추가
+# ★ 추가 시작 (3줄)
+---
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+# ★ 추가 끝
 ```
+
+### `review-service/.../application.yml`
+```bash
+code microservices/review-service/src/main/resources/application.yml
+```
+**맨 끝에** 4줄 추가
+```yaml
+spring.application.name: review-service
+server.port: 7004
+spring.web.error.include-message: always
+
+logging:
+  level:
+    root: INFO
+    se.magnus: DEBUG
+
+# ★ 추가 시작 (3줄)
+---
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+# ★ 추가 끝
+```
+
 컨테이너는 각자 떨어진 환경이라 서비스마다 포트를 다르게 줄 필요가 없다. 셋 다 8080이다.
 
 ---

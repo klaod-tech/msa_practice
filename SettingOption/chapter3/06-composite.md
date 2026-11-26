@@ -142,56 +142,155 @@ logging:
 ```
 `app:` 아래는 교재가 직접 정한 이름이라 VS Code가 "모르는 속성"으로 밑줄을 긋지만 정상이다. Integration이 `@Value("${app.product-service.host}")`로 읽는다.
 
-## 4. `services/ProductCompositeIntegration.java` (새 파일, 교재 소스 + 수정)
+## 4. `services/ProductCompositeIntegration.java` (새 파일, 교재 소스 + Boot 4 수정)
 ```bash
 mkdir -p microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/
 ```
+### `product-composite-service/.../services/ProductCompositeIntegration.java` (전체)
 ```bash
 code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeIntegration.java
 ```
-아래 **세 군데 수정** (직접 입력하려면 `cp` 없이 열어서 교재 소스를 보며 작성)
-`code`로 열린 탭은 반드시 `Ctrl+S`로 저장한다. 저장하지 않으면 디스크에 파일이 없어서, VS Code에 오류도 안 뜨고 Gradle도 이 파일을 모른다.
-복사한 뒤 **세 군데를 고친다.** Boot 4의 클래스패스에는 Jackson 3(`tools.jackson`)만 있고 Jackson 2(`com.fasterxml.jackson.databind`)는 없다.
+아래 내용 전체 입력
 
-### ① import (파일 맨 위, 3~8번 줄 근처)
 ```java
+package se.magnus.microservices.composite.product.services;
+
 import static org.springframework.http.HttpMethod.GET;
 
-import com.fasterxml.jackson.databind.ObjectMapper;      // ★ 삭제
-import java.io.IOException;                              // ★ 삭제
-import tools.jackson.core.JacksonException;              // ★ 추가
-import tools.jackson.databind.ObjectMapper;              // ★ 추가
+import tools.jackson.core.JacksonException;              // ★ 참고: 교재: import java.io.IOException;
+import tools.jackson.databind.ObjectMapper;              // ★ 참고: 교재: com.fasterxml.jackson.databind.ObjectMapper
 import java.util.ArrayList;
 import java.util.List;
-```
-`JacksonException` import를 두 번 넣은 적이 있다. 중복 import는 오류는 아니지만 하나만 남긴다.
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import se.magnus.api.core.product.Product;
+import se.magnus.api.core.product.ProductService;
+import se.magnus.api.core.recommendation.Recommendation;
+import se.magnus.api.core.recommendation.RecommendationService;
+import se.magnus.api.core.review.Review;
+import se.magnus.api.core.review.ReviewService;
+import se.magnus.api.exceptions.InvalidInputException;
+import se.magnus.api.exceptions.NotFoundException;
+import se.magnus.util.http.HttpErrorInfo;
 
-### ② `getProduct()`의 `switch` (70~81번 줄 근처)
-```java
-    } catch (HttpClientErrorException ex) {
+@Component
+public class ProductCompositeIntegration implements ProductService, RecommendationService, ReviewService {
 
-      switch (HttpStatus.resolve(ex.getStatusCode().value())) {
-        case NOT_FOUND:
-          throw new NotFoundException(getErrorMessage(ex));
+    private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
-        case UNPROCESSABLE_CONTENT:                      // ★ 변경 (교재: UNPROCESSABLE_ENTITY)
-          throw new InvalidInputException(getErrorMessage(ex));
+    private final RestTemplate restTemplate;
+    private final ObjectMapper mapper;
 
-        default:
-```
+    private final String productServiceUrl;
+    private final String recommendationServiceUrl;
+    private final String reviewServiceUrl;
 
-### ③ `getErrorMessage()` (85~91번 줄 근처)
-```java
-  private String getErrorMessage(HttpClientErrorException ex) {
-    try {
-      return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-    } catch (JacksonException ioex) {                    // ★ 변경 (교재: IOException)
-      return ex.getMessage();
+    public ProductCompositeIntegration(
+        RestTemplate restTemplate,
+        ObjectMapper mapper,
+        @Value("${app.product-service.host}") String productServiceHost,
+        @Value("${app.product-service.port}") int productServicePort,
+        @Value("${app.recommendation-service.host}") String recommendationServiceHost,
+        @Value("${app.recommendation-service.port}") int recommendationServicePort,
+        @Value("${app.review-service.host}") String reviewServiceHost,
+        @Value("${app.review-service.port}") int reviewServicePort) {
+
+        this.restTemplate = restTemplate;
+        this.mapper = mapper;
+
+        productServiceUrl = "http://" + productServiceHost + ":" + productServicePort + "/product/";
+        recommendationServiceUrl = "http://" + recommendationServiceHost + ":" + recommendationServicePort + "/recommendation?productId=";
+        reviewServiceUrl = "http://" + reviewServiceHost + ":" + reviewServicePort + "/review?productId=";
     }
-  }
+
+    public Product getProduct(int productId) {
+
+        try {
+            String url = productServiceUrl + productId;
+            LOG.debug("Will call getProduct API on URL: {}", url);
+
+            Product product = restTemplate.getForObject(url, Product.class);
+            LOG.debug("Found a product with id: {}", product.getProductId());
+
+            return product;
+
+        } catch (HttpClientErrorException ex) {
+
+            switch (HttpStatus.resolve(ex.getStatusCode().value())) {
+                case NOT_FOUND:
+                    throw new NotFoundException(getErrorMessage(ex));
+
+                case UNPROCESSABLE_CONTENT:                      // ★ 참고: 교재: UNPROCESSABLE_ENTITY
+                    throw new InvalidInputException(getErrorMessage(ex));
+
+                default:
+                    LOG.warn("Got an unexpected HTTP error: {}, will rethrow it", ex.getStatusCode());
+                    LOG.warn("Error body: {}", ex.getResponseBodyAsString());
+                    throw ex;
+            }
+        }
+    }
+
+    private String getErrorMessage(HttpClientErrorException ex) {
+        try {
+            return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
+        } catch (JacksonException ioex) {                    // ★ 참고: 교재: IOException
+            return ex.getMessage();
+        }
+    }
+
+    public List<Recommendation> getRecommendations(int productId) {
+
+        try {
+            String url = recommendationServiceUrl + productId;
+
+            LOG.debug("Will call getRecommendations API on URL: {}", url);
+            List<Recommendation> recommendations = restTemplate
+                .exchange(url, GET, null, new ParameterizedTypeReference<List<Recommendation>>() {})
+                .getBody();
+
+            LOG.debug("Found {} recommendations for a product with id: {}", recommendations.size(), productId);
+            return recommendations;
+
+        } catch (Exception ex) {
+            LOG.warn("Got an exception while requesting recommendations, return zero recommendations: {}", ex.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Review> getReviews(int productId) {
+
+        try {
+            String url = reviewServiceUrl + productId;
+
+            LOG.debug("Will call getReviews API on URL: {}", url);
+            List<Review> reviews = restTemplate
+                .exchange(url, GET, null, new ParameterizedTypeReference<List<Review>>() {})
+                .getBody();
+
+            LOG.debug("Found {} reviews for a product with id: {}", reviews.size(), productId);
+            return reviews;
+
+        } catch (Exception ex) {
+            LOG.warn("Got an exception while requesting reviews, return zero reviews: {}", ex.getMessage());
+            return new ArrayList<>();
+        }
+    }
+}
 ```
-Jackson 3의 `readValue()`는 `IOException`을 던지지 않는다. 교재대로 두면 `exception IOException is never thrown in body of corresponding try statement` 컴파일 오류가 난다.
+`code`로 열린 탭은 반드시 `Ctrl+S`로 저장한다. 저장하지 않으면 디스크에 파일이 없어서, VS Code에 오류도 안 뜨고 Gradle도 이 파일을 모른다.
+
+### 교재와 다른 세 곳 (`★ 참고` 줄)
+Boot 4의 클래스패스에는 Jackson 3(`tools.jackson`)만 있고 Jackson 2(`com.fasterxml.jackson.databind`)는 없다.
+- **import**: `com.fasterxml.jackson.databind.ObjectMapper`, `java.io.IOException` 대신 `tools.jackson.databind.ObjectMapper`, `tools.jackson.core.JacksonException`. `JacksonException` import를 두 번 넣은 적이 있다. 중복은 오류는 아니지만 하나만 둔다.
+- **`switch`**: `UNPROCESSABLE_ENTITY` → `UNPROCESSABLE_CONTENT` (Spring 7에서 ENTITY는 deprecated).
+- **`getErrorMessage()`**: `catch (IOException ioex)` → `catch (JacksonException ioex)`. Jackson 3의 `readValue()`는 `IOException`을 던지지 않아서, 교재대로 두면 `exception IOException is never thrown in body of corresponding try statement` 컴파일 오류가 난다.
 
 `RestTemplate`은 Spring 7에서도 deprecated가 아니라 그대로 쓴다(교재 7장에서 WebClient로 바꾼다).
 
@@ -217,17 +316,85 @@ Jackson 3의 `readValue()`는 `IOException`을 던지지 않는다. 교재대로
 고친 뒤에는 composite만 다시 빌드·실행하면 된다. 옛 composite를 먼저 꺼야 한다(포트 충돌) → [07](07-test.md)
 
 ## 6. `services/ProductCompositeServiceImpl.java` (새 파일, 교재 소스 그대로)
-방법 1 — 아래 파일을 열어서 교재 소스를 보며 작성
+### `product-composite-service/.../services/ProductCompositeServiceImpl.java` (전체)
 ```bash
 code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java
 ```
+아래 내용 전체 입력
 
-방법 2 — 복사
-```bash
-cp $BOOK_HOME/Chapter03/2-basic-rest-services/microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/
+```java
+package se.magnus.microservices.composite.product.services;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RestController;
+import se.magnus.api.composite.product.*;
+import se.magnus.api.core.product.Product;
+import se.magnus.api.core.recommendation.Recommendation;
+import se.magnus.api.core.review.Review;
+import se.magnus.api.exceptions.NotFoundException;
+import se.magnus.util.http.ServiceUtil;
+
+@RestController
+public class ProductCompositeServiceImpl implements ProductCompositeService {
+
+    private final ServiceUtil serviceUtil;
+    private ProductCompositeIntegration integration;
+
+    public ProductCompositeServiceImpl(
+        ServiceUtil serviceUtil, ProductCompositeIntegration integration) {
+
+        this.serviceUtil = serviceUtil;
+        this.integration = integration;
+    }
+
+    @Override
+    public ProductAggregate getProduct(int productId) {
+
+        Product product = integration.getProduct(productId);
+        if (product == null) {
+            throw new NotFoundException("No product found for productId: " + productId);
+        }
+
+        List<Recommendation> recommendations = integration.getRecommendations(productId);
+
+        List<Review> reviews = integration.getReviews(productId);
+
+        return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
+    }
+
+    private ProductAggregate createProductAggregate(
+        Product product,
+        List<Recommendation> recommendations,
+        List<Review> reviews,
+        String serviceAddress) {
+
+        int productId = product.getProductId();
+        String name = product.getName();
+        int weight = product.getWeight();
+
+        List<RecommendationSummary> recommendationSummaries =
+            (recommendations == null) ? null : recommendations.stream()
+                .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate()))
+                .collect(Collectors.toList());
+
+        List<ReviewSummary> reviewSummaries =
+            (reviews == null) ? null : reviews.stream()
+                .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
+                .collect(Collectors.toList());
+
+        String productAddress = product.getServiceAddress();
+        String reviewAddress = (reviews != null && reviews.size() > 0) ? reviews.get(0).getServiceAddress() : "";
+        String recommendationAddress = (recommendations != null && recommendations.size() > 0) ? recommendations.get(0).getServiceAddress() : "";
+        ServiceAddresses serviceAddresses = new ServiceAddresses(serviceAddress, productAddress, reviewAddress, recommendationAddress);
+
+        return new ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses);
+    }
+}
 ```
-핵심 서비스 결과를 `ProductAggregate`로 합치고 `serviceAddresses`에 4개 서비스의 주소를 담는다.
-api의 Recommendation·Review가 비어 있으면 이 파일에서 `getRecommendationId()`, `getReviewId()`에 `cannot find symbol` 오류가 난다.
+- product를 먼저 부르고, 없으면 `NotFoundException`(404). 이어서 추천·리뷰를 불러 `createProductAggregate()`로 합친다.
+- `createProductAggregate()`: 상품 정보 → 추천 요약 목록 → 리뷰 요약 목록 → 4개 서비스 주소(`ServiceAddresses`) 순서로 만든다.
+- api의 Recommendation·Review가 비어 있으면 이 파일에서 `getRecommendationId()`, `getReviewId()`에 `cannot find symbol` 오류가 난다.
 
 ## 확인
 ```bash

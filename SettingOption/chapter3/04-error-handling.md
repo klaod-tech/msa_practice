@@ -26,20 +26,118 @@ curl /product/13
 ```bash
 mkdir -p api/src/main/java/se/magnus/api/exceptions
 ```
-방법 1 — 직접 작성 (교재 소스를 보며 입력)
+
+### `api/.../exceptions/InvalidInputException.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/exceptions/InvalidInputException.java
+```
+아래 내용 전체 입력
+
+```java
+package se.magnus.api.exceptions;
+
+public class InvalidInputException extends RuntimeException {
+    public InvalidInputException() {}
+
+    public InvalidInputException(String message) {
+        super(message);
+    }
+
+    public InvalidInputException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public InvalidInputException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+- 잘못된 입력(예: 음수 productId)일 때 던지는 예외. 핸들러가 **422**로 바꿔 응답한다.
+- 생성자 4개는 `RuntimeException`의 생성자를 그대로 이어 준다.
+
+### `api/.../exceptions/NotFoundException.java` (전체)
+```bash
 code api/src/main/java/se/magnus/api/exceptions/NotFoundException.java
+```
+아래 내용 전체 입력
+
+```java
+package se.magnus.api.exceptions;
+
+public class NotFoundException extends RuntimeException {
+    public NotFoundException() {}
+
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    public NotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NotFoundException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+- 찾는 데이터가 없을 때(예: productId 13) 던지는 예외. 핸들러가 **404**로 바꿔 응답한다.
+- InvalidInputException과 같은 모양이고 클래스 이름만 다르다.
+
+### `util/.../http/HttpErrorInfo.java` (전체)
+```bash
 code util/src/main/java/se/magnus/util/http/HttpErrorInfo.java
 ```
-열린 파일마다 작성
-방법 2 — 복사
-```bash
-B=$BOOK_HOME/Chapter03/2-basic-rest-services
-cp $B/api/src/main/java/se/magnus/api/exceptions/InvalidInputException.java api/src/main/java/se/magnus/api/exceptions/
-cp $B/api/src/main/java/se/magnus/api/exceptions/NotFoundException.java     api/src/main/java/se/magnus/api/exceptions/
-cp $B/util/src/main/java/se/magnus/util/http/HttpErrorInfo.java             util/src/main/java/se/magnus/util/http/
+아래 내용 전체 입력
+
+```java
+package se.magnus.util.http;
+
+import java.time.ZonedDateTime;
+import org.springframework.http.HttpStatus;
+
+public class HttpErrorInfo {
+    private final ZonedDateTime timestamp;
+    private final String path;
+    private final HttpStatus httpStatus;
+    private final String message;
+
+    public HttpErrorInfo() {
+        timestamp = null;
+        this.httpStatus = null;
+        this.path = null;
+        this.message = null;
+    }
+
+    public HttpErrorInfo(HttpStatus httpStatus, String path, String message) {
+        timestamp = ZonedDateTime.now();
+        this.httpStatus = httpStatus;
+        this.path = path;
+        this.message = message;
+    }
+
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public int getStatus() {
+        return httpStatus.value();
+    }
+
+    public String getError() {
+        return httpStatus.getReasonPhrase();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}
 ```
+- 오류 응답 본문(JSON)의 모양: `timestamp`, `path`, `status`, `error`, `message`.
+- 롬복을 쓰지 않는다(아래 "롬복을 쓰면 안 되는 이유").
 
 ### 예외 클래스 위치: 본문과 소스가 다르다
 - 본문: "util 프로젝트에 ... `se.magnus.util.exceptions` 패키지"
@@ -67,9 +165,7 @@ HttpErrorInfo에 클래스 단위로 `@Getter`, `@AllArgsConstructor`를 붙였�
 code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java
 ```
 아래 내용 전체 입력
-(복사하려면 `cp $BOOK_HOME/Chapter03/2-basic-rest-services/util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java util/src/main/java/se/magnus/util/http/` 후 열어서 수정)
-
-교재 소스를 복사(또는 입력)한 뒤 **`UNPROCESSABLE_ENTITY`를 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바꾼다**(Spring 7.0.10에서 ENTITY는 deprecated).
+교재 소스와 비교하면 **`UNPROCESSABLE_ENTITY`가 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바뀌어 있다**(Spring 7.0.10에서 ENTITY는 deprecated).
 ```java
 package se.magnus.util.http;
 
