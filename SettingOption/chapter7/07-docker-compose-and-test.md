@@ -79,7 +79,7 @@ services:
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 5s
-      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)  # ★ 변경 (전: timeout: 10s)
+      timeout: 10s  # ★ 참고: 교재와 다름 (교재: 2s, 6장 트러블슈팅)
       retries: 60
 
   mysql:
@@ -95,7 +95,7 @@ services:
     healthcheck:
       test: "/usr/bin/mysql --user=user --password=pwd --execute \"SHOW DATABASES;\""
       interval: 5s
-      timeout: 10s  # 교재와 다름 (교재: 2s, 6장 트러블슈팅)  # ★ 변경 (전: timeout: 10s)
+      timeout: 10s  # ★ 참고: 교재와 다름 (교재: 2s, 6장 트러블슈팅)
       retries: 60
 
   # ★ 추가 시작 (11줄)

@@ -708,7 +708,7 @@ import se.magnus.api.exceptions.NotFoundException;
 import se.magnus.microservices.composite.product.services.ProductCompositeIntegration;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-@AutoConfigureWebTestClient  // Boot 4 (3장부터 유지)  // ★ 변경 (전: @AutoConfigureWebTestClient)
+@AutoConfigureWebTestClient  // ★ 참고: Boot 4 (3장부터 유지)
 class ProductCompositeServiceApplicationTests {
 
   private static final int PRODUCT_ID_OK = 1;

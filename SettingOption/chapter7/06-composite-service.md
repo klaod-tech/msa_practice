@@ -560,7 +560,7 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
   private String getErrorMessage(WebClientResponseException ex) {  // ★ 변경 (전: private String getErrorMessage(HttpClientErrorException ex) {)
     try {
       return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
-    } catch (JacksonException ioex) {  // 교재와 다름 (교재: IOException, 3장부터)  // ★ 변경 (전: } catch (JacksonException ioex) {)
+    } catch (JacksonException ioex) {  // ★ 참고: 교재와 다름 (교재: IOException, 3장부터)
       return ex.getMessage();
     }
   }
@@ -1089,7 +1089,7 @@ class ProductCompositeServiceApplicationTests {
   @Test
   void getProductInvalidInput() {
 
-    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT))
+    getAndVerifyProduct(PRODUCT_ID_INVALID, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
       .jsonPath("$.path").isEqualTo("/product-composite/" + PRODUCT_ID_INVALID)
       .jsonPath("$.message").isEqualTo("INVALID: " + PRODUCT_ID_INVALID);
   }

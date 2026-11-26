@@ -297,7 +297,7 @@ spring.application.name: product-service
 server.port: 7002
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)  # ★ 변경 (전: spring.web.error.include-message: always  # (교재: server.error.inclu...)
 
-spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)  # ★ 변경 (전: spring.mongodb:)
+spring.mongodb:  # ★ 참고: 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)
   host: localhost
   port: 27017
   database: product-db
@@ -400,7 +400,7 @@ spring.application.name: recommendation-service
 server.port: 7003
 spring.web.error.include-message: always  # 교재와 다름 (Boot 4, 3장부터 유지)  # ★ 변경 (전: spring.web.error.include-message: always  # (교재: server.error.inclu...)
 
-spring.mongodb:  # 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)  # ★ 변경 (전: spring.mongodb:)
+spring.mongodb:  # ★ 참고: 교재와 다름 (교재: spring.data.mongodb, 6장부터 유지)
   host: localhost
   port: 27017
   database: recommendation-db
@@ -771,7 +771,7 @@ class ProductServiceApplicationTests extends MongoDbTestBase {
 
     int productIdInvalid = -1;
 
-    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // 교재와 다름 (교재: UNPROCESSABLE_ENTITY)  // ★ 변경 (전: getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT))
+    getAndVerifyProduct(productIdInvalid, UNPROCESSABLE_CONTENT)  // ★ 참고: 교재와 다름 (교재: UNPROCESSABLE_ENTITY)
       .jsonPath("$.path").isEqualTo("/product/" + productIdInvalid)
       .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
   }
