@@ -105,6 +105,16 @@ sdk install springboot 4.0.7
 spring --version
 ```
 
+**`java -version` 또는 `spring --version`이 `Command 'java' not found` / `JAVA_HOME not set and cannot find javac`로 나올 때**
+Java는 설치됐는데 **지금 터미널이 Java 경로를 모르는 것**이다. SDKMAN은 터미널을 열 때 그 시점에 있는 도구의 경로만 PATH에 넣는데, 이 터미널은 Java를 설치하기 전에 열렸다. 설정을 다시 읽게 한다(`~/.sdkman` 사이에 공백 없이):
+```bash
+source ~/.sdkman/bin/sdkman-init.sh
+hash -r
+java -version     # openjdk version "21.0.13"
+spring --version  # Spring CLI v4.0.7
+```
+터미널을 닫았다가 다시 열어도 된다. 화면에 나오는 `sudo apt install openjdk-...` 안내는 따르지 않는다(Java가 두 개가 되어 꼬인다).
+
 apt로 Java 17을 먼저 설치했다가 지운 기록 → [troubleshooting.md](troubleshooting.md)
 
 ## 4. kubectl, minikube, istioctl (15장부터 사용)
