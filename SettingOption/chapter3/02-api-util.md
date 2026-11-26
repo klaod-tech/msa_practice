@@ -204,13 +204,14 @@ public class Product {
 | `composite/product/ReviewSummary.java` | 〃 | `int reviewId, String author, String subject` |
 | `composite/product/ServiceAddresses.java` | 〃 | `String cmp, String pro, String rev, String rec` |
 
-파일마다 따로 열어서 아래 전체 코드를 입력한다. 모양은 같고 **클래스 이름, package, 필드만 다르다.**
+각 파일을 따로 열어 아래 내용 전체를 입력한다. 모양은 `Product.java`와 같고 **package, 클래스 이름, 필드만 다르다.**
 
-#### `Recommendation.java`
+### `api/.../core/recommendation/Recommendation.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/core/recommendation/Recommendation.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.core.recommendation;
 
@@ -218,25 +219,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class Recommendation {
-  private final int productId;
-  private final int recommendationId;
-  private final String author;
-  private final int rate;
-  private final String content;
-  private final String serviceAddress;
+    private final int productId;
+    private final int recommendationId;
+    private final String author;
+    private final int rate;
+    private final String content;
+    private final String serviceAddress;
 }
 ```
+- 상품 하나에 달린 추천 하나. `productId`로 어느 상품의 추천인지 가리킨다.
+- 필드 순서가 생성자 인자 순서다. 3장 05에서 `new Recommendation(productId, 1, "Author 1", 1, "Content 1", ...)`처럼 쓴다.
 
-#### `Review.java`
+### `api/.../core/review/Review.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/core/review/Review.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.core.review;
 
@@ -244,25 +247,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class Review {
-  private final int productId;
-  private final int reviewId;
-  private final String author;
-  private final String subject;
-  private final String content;
-  private final String serviceAddress;
+    private final int productId;
+    private final int reviewId;
+    private final String author;
+    private final String subject;
+    private final String content;
+    private final String serviceAddress;
 }
 ```
+- 상품 하나에 달린 리뷰 하나. Recommendation과 비슷하지만 `rate` 대신 `subject`(제목)가 있다.
 
-#### `ProductAggregate.java`
+### `api/.../composite/product/ProductAggregate.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/composite/product/ProductAggregate.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.composite.product;
 
@@ -272,25 +276,28 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class ProductAggregate {
-  private final int productId;
-  private final String name;
-  private final int weight;
-  private final List<RecommendationSummary> recommendations;
-  private final List<ReviewSummary> reviews;
-  private final ServiceAddresses serviceAddresses;
+    private final int productId;
+    private final String name;
+    private final int weight;
+    private final List<RecommendationSummary> recommendations;
+    private final List<ReviewSummary> reviews;
+    private final ServiceAddresses serviceAddresses;
 }
 ```
+- composite가 돌려주는 **합친 응답**: 상품 정보 + 추천 목록 + 리뷰 목록 + 응답한 서비스 주소.
+- `List`를 쓰므로 `import java.util.List;`가 더 있다.
+- `RecommendationSummary`, `ReviewSummary`, `ServiceAddresses`는 아래에서 만든다. 셋을 만들기 전까지 빨간 줄이 보이는 건 정상이다.
 
-#### `RecommendationSummary.java`
+### `api/.../composite/product/RecommendationSummary.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/composite/product/RecommendationSummary.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.composite.product;
 
@@ -298,23 +305,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class RecommendationSummary {
-
-  private final int recommendationId;
-  private final String author;
-  private final int rate;
+    private final int recommendationId;
+    private final String author;
+    private final int rate;
 }
 ```
+- 합친 응답에 넣을 추천의 **요약**(id, 작성자, 점수만).
 
-#### `ReviewSummary.java`
+### `api/.../composite/product/ReviewSummary.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/composite/product/ReviewSummary.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.composite.product;
 
@@ -322,24 +329,23 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class ReviewSummary {
-
-  private final int reviewId;
-  private final String author;
-  private final String subject;
-
+    private final int reviewId;
+    private final String author;
+    private final String subject;
 }
 ```
+- 합친 응답에 넣을 리뷰의 **요약**(id, 작성자, 제목만).
 
-#### `ServiceAddresses.java`
+### `api/.../composite/product/ServiceAddresses.java` (전체)
 ```bash
 code api/src/main/java/se/magnus/api/composite/product/ServiceAddresses.java
 ```
-붙여넣기 (새 파일)
+아래 내용 전체 입력
+
 ```java
 package se.magnus.api.composite.product;
 
@@ -347,17 +353,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
-
+@Getter                               // 모든 필드의 게터
+@AllArgsConstructor                   // 필드 순서대로 받는 생성자
+@NoArgsConstructor(force = true)      // 기본 생성자 (final 필드를 0/null로 채움)
 public class ServiceAddresses {
-  private final String cmp;
-  private final String pro;
-  private final String rev;
-  private final String rec;
+    private final String cmp;
+    private final String pro;
+    private final String rev;
+    private final String rec;
 }
 ```
+- 어느 서비스 인스턴스가 응답했는지 담는다. `cmp` = composite, `pro` = product, `rev` = review, `rec` = recommendation.
 
 ---
 
