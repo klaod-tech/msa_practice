@@ -192,19 +192,7 @@ public class Product {
 - 필드가 `final`이라 세터는 없다.
 - `force = true`가 없으면 final 필드 때문에 기본 생성자를 만들 수 없어 컴파일 오류가 난다.
 
-### 나머지 데이터 클래스 (같은 패턴)
-`package`와 `import`, 애너테이션 3개는 Product와 같고 **필드만 다르다.** 필드 순서는 교재와 똑같이 맞춘다. `@AllArgsConstructor`가 필드 순서대로 생성자를 만들기 때문에, 순서가 다르면 `new Recommendation(productId, 1, "Author 1", ...)`가 값을 엉뚱한 필드에 넣는다.
-
-| 파일 | package | 필드 (순서대로) |
-|---|---|---|
-| `core/recommendation/Recommendation.java` | `se.magnus.api.core.recommendation` | `int productId, int recommendationId, String author, int rate, String content, String serviceAddress` |
-| `core/review/Review.java` | `se.magnus.api.core.review` | `int productId, int reviewId, String author, String subject, String content, String serviceAddress` |
-| `composite/product/ProductAggregate.java` | `se.magnus.api.composite.product` | `int productId, String name, int weight, List<RecommendationSummary> recommendations, List<ReviewSummary> reviews, ServiceAddresses serviceAddresses` (+ `import java.util.List;`) |
-| `composite/product/RecommendationSummary.java` | 〃 | `int recommendationId, String author, int rate` |
-| `composite/product/ReviewSummary.java` | 〃 | `int reviewId, String author, String subject` |
-| `composite/product/ServiceAddresses.java` | 〃 | `String cmp, String pro, String rev, String rec` |
-
-각 파일을 따로 열어 아래 내용 전체를 입력한다. 모양은 `Product.java`와 같고 **package, 클래스 이름, 필드만 다르다.**
+나머지 6개도 `Product.java`와 같은 모양이고 **package, 클래스 이름, 필드만 다르다.** `@AllArgsConstructor`는 필드 순서대로 생성자를 만들므로 필드 순서를 그대로 입력한다.
 
 ### `api/.../core/recommendation/Recommendation.java` (전체)
 ```bash
