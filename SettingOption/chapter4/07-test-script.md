@@ -258,7 +258,7 @@ then                                                # ★ ③ 추가
   docker compose up -d                              # ★ ③ 추가
 fi                                                  # ★ ③ 추가
 
-waitForService curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS# ★ ③ 추가
+waitForService curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS  # ★ ③ 추가
 
 assertCurl 200 "curl http://$HOST:$PORT/product-composite/$PROD_ID_REVS_RECS -s"
 assertEqual $PROD_ID_REVS_RECS $(echo $RESPONSE | jq .productId)
@@ -286,7 +286,7 @@ assertEqual "\"Type mismatch.\"" "$(echo $RESPONSE | jq .message)"
 
 if [[ $@ == *"stop"* ]]                             # ★ ④ 추가
 then                                                # ★ ④ 추가
-    echo "We are done, stopping the test environment..."# ★ ④ 추가
+    echo "We are done, stopping the test environment..."  # ★ ④ 추가
     echo "$ docker compose down"                    # ★ ④ 추가
     docker compose down                             # ★ ④ 추가
 fi                                                  # ★ ④ 추가
