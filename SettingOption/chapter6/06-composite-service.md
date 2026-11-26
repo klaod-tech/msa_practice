@@ -669,6 +669,8 @@ app:
 문자열·블록 안이라 ★를 달지 못한 변경: 변경 1줄(첫 줄: `1. Product information`), 전 1줄(첫 줄: `1. Base product information`); 변경 2줄(첫 줄: `1. If no product information is found, a **404 ...`), 전 1줄(첫 줄: `In the following cases, only a partial response...`); 변경 4줄(첫 줄: `create-composite-product:`), 전 1줄(첫 줄: `200 - Ok, but no recommendations will be returned`); 변경 2줄(첫 줄: `1. If a product with the same productId as spec...`), 전 1줄(첫 줄: `200 - Ok, but no reviews will be returned`); 변경 5줄(첫 줄: `delete-composite-product:`), 전 1줄(첫 줄: `400 - A **Bad Request** error will be returned`); 변경 1줄(첫 줄: `This means that a delete request of a non-exist...`), 전 2줄(첫 줄: `404 - A **Not Found** error will be returned`)
 
 ## 6. 테스트 (전체 교체)
+
+> **시간이 부족하면 이 절은 건너뛰어도 된다.** 실행(`docker compose up`)과 `test-em-all.bash`는 이 테스트 파일과 상관없이 동작한다. 다만 `./gradlew build`는 테스트도 돌리므로, 옛 테스트가 남아 실패하면 `./gradlew build -x test`(테스트 빼고 빌드)로 빌드한다. 6장 03의 영속성 테스트는 이 장의 핵심 실습이라 되도록 한다.
 ```bash
 code microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java
 ```

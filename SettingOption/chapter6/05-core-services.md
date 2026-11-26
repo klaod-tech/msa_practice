@@ -713,6 +713,8 @@ find ~/.gradle/caches -name "spring-boot-mongodb-4.0.9.jar" | head -1 | xargs -I
 결과에 `"level": "error", "replacement": "spring.mongodb.host"`가 보이면 옛 이름은 읽지 않는다는 뜻이다.
 
 ## 5. 서비스 테스트 (전체 교체)
+
+> **시간이 부족하면 이 절은 건너뛰어도 된다.** 실행(`docker compose up`)과 `test-em-all.bash`는 이 테스트 파일과 상관없이 동작한다. 다만 `./gradlew build`는 테스트도 돌리므로, 옛 테스트가 남아 실패하면 `./gradlew build -x test`(테스트 빼고 빌드)로 빌드한다. 6장 03의 영속성 테스트는 이 장의 핵심 실습이라 되도록 한다.
 5장까지의 `contextLoads` 테스트를 교재 6장 테스트로 바꾼다. 03의 `MongoDbTestBase` / `MySqlTestBase`를 상속하므로 **Docker가 켜져 있어야** 한다.
 
 ```bash

@@ -967,6 +967,8 @@ spring.cloud.stream.kafka.binder.replication-factor: 1
 | `streaming_partitioned` 프로필 | `partitionKey` 헤더(productId)로 파티션 2개에 나눠 보냄 |
 
 ## 7. 테스트 (4개)
+
+> **시간이 부족하면 이 절은 건너뛰어도 된다.** 실행(`docker compose up`)과 `test-em-all.bash`는 이 테스트 파일과 상관없이 동작한다. 다만 `./gradlew build`는 테스트도 돌리므로, 옛 테스트가 남아 실패하면 `./gradlew build -x test`(테스트 빼고 빌드)로 빌드한다. 6장 03의 영속성 테스트는 이 장의 핵심 실습이라 되도록 한다.
 ### 7-1. ProductCompositeServiceApplicationTests (전체 교체)
 Integration이 `Mono`/`Flux`를 돌려주니 목(mock)도 `Mono.just(...)`, `Flux.fromIterable(...)`로 바뀐다. 생성/삭제 테스트는 7-4의 MessagingTests로 옮겨간다.
 ```bash

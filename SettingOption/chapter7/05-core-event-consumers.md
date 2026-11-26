@@ -617,6 +617,8 @@ spring.cloud.stream.kafka.binder.replication-factor: 1
 `Event`의 필드는 전부 `final`이고 setter가 없다. Jackson 3은 기본으로 **final 필드에 값을 넣지 않아서**, 이 줄이 없으면 받은 이벤트의 `eventType`, `key`, `data`가 **전부 null**이 된다(그러면 `switch (event.getEventType())`에서 NullPointerException). composite yml에 3장부터 있는 그 설정과 같은 것이다. Spring Cloud Stream이 스프링 부트의 Jackson 설정을 그대로 가져다 쓰므로 yml 한 줄로 해결된다.
 
 ## 5. 서비스 테스트 (3개, 전체 교체)
+
+> **시간이 부족하면 이 절은 건너뛰어도 된다.** 실행(`docker compose up`)과 `test-em-all.bash`는 이 테스트 파일과 상관없이 동작한다. 다만 `./gradlew build`는 테스트도 돌리므로, 옛 테스트가 남아 실패하면 `./gradlew build -x test`(테스트 빼고 빌드)로 빌드한다. 6장 03의 영속성 테스트는 이 장의 핵심 실습이라 되도록 한다.
 HTTP POST/DELETE가 없어졌으니, 테스트는 **`messageProcessor` 빈을 주입받아 이벤트를 직접 넣는다**(`messageProcessor.accept(event)`). 조회(GET)는 그대로 WebTestClient로 확인한다.
 ```bash
 code microservices/product-service/src/test/java/se/magnus/microservices/core/product/ProductServiceApplicationTests.java
