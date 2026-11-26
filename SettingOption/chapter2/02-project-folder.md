@@ -174,6 +174,8 @@ Password for 'https://<GitHub 아이디>@github.com':   ← 토큰(ghp_...) 붙�
 
 ### 처음 한 번 (git 시작 + 새 레포 연결)
 ```bash
+git config --global user.name "<GitHub 아이디>"
+git config --global user.email "<GitHub에 등록한 이메일>"
 git init -b main
 git add .
 git status
@@ -182,6 +184,7 @@ git remote add origin https://github.com/<GitHub 아이디>/<새 레포 이름>.
 git config --global credential.helper store
 git push -u origin main
 ```
+- `git config` 두 줄은 이 Ubuntu에서 처음 한 번만 한다. 안 하면 `git commit`이 `Please tell me who you are`로 멈춘다. 커밋 기록에 남는 이름·이메일이다.
 - `<GitHub 아이디>/<새 레포 이름>`은 ①에서 복사한 HTTPS 주소로 바꾼다.
 - `git push`에서 Password를 물으면 ②의 토큰을 붙여 넣는다. 막히면 [troubleshooting.md](troubleshooting.md).
 
