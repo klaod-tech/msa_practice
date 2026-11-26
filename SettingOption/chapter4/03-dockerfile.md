@@ -12,18 +12,26 @@ product-service부터 시작한다. 교재 소스: `$BOOK_HOME/Chapter04/microse
 ```bash
 code microservices/product-service/src/main/resources/application.yml
 ```
-**맨 끝에** 4줄 추가
+아래처럼 맞추기 (전체 파일)
 
 ```yaml
+spring.application.name: product-service
+
+server.port: 7002
+spring.web.error.include-message: always
+
 logging:
   level:
     root: INFO
     se.magnus: DEBUG
 
----                                              # ★ 추가
-spring.config.activate.on-profile: docker        # ★ 추가
-                                                 # ★ 추가
-server.port: 8080                                # ★ 추가
+
+# ★ 추가 시작 (3줄)
+---
+spring.config.activate.on-profile: docker
+
+server.port: 8080
+# ★ 추가 끝
 ```
 - `---`은 한 yml 파일 안에서 설정 묶음을 나누는 구분선이다.
 - 그 아래는 **`docker` 프로파일로 실행할 때만** 적용된다. 위쪽 값 중 겹치는 것(`server.port`)을 덮어쓴다.

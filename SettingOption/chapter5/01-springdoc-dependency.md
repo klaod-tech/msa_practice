@@ -8,17 +8,43 @@
 ```bash
 code api/build.gradle
 ```
-`dependencies` 안의 webflux 줄 아래에 한 줄 추가
+아래처럼 맞추기 (전체 파일)
 ```groovy
+plugins {
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+}
+
+group = 'se.magnus.microservices.api'
+version = '1.0.0-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    springBootVersion = '4.0.9'
+}
+
 dependencies {
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springdoc:springdoc-openapi-starter-common:3.0.3'      // ★ 추가 (교재: 2.8.6)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compileOnly platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springdoc:springdoc-openapi-starter-common:3.0.3'  // ★ 추가 — 교재: 2.8.6
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
 }
 ```
 
@@ -26,17 +52,41 @@ dependencies {
 ```bash
 code microservices/product-composite-service/build.gradle
 ```
-`dependencies` 안의 webflux 줄 아래에 한 줄 추가
+아래처럼 맞추기 (전체 파일)
 ```groovy
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.9'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+jar { enabled = false }
+group = 'se.magnus.microservices.composite.product'
+version = '1.0.0-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.3'  // ★ 추가 (교재: 2.8.6)
 	testImplementation 'org.springframework.boot:spring-boot-starter-actuator-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation project(':api')
 	implementation project(':util')
+	implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.0.3'  // ★ 추가 — 교재: 2.8.6
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
 }
 ```
 

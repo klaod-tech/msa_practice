@@ -33,7 +33,6 @@ cp microservices/product-service/Dockerfile microservices/product-composite-serv
 
 ## 2. recommendation, review의 docker 프로파일 (기존 파일)
 
-> 기본 형태가 궁금하면 참고: `code microservices/product-service/src/main/resources/application.yml` (맨 끝 4줄이 03에서 넣은 docker 프로파일)
 
 ### `recommendation-service/.../application.yml`
 ```bash
@@ -87,14 +86,17 @@ server.port: 8080
 
 ## 3. product-composite-service의 docker 프로파일 (기존 파일)
 
-> 기본 형태가 궁금하면 참고: `code microservices/product-service/src/main/resources/application.yml` (docker 프로파일 형식)
 > `app:` 구조는 같은 composite 파일 위쪽의 로컬용 `app:` 블록과 같고 값만 다르다.
 
 ```bash
 code microservices/product-composite-service/src/main/resources/application.yml
 ```
-**맨 끝에** 추가
+아래처럼 맞추기 (전체 파일)
 ```yaml
+server.port: 7001
+spring.web.error.include-message: always
+spring.jackson.mapper.allow-final-fields-as-mutators: true
+
 app:
   product-service:
     host: localhost
@@ -111,20 +113,22 @@ logging:
     root: INFO
     se.magnus: DEBUG
 
----                                              # ★ 추가
-spring.config.activate.on-profile: docker        # ★ 추가
-server.port: 8080                                # ★ 추가
-                                                 # ★ 추가
-app:                                             # ★ 추가
-  product-service:                               # ★ 추가
-    host: product                                # ★ 추가
-    port: 8080                                   # ★ 추가
-  recommendation-service:                        # ★ 추가
-    host: recommendation                         # ★ 추가
-    port: 8080                                   # ★ 추가
-  review-service:                                # ★ 추가
-    host: review                                 # ★ 추가
-    port: 8080                                   # ★ 추가
+# ★ 추가 시작 (13줄)
+---
+spring.config.activate.on-profile: docker
+server.port: 8080
+
+app:
+  product-service:
+    host: product
+    port: 8080
+  recommendation-service:
+    host: recommendation
+    port: 8080
+  review-service:
+    host: review
+    port: 8080
+# ★ 추가 끝
 ```
 - **위쪽의 로컬용 `app:` 블록은 지우지 않는다.** 로컬 실행(`java -jar`) 때는 위쪽 값(localhost:7002~7004), docker 프로파일이 켜지면 아래쪽 값이 위쪽 값을 덮어쓴다.
 - 로컬 실행과 컨테이너 실행에서 핵심 서비스 주소가 이렇게 달라진다.
