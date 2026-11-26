@@ -199,6 +199,15 @@ bash -x ./test-em-all.bash 2>&1 | grep -E "^\+ assert|Test OK|Test FAILED|End,"
 http://localhost:8080/openapi/swagger-ui.html
 ```
 
+**브라우저로 확인** (주소창에 붙여 넣기)
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product-composite (Swagger UI) | 8080 | http://localhost:8080/openapi/swagger-ui.html | `ProductComposite` API 문서 화면 (`/openapi/swagger-ui/index.html`로 바뀐다) |
+| product-composite (API 문서 JSON) | 8080 | http://localhost:8080/openapi/v3/api-docs | `"openapi":"3.1.0"`으로 시작하는 문서 JSON |
+| product-composite | 8080 | http://localhost:8080/product-composite/1 | 추천 3개, 리뷰 3개 (4장과 같음) |
+
+
 ### Try it out으로 API 호출
 1. 연산(`GET /product-composite/{productId}`)을 펼친다.
 2. 오른쪽 위 **`Try it out`** 클릭 → 버튼이 `Cancel`로 바뀌고 `productId` 칸이 입력 가능해지며 **`Execute`** 버튼이 생긴다.

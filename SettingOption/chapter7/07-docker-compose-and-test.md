@@ -645,6 +645,16 @@ cd ~/msa
 `Wait for messages to be processed...` 뒤에 `All messages are now processed!`, 마지막에 `End, all tests OK`가 나오면 된다.
 
 ## 7. 수동 확인
+
+**브라우저로 확인** (주소창에 붙여 넣기)
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product-composite (헬스) | 8080 | http://localhost:8080/actuator/health | `"status":"UP"`, `coreServices`의 product·recommendation·review, `rabbit`이 UP |
+| product-composite | 8080 | http://localhost:8080/product-composite/1 | test-em-all이 만든 상품 1: 추천 3개, 리뷰 3개 |
+| product-composite (Swagger UI) | 8080 | http://localhost:8080/openapi/swagger-ui.html | API 문서 (POST/DELETE는 **202**) |
+| RabbitMQ 관리 화면 | 15672 | http://localhost:15672 | 로그인 `guest` / `guest` → Exchanges·Queues 탭 (아래 7-2) |
+
 ### 7-1. 헬스 체크
 ```bash
 curl localhost:8080/actuator/health -s | jq .

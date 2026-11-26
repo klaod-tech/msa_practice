@@ -149,6 +149,14 @@ java -jar microservices/product-service/build/libs/*.jar &    # "Started Product
 curl http://localhost:7002/product/123
 kill $(jobs -p)                                               # 서비스를 띄운 그 터미널에서
 ```
+
+**브라우저로 확인** (주소창에 붙여 넣기)
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product | 7002 | http://localhost:7002/product/123 | `productId` 123, `name` `name-123`, `weight` 123 |
+- `kill` 하기 **전에** 연다(서비스가 떠 있어야 한다). 주소 끝을 비우면(`localhost:7002/`) Whitelabel 404가 나오는데 정상이다.
+
 실제 응답:
 ```json
 {"name":"name-123","productId":123,"serviceAddress":"301B-03/127.0.1.1:7002","weight":123}

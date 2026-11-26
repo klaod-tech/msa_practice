@@ -319,6 +319,17 @@ cd ~/msa
 bash -x ./test-em-all.bash 2>&1 | grep -E "^\+ assert|Test OK|Test FAILED|End,"
 ```
 
+**브라우저로 확인** (주소창에 붙여 넣기)
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product-composite | 8080 | http://localhost:8080/product-composite/1 | test-em-all이 DB에 넣은 상품 1: 추천 3개, 리뷰 3개 |
+| product-composite | 8080 | http://localhost:8080/product-composite/13 | 없는 상품 → **404**, `"message":"No product found for productId: 13"` |
+| product-composite (Swagger UI) | 8080 | http://localhost:8080/openapi/swagger-ui.html | POST/DELETE가 추가된 API 문서 |
+| product-composite (헬스) | 8080 | http://localhost:8080/actuator/health | `"status":"UP"` |
+- MongoDB(27017), MySQL(3306)은 브라우저로 여는 주소가 아니다. DB 내용은 아래 5절처럼 터미널에서 본다.
+
+
 ## 5. DB에 저장된 데이터 직접 보기
 테스트 스크립트가 넣은 데이터가 **각자의 DB에 따로** 들어갔는지 확인한다.
 

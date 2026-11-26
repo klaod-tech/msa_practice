@@ -37,6 +37,16 @@ java -jar microservices/review-service/build/libs/*.jar &
 - composite에서 추천이나 리뷰가 `[]`이고 `rec`/`rev`가 `""`이면, 그 서비스 주소를 바로 열어 본다. 거기서 404(`No static resource ...`)가 나면 그 서비스의 `ServiceImpl`에 `@RestController`가 빠졌거나 저장이 안 된 것이다.
 - Chrome에서 `pretty print 적용`을 체크하면 JSON이 줄바꿈되어 보기 쉽다.
 
+같은 방식으로 composite의 특수 케이스도 확인할 수 있다.
+
+| 주소 | 나와야 하는 것 |
+|---|---|
+| http://localhost:7001/product-composite/13 | **404**, `"message":"No product found for productId: 13"` |
+| http://localhost:7001/product-composite/113 | 추천 `[]`, `rec` `""`, 리뷰 3개 |
+| http://localhost:7001/product-composite/213 | 리뷰 `[]`, `rev` `""`, 추천 3개 |
+| http://localhost:7001/product-composite/-1 | **422**, `"message":"Invalid productId: -1"` |
+| http://localhost:7001/product-composite/abc | **400**, `"message":"Type mismatch."` |
+
 ### 호출과 결과
 | 명령 | 결과 |
 |---|---|

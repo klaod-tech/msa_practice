@@ -268,4 +268,14 @@ kill $(jobs -p)
 ```
 응답 본문에 `timestamp, path, status, error, message`가 나오면 성공이다. `message`가 보이면 `spring.web.error.include-message` 설정도 동작하는 것이다.
 
+**브라우저로 확인** (주소창에 붙여 넣기)
+
+| 서비스 | 포트 | 주소 | 나와야 하는 것 |
+|---|---|---|---|
+| product | 7002 | http://localhost:7002/product/1 | 정상 응답 (`productId` 1) |
+| product | 7002 | http://localhost:7002/product/0 | **422**: `"error":"Unprocessable Content"`, `"message":"Invalid productId: 0"` |
+| product | 7002 | http://localhost:7002/product/13 | **404**: `"error":"Not Found"`, `"message":"No product found for productId: 13"` |
+- 브라우저는 상태 코드를 화면에 따로 보여 주지 않는다. 본문의 `status`/`error`로 확인한다. `kill` 하기 전에 연다.
+
+
 다음: [05-recommendation-review.md](05-recommendation-review.md)
