@@ -6,7 +6,7 @@
 
 ## `kubectl port-forward ... 443:443`이 `permission denied`
 **원인:** 1024보다 낮은 포트는 관리자만 열 수 있다.
-**해결:** 한 번만 설정한다([../README.md](../README.md) 준비 6번).
+**해결:** 한 번만 설정한다([1장 4-5절](../chapter1/01-ubuntu-environment.md) ③ 443 포트).
 ```bash
 echo "net.ipv4.ip_unprivileged_port_start=443" | sudo tee /etc/sysctl.d/99-unprivileged-443.conf
 sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443

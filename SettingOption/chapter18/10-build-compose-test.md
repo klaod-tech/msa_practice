@@ -1002,7 +1002,7 @@ helm install cert-manager jetstack/cert-manager --create-namespace -n cert-manag
 ```
 
 ## 확인 3: 이스티오 설치
-관찰 도구(Kiali, Jaeger, Prometheus, Grafana) YAML이 들어 있는 이스티오 배포 파일을 홈 폴더에 받는다(`istioctl`은 [../README.md](../README.md) 준비에서 이미 설치했다).
+관찰 도구(Kiali, Jaeger, Prometheus, Grafana) YAML이 들어 있는 이스티오 배포 파일을 홈 폴더에 받는다(`istioctl`은 [1장 4-5절](../chapter1/01-ubuntu-environment.md) 준비에서 이미 설치했다).
 ```bash
 cd ~
 curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.31.4 sh -
@@ -1034,7 +1034,7 @@ kubectl get pods -n hands-on
 - 그래서 파드의 READY가 **`2/2`**다(서비스 컨테이너 + `istio-proxy`).
 
 ## 확인 5: 테스트 (교수님 안내와 다름: WSL)
-교수님 안내는 `minikube tunnel`로 게이트웨이 IP를 받아 `/etc/hosts`에 넣는다. WSL에서는 그 IP에 닿지 않아서, 이스티오 입구(istio-ingressgateway)를 내 PC의 8443 포트로 연결한다. `/etc/hosts`에는 이미 `127.0.0.1 minikube.me health.minikube.me ...`가 있다([../README.md](../README.md) 준비).
+교수님 안내는 `minikube tunnel`로 게이트웨이 IP를 받아 `/etc/hosts`에 넣는다. WSL에서는 그 IP에 닿지 않아서, 이스티오 입구(istio-ingressgateway)를 내 PC의 8443 포트로 연결한다. `/etc/hosts`에는 이미 `127.0.0.1 minikube.me health.minikube.me ...`가 있다([1장 4-5절](../chapter1/01-ubuntu-environment.md) 준비).
 ```bash
 kubectl port-forward -n istio-system service/istio-ingressgateway 8443:443
 ```

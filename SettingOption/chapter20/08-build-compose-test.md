@@ -361,7 +361,7 @@ kubectl -n istio-system wait --timeout=300s --for=condition=available deployment
 - 메일 서버(maildev)는 Grafana 알림 메일을 받아 보는 시험용이다. 교재처럼 직접 만든다(1080: 웹 화면, 1025: 메일 받기).
 
 ## 확인 3: 테스트 (교수님 안내와 다름: WSL, 443 포트)
-이 장의 test-em-all에는 `https://health.minikube.me/actuator/prometheus`처럼 **443 포트를 고정**한 줄이 있다. 그래서 이스티오 입구를 내 PC의 **443** 포트로 연결한다. 1024보다 낮은 포트라 [../README.md](../README.md) 준비 6번(`ip_unprivileged_port_start=443`)을 먼저 해 둔다.
+이 장의 test-em-all에는 `https://health.minikube.me/actuator/prometheus`처럼 **443 포트를 고정**한 줄이 있다. 그래서 이스티오 입구를 내 PC의 **443** 포트로 연결한다. 1024보다 낮은 포트라 [1장 4-5절](../chapter1/01-ubuntu-environment.md) 준비 6번(`ip_unprivileged_port_start=443`)을 먼저 해 둔다.
 ```bash
 kubectl port-forward -n istio-system service/istio-ingressgateway 443:443
 ```

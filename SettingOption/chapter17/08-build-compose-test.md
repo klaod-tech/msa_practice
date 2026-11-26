@@ -1253,7 +1253,7 @@ kubectl get ingress,certificate -n hands-on
 
 ## 확인 4: 테스트 (교수님 안내와 다름: WSL)
 교수님 안내는 `/etc/hosts`에 `$(minikube ip) minikube.me`를 넣고 `HOST=minikube.me PORT=443`인데, WSL에서는 `minikube ip`에 닿지 않는다. 대신:
-1. `/etc/hosts`에 `127.0.0.1 minikube.me ...` (한 번만, [../README.md](../README.md)의 준비 참고)
+1. `/etc/hosts`에 `127.0.0.1 minikube.me ...` (한 번만, [1장 4-5절](../chapter1/01-ubuntu-environment.md)의 준비 참고)
 2. Ingress 컨트롤러를 내 PC의 8443 포트로 연결한다.
 ```bash
 kubectl port-forward -n ingress-nginx service/ingress-nginx-controller 8443:443
