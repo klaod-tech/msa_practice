@@ -204,15 +204,160 @@ public class Product {
 | `composite/product/ReviewSummary.java` | 〃 | 교재 소스의 필드 순서대로 |
 | `composite/product/ServiceAddresses.java` | 〃 | 교재 소스의 필드 순서대로 |
 
+파일마다 따로 열어서 아래 전체 코드를 입력한다. 모양은 같고 **클래스 이름, package, 필드만 다르다.**
+
+#### `Recommendation.java`
 ```bash
 code api/src/main/java/se/magnus/api/core/recommendation/Recommendation.java
+```
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.core.recommendation;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class Recommendation {
+  private final int productId;
+  private final int recommendationId;
+  private final String author;
+  private final int rate;
+  private final String content;
+  private final String serviceAddress;
+}
+```
+
+#### `Review.java`
+```bash
 code api/src/main/java/se/magnus/api/core/review/Review.java
+```
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.core.review;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class Review {
+  private final int productId;
+  private final int reviewId;
+  private final String author;
+  private final String subject;
+  private final String content;
+  private final String serviceAddress;
+}
+```
+
+#### `ProductAggregate.java`
+```bash
 code api/src/main/java/se/magnus/api/composite/product/ProductAggregate.java
+```
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.composite.product;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class ProductAggregate {
+  private final int productId;
+  private final String name;
+  private final int weight;
+  private final List<RecommendationSummary> recommendations;
+  private final List<ReviewSummary> reviews;
+  private final ServiceAddresses serviceAddresses;
+}
+```
+
+#### `RecommendationSummary.java`
+```bash
 code api/src/main/java/se/magnus/api/composite/product/RecommendationSummary.java
+```
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.composite.product;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class RecommendationSummary {
+
+  private final int recommendationId;
+  private final String author;
+  private final int rate;
+}
+```
+
+#### `ReviewSummary.java`
+```bash
 code api/src/main/java/se/magnus/api/composite/product/ReviewSummary.java
+```
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.composite.product;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class ReviewSummary {
+
+  private final int reviewId;
+  private final String author;
+  private final String subject;
+
+}
+```
+
+#### `ServiceAddresses.java`
+```bash
 code api/src/main/java/se/magnus/api/composite/product/ServiceAddresses.java
 ```
-열린 파일마다 작성
+붙여넣기 (새 파일)
+```java
+package se.magnus.api.composite.product;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(force = true)
+
+public class ServiceAddresses {
+  private final String cmp;
+  private final String pro;
+  private final String rev;
+  private final String rec;
+}
+```
 
 ---
 
