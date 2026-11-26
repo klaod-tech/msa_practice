@@ -149,6 +149,29 @@ find microservices/product-service -type f -not -path "*/build/*"
 ## 6. (선택) GitHub 업로드
 > 새 폴더를 기존 레포(`msa_practice`)에 push하지 않는다. 기록이 달라서 거절되고, 강제로 밀면 기존 기록과 문서가 덮어써진다. GitHub에서 **새 레포를 먼저 만들고** 그 주소를 쓴다.
 
+### GitHub 레포 만들기, 토큰 준비 (웹에서 한 번)
+**① 새 레포 만들기**
+1. GitHub 오른쪽 위 **`+` → New repository**
+2. Repository name을 정한다(예: `msa-exam`). Public / Private는 상관없다.
+3. **`Add a README file`, `.gitignore`, `license`는 모두 선택하지 않는다.** 빈 레포여야 아래 `git push`가 충돌 없이 된다(이미 `.gitignore`는 2장에서 만들었다).
+4. **Create repository** → 화면의 **HTTPS 주소**(`https://github.com/<GitHub 아이디>/<레포 이름>.git`)를 복사해 둔다. 아래 `git remote add`에 쓴다.
+
+**② Personal Access Token(PAT) 만들기**
+`git push`는 GitHub 로그인을 묻는데, **Password 칸에 GitHub 웹 비밀번호를 넣으면 거절된다**(2021년부터 git 로그인에 계정 비밀번호를 받지 않음). 대신 git 전용 비밀번호인 **토큰**을 넣는다.
+1. 오른쪽 위 프로필 → **Settings** → 왼쪽 맨 아래 **Developer settings**
+2. **Personal access tokens → Tokens (classic) → Generate new token (classic)**
+3. Note에 아무 이름(예: `wsl`), Expiration 선택, **`repo`에 체크**
+4. **Generate token** → 나온 `ghp_...`를 바로 복사해 둔다(이 화면을 벗어나면 다시 볼 수 없다)
+
+처음 `git push` 할 때 화면:
+```
+Username for 'https://github.com': <GitHub 아이디>
+Password for 'https://<GitHub 아이디>@github.com':   ← 토큰(ghp_...) 붙여넣기
+```
+- 비밀번호 칸은 입력해도 화면에 아무것도 안 보이는 게 정상이다. 마우스 오른쪽 클릭 또는 `Ctrl+Shift+V`로 붙여 넣고 Enter.
+- 아래 `credential.helper store` 덕분에 한 번 넣으면 `~/.git-credentials`에 저장되어 다음부터 묻지 않는다. 새로 설치한 Ubuntu(예: 연습용)에서는 처음 한 번 다시 넣는다.
+- 토큰은 비밀번호와 같다. 남에게 보여 주거나 채팅·문서에 붙여 넣지 않는다.
+
 ### 처음 한 번 (git 시작 + 새 레포 연결)
 ```bash
 git init -b main
@@ -159,9 +182,8 @@ git remote add origin https://github.com/<GitHub 아이디>/<새 레포 이름>.
 git config --global credential.helper store
 git push -u origin main
 ```
-- `<GitHub 아이디>/<새 레포 이름>`은 GitHub에서 만든 새 레포 주소로 바꾼다(레포 화면의 `Code` 버튼에 나오는 HTTPS 주소).
-- 푸시할 때 비밀번호 대신 **Personal Access Token**을 입력한다 → [troubleshooting.md](troubleshooting.md)
-- `credential.helper store`로 토큰이 `~/.git-credentials`에 저장된다. 다음부터는 입력하지 않아도 된다.
+- `<GitHub 아이디>/<새 레포 이름>`은 ①에서 복사한 HTTPS 주소로 바꾼다.
+- `git push`에서 Password를 물으면 ②의 토큰을 붙여 넣는다. 막히면 [troubleshooting.md](troubleshooting.md).
 
 ### 이후 커밋·푸시 (3장부터 매번)
 처음 연결을 한 뒤로는 세 줄이면 된다. `~/msa`(VS Code 터미널)에서:
