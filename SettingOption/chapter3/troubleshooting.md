@@ -19,7 +19,7 @@
 ## 실행
 | 증상 | 원인 | 해결 | 문서 |
 |---|---|---|---|
-| `no main manifest attribute` | `*.jar`가 plain jar를 먼저 잡음 | `jar { enabled = false }` | 03 |
+| `no main manifest attribute, in ...-plain.jar` (그 서비스만 `Exit 1`) | `*.jar`가 plain jar를 먼저 잡음. `jar { enabled = false }`를 넣기 전에 빌드해서 생긴 plain jar가 남아 있어도 같다 | `jar { enabled = false }` 확인 + `./gradlew clean build`로 남은 plain jar 삭제 | 03, 07 |
 | `Error starting ApplicationContext` (`Port 7001 was already in use`) | 옛 프로세스가 포트를 잡고 있음 | `kill <PID>` → `ss -ltnp \| grep 7001`로 확인 후 실행 | 07 |
 | composite 호출 시 500 `Connection refused` | 호출 대상 서비스가 안 떠 있음 | 4개 모두 실행 | 07 |
 | composite 응답 값이 전부 null/0 | Jackson 3은 final 필드에 값을 넣지 않음 + `new RestTemplate()`은 Boot 설정을 안 씀 | RestTemplate에 JsonMapper 연결 + `allow-final-fields-as-mutators: true` | 06 |

@@ -7,9 +7,15 @@
 | 3. `test-em-all.bash` | 4개 모두 | 전체 시스템을 실제로 호출 (curl 확인을 스크립트로 자동화) |
 
 ## 1. 수동 테스트: 서비스 4개 띄우고 curl
+먼저 `clean`으로 예전 빌드 결과를 지우고 빌드한 뒤, 서비스마다 jar가 **하나씩만** 있는지 확인한다.
 ```bash
 cd ~/msa
-./gradlew build
+./gradlew clean build
+ls microservices/*/build/libs/     # 서비스마다 ...-1.0.0-SNAPSHOT.jar 하나씩 (…-plain.jar가 있으면 안 됨)
+```
+- `jar { enabled = false }`를 넣기 **전에** 한 번이라도 빌드했다면 `...-plain.jar`가 남아 있다. 이 설정은 앞으로 만들지 않을 뿐 이미 있는 파일은 지우지 않는다. 그러면 아래 `*.jar`가 plain jar를 잡아서 `no main manifest attribute, in ...-plain.jar`를 내고 그 서비스만 바로 꺼진다(`Exit 1`). `clean`이 이 파일을 지운다.
+
+```bash
 java -jar microservices/product-composite-service/build/libs/*.jar &
 java -jar microservices/product-service/build/libs/*.jar &
 java -jar microservices/recommendation-service/build/libs/*.jar &
@@ -302,7 +308,7 @@ chmod +x test-em-all.bash
 ```bash
 cd ~/msa
 chmod +x test-em-all.bash        # 처음 한 번 (없으면 Permission denied)
-./gradlew build
+./gradlew clean build
 java -jar microservices/product-composite-service/build/libs/*.jar &
 java -jar microservices/product-service/build/libs/*.jar &
 java -jar microservices/recommendation-service/build/libs/*.jar &
