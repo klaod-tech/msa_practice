@@ -9,16 +9,16 @@
 
 PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인):
 ```powershell
-wsl --install Ubuntu-24.04 --name Ubuntu-exam
+wsl --install Ubuntu-24.04 --name Ubuntu-test
 ```
-- 설치가 끝나면 새 사용자 이름과 비밀번호를 정한다. 시작 메뉴 또는 Windows Terminal에서 `Ubuntu-exam`을 열고 아래 1절부터 진행한다.
-- 이 문서에서 `Ubuntu-24.04`, `leo`라고 적힌 곳은 `Ubuntu-exam`, 새로 정한 사용자 이름으로 바꿔 읽는다.
-- **Docker Desktop**: Settings → Resources → WSL integration에서 `Ubuntu-exam`도 켠다. 안 켜면 새 Ubuntu에서 `docker` 명령이 없다고 나온다.
-- **VS Code**: `code .`로 열면 왼쪽 아래가 `WSL: Ubuntu-exam`이다. Java 확장도 이 Ubuntu에 **따로** 설치해야 한다(1절 VS Code의 "WSL: ...에 설치").
+- 설치가 끝나면 새 사용자 이름과 비밀번호를 정한다. 시작 메뉴 또는 Windows Terminal에서 `Ubuntu-test`을 열고 아래 1절부터 진행한다.
+- 이 문서에서 `Ubuntu-24.04`, `leo`라고 적힌 곳은 `Ubuntu-test`, 새로 정한 사용자 이름으로 바꿔 읽는다.
+- **Docker Desktop**: Settings → Resources → WSL integration에서 `Ubuntu-test`도 켠다. 안 켜면 새 Ubuntu에서 `docker` 명령이 없다고 나온다.
+- **VS Code**: `code .`로 열면 왼쪽 아래가 `WSL: Ubuntu-test`이다. Java 확장도 이 Ubuntu에 **따로** 설치해야 한다(1절 VS Code의 "WSL: ...에 설치").
 - 둘 다 켜 둬도 된다(메모리 24GB 설정 기준). 1~7장은 minikube를 쓰지 않는다.
 - 연습이 끝나서 필요 없으면 연습용만 지운다:
   ```powershell
-  wsl --unregister Ubuntu-exam
+  wsl --unregister Ubuntu-test
   ```
 
 **그래도 기존 Ubuntu-24.04를 지우고 새로 깔 때**는 먼저 백업한다.
