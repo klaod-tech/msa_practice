@@ -24,8 +24,8 @@
 | Helm | v3.22.1 | 공식 설치 스크립트 | 01 |
 | Java | 21.0.13 (Temurin) | SDKMAN | 01 |
 | Spring Boot CLI | 4.0.7 | SDKMAN | 01 |
-| kubectl | v1.32.0 | 바이너리 다운로드 | 01 |
-| minikube | v1.35.0 | 바이너리 다운로드 | 01 |
-| istioctl | 1.24.2 | Istio 다운로드 스크립트 | 01 |
+| kubectl | v1.37.2 | 바이너리 다운로드 | 01 |
+| minikube | v1.39.0 (Kubernetes 1.37.0) | 바이너리 다운로드 | 01 |
+| istioctl | 1.31.4 | Istio 다운로드 스크립트 | 01 |
 
 > 교재는 Spring Boot 3 / Java 17 기준(교재 소스는 Java 24 / Boot 3.5.0)이지만, 이 실습은 **Java 21 / Spring Boot 4.0.9**로 진행한다.

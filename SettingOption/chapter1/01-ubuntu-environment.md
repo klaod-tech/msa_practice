@@ -129,31 +129,79 @@ spring --version  # Spring CLI v4.0.7
 apt로 Java 17을 먼저 설치했다가 지운 기록 → [troubleshooting.md](troubleshooting.md)
 
 ## 4. kubectl, minikube, istioctl (15장부터 사용)
-> **1~7장만 할 때는 이 절과 2절의 Helm을 건너뛴다.**
-### kubectl
+> **1~7장만 할 때는 이 절과 2절의 Helm을 건너뛴다.** 15~20장(3부)을 할 때 아래를 순서대로 한다. 버전은 교수님 저장소 기준이다.
+
+| 도구 | 버전 | 쓰는 장 |
+|---|---|---|
+| kubectl | 1.37.2 | 15장~ |
+| minikube | 1.39.0 (Kubernetes 1.37.0) | 15장~ |
+| helm | 3.22.1 (2절에서 설치) | 16장~ |
+| istioctl | 1.31.4 | 18장~ |
+
+### 4-1. kubectl
 ```bash
-curl -LO "https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl"
+curl -LO "https://dl.k8s.io/release/v1.37.2/bin/linux/amd64/kubectl"
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 rm kubectl
-kubectl version --client
+kubectl version --client          # Client Version: v1.37.2
 ```
 
-### minikube
+### 4-2. minikube
 ```bash
-curl -LO https://storage.googleapis.com/minikube/releases/v1.35.0/minikube-linux-amd64
+curl -LO https://storage.googleapis.com/minikube/releases/v1.39.0/minikube-linux-amd64
 sudo install -o root -g root -m 0755 minikube-linux-amd64 /usr/local/bin/minikube
 rm minikube-linux-amd64
-minikube version
+minikube version                  # minikube version: v1.39.0
+```
+클러스터는 15장에서 `minikube start ...`로 처음 만든다(처음에는 이미지를 받아서 몇 분 걸린다).
+
+### 4-3. helm 버전 확인
+2절에서 설치했다. 버전이 다르면 2절의 스크립트를 다시 실행한다.
+```bash
+helm version --short              # v3.22.1+...
 ```
 
-### istioctl (버전 1.24.2로 고정)
+### 4-4. istioctl (버전 1.31.4로 고정)
 ```bash
-curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.24.2 TARGET_ARCH=x86_64 sh -
-sudo install -o root -g root -m 0755 istio-1.24.2/bin/istioctl /usr/local/bin/istioctl
-rm -r istio-1.24.2
-istioctl version --remote=false
+cd ~
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.31.4 TARGET_ARCH=x86_64 sh -
+sudo install -o root -g root -m 0755 istio-1.31.4/bin/istioctl /usr/local/bin/istioctl
+istioctl version --remote=false   # client version: 1.31.4
 ```
-버전을 지정하지 않으면 최신 버전이 설치된다 → [troubleshooting.md](troubleshooting.md)
+- `ISTIO_VERSION`을 빼면 최신 버전이 설치된다 → [troubleshooting.md](troubleshooting.md)
+- `~/istio-1.31.4` 폴더는 지우지 않는다. 18장에서 그 안의 애드온(Kiali, Jaeger, Prometheus, Grafana) 설정 파일을 쓴다.
+
+### 4-5. 쿠버네티스 실습 준비 (WSL + Docker Desktop, 한 번만)
+**① WSL 메모리 늘리기** — minikube에 10~12GB를 주므로 WSL 기본값(PC 메모리의 절반)으로는 Docker Desktop이 멈춘다. Windows의 `%UserProfile%\.wslconfig`(확장자 없음, 메모장으로 만들 때 `.txt`가 붙지 않게 주의) 파일에:
+```ini
+[wsl2]
+memory=24GB
+swap=8GB
+```
+PC 메모리 32GB 기준이다. 관리자 PowerShell에서 Docker를 끄고 WSL을 재시작한 뒤 Docker Desktop을 다시 켠다.
+```powershell
+Stop-Service com.docker.service -ErrorAction SilentlyContinue
+Get-Process *docker* -ErrorAction SilentlyContinue | Stop-Process -Force
+wsl --shutdown
+```
+Ubuntu에서 `free -g`의 total이 23 근처면 적용된 것이다.
+
+**② 호스트 이름 (17장부터)** — Ubuntu에서 한 번만. 첫 줄이 없으면 WSL을 재시작할 때 `/etc/hosts`가 새로 만들어져서 넣은 줄이 사라진다.
+```bash
+printf '\n[network]\ngenerateHosts = false\n' | sudo tee -a /etc/wsl.conf
+echo "127.0.0.1 minikube.me health.minikube.me grafana.minikube.me kiali.minikube.me prometheus.minikube.me tracing.minikube.me kibana.minikube.me elasticsearch.minikube.me mail.minikube.me dashboard.minikube.me" | sudo tee -a /etc/hosts
+```
+Windows 브라우저로도 열려면 `C:\Windows\System32\drivers\etc\hosts`(관리자 메모장)에 같은 줄을 추가한다.
+
+**③ 443 포트 열기 (20장)** — 20장 test-em-all은 `https://health.minikube.me/...`처럼 443 포트를 고정해 쓴다. 1024보다 낮은 포트를 일반 사용자도 열 수 있게 한 번만 설정한다(재시작해도 유지).
+```bash
+echo "net.ipv4.ip_unprivileged_port_start=443" | sudo tee /etc/sysctl.d/99-unprivileged-443.conf
+sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443
+```
+
+**④ 접속 방법 (교재와 다름)** — 교재는 `minikube ip`(192.168.49.x)로 접속하지만, WSL + Docker Desktop에서는 그 주소에 닿지 않는다. 대신 `kubectl port-forward`로 내 PC(`localhost`)의 포트에 연결한다. 장마다 어떤 서비스를 어느 포트로 연결하는지는 각 장 마지막 문서에 있다.
+
+**⑤ 메모리 주의** — minikube를 쓰는 동안에는 도커 컴포즈로 띄운 것을 내린다(`docker compose down`).
 
 ## 5. 설치 버전 확인, 교재 소스 내려받기
 ### 설치 버전 한 번에 확인
