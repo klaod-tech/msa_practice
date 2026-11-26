@@ -74,6 +74,7 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```
 **import 6줄, 애너테이션 1줄, RestTemplate 빈 메서드 1개 추가**
 빈 메서드는 `main()` 메서드 **아래, 클래스를 닫는 `}` 위**에 넣는다.
+`import java.util.List;`를 빠뜨리면 `List cannot be resolved`가 난다. `Ctrl+.`로 넣을 때는 `java.awt.List`가 아니라 **`java.util.List`**를 고른다.
 ```java
 package se.magnus.microservices.composite.product;
 

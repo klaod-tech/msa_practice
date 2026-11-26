@@ -6,7 +6,7 @@
 
 ## 0. 어느 터미널에서 시작하나
 **Ubuntu 24.04 터미널**에서 시작한다. Windows PowerShell이나 cmd가 아니다.
-- 여는 법: Windows 시작 메뉴에서 **`Ubuntu 24.04`** 실행 (또는 Windows Terminal에서 `Ubuntu-24.04` 탭)
+- 여는 법: Windows 시작 메뉴에서 **`Ubuntu 24.04`** 실행 (또는 Windows Terminal에서 `Ubuntu-24.04` 탭). 연습용으로 따로 설치했으면 **`Ubuntu-test`**를 연다([1장 0절](../chapter1/01-ubuntu-environment.md)).
 - 열리면 홈 폴더(`~` = `/home/leo`)에 있다. 프롬프트가 `leo@...:~$`처럼 `~$`로 끝나면 맞다.
 - 확인:
   ```bash
@@ -42,7 +42,8 @@ cd ~/msa
 code .
 ```
 - VS Code가 열리면 `` Ctrl+` ``로 VS Code 터미널을 열고, **이제부터는 그 터미널을 쓴다**(0절). 처음 연 Ubuntu 터미널은 닫아도 된다.
-- 왼쪽 아래에 `WSL: Ubuntu-24.04`가 보이면 WSL에 연결된 상태다.
+- 왼쪽 아래에 `WSL: Ubuntu-24.04`(연습용이면 `WSL: Ubuntu-test`)가 보이면 WSL에 연결된 상태다. 창 제목도 `msa [WSL: ...]`여야 한다. 홈(`~`)을 열면 숨김 폴더가 잔뜩 보이니, 꼭 `~/msa`에서 `code .`를 한다.
+- VS Code 창이 두 개(기존 Ubuntu, 연습용) 떠 있으면 헷갈리기 쉽다. 명령을 치기 전에 왼쪽 아래 이름을 확인한다.
 - 이후 문서의 `code 파일경로`는 이 창에서 파일을 연다. `code`로 연 탭은 `Ctrl+S`로 저장해야 파일이 생긴다.
 - `.java` 파일에서 자동 완성이 이상하면 Java 확장이 WSL 쪽에 없는 것이다 → [01](../chapter1/01-ubuntu-environment.md)의 1절 "VS Code".
 - 코드가 맞는데 빨간 줄이 남으면 → [../chapter3/00-background.md](../chapter3/00-background.md) 맨 위 "VS Code에 빨간 줄이 남을 때".

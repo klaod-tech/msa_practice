@@ -166,6 +166,8 @@ code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.jav
 ```
 아래 내용 전체 입력
 교재 소스와 비교하면 **`UNPROCESSABLE_ENTITY`가 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바뀌어 있다**(Spring 7.0.10에서 ENTITY는 deprecated).
+
+맨 위 `import static ...HttpStatus.NOT_FOUND;`, `...UNPROCESSABLE_CONTENT;` 두 줄은 **직접 입력한다.** `NOT_FOUND`처럼 클래스 이름 없이 쓰는 상수는 VS Code의 `Ctrl+.` 자동 import가 어느 클래스 것인지 찾지 못한다. 빠뜨리면 `NOT_FOUND cannot be resolved`가 난다.
 ```java
 package se.magnus.util.http;
 

@@ -215,6 +215,7 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 }
 ```
+- 클래스 위 **`@RestController`를 빠뜨리지 않는다.** 없으면 컴파일·실행은 되지만 `/recommendation` 주소가 등록되지 않아, composite 응답에서 추천이 `[]`로 나온다(review도 같다).
 - productId가 1보다 작으면 `InvalidInputException`(422), **113**이면 빈 목록(추천 없음 테스트용), 그 밖에는 가짜 추천 3개를 돌려준다.
 - `ServiceUtil`은 생성자로 주입받는다(위 2절의 `@ComponentScan` 덕분).
 

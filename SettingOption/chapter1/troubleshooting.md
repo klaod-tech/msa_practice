@@ -10,6 +10,10 @@
 | SDKMAN으로 Java를 설치한 직후 `java` not found, `spring --version`이 `JAVA_HOME not set` | 지금 터미널의 PATH에 Java가 없음 → `source ~/.sdkman/bin/sdkman-init.sh` + `hash -r`, 또는 터미널 다시 열기 | 01 |
 | `21-graalce`도 함께 설치됨 | 실습에는 Temurin을 기본값으로 쓴다. 필요 없으면 `sdk uninstall java 21-graalce` | 01 |
 | `downloadIstio`를 버전 지정 없이 실행하면 최신 버전이 설치됨 | `ISTIO_VERSION=1.24.2 TARGET_ARCH=x86_64`를 지정해 다시 설치 | 01 |
+| Ubuntu 터미널에서 `wsl --unregister ...` → `wsl: command not found` | `wsl`은 Windows PowerShell 명령이다 → PowerShell(관리자)에서 실행 | 01 |
+| `lsb release -d` / `lsb-release -d` → `Command not found` | 명령 이름은 언더바 → `lsb_release -d` | 01 |
+| `source ~/ .sdkman/...` → `is a directory` | `~/`와 `.sdkman` 사이 공백 → `source ~/.sdkman/bin/sdkman-init.sh` (붙여서) | 01 |
+| `Create a default Unix user account`에 숫자로 시작하는 이름 | 사용자 이름은 소문자로 시작해야 한다 → `leo` | 01 |
 
 apt Java 17 삭제 명령:
 ```bash

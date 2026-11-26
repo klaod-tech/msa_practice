@@ -68,11 +68,15 @@ java -jar microservices/review-service/build/libs/*.jar &
 ```bash
 kill $(jobs -p)          # 서비스를 띄운 그 터미널에서
 ```
-한 개만 다시 띄울 때는 PID로 종료한다. 포트가 비었는지 확인한 뒤 다시 실행한다.
+한 개만 다시 띄울 때는 그 서비스의 PID(프로그램 번호)로 종료한다. PID는 **켜져 있는 동안** 포트로 찾는다.
 ```bash
-kill <PID>               # 시작 로그의 "with PID 124097" 값
-ss -ltnp | grep 7001     # 아무것도 안 나오면 포트가 빈 것
+ss -ltnp | grep 7004     # 끝에 users:(("java",pid=87563,...)) → pid= 뒤 숫자가 PID
+kill 87563               # 위에서 본 숫자를 그대로 (<> 없이)
+ss -ltnp | grep 7004     # 아무것도 안 나오면 꺼진 것
 ```
+- 포트: composite 7001, product 7002, recommendation 7003, review 7004
+- 시작 로그의 `... with PID 87563 ...`에서도 볼 수 있다. 다시 띄우면 번호가 바뀐다.
+- `kill <PID>`처럼 `<>`를 그대로 치면 `syntax error near unexpected token`이 난다.
 옛 프로세스가 포트를 잡고 있는데 새로 띄우면 `Error starting ApplicationContext`(`Port 7001 was already in use`)가 난다. `Exit 143`은 kill로 종료됐다는 정상 메시지다.
 
 ### 일부 서비스만 떠 있을 때
@@ -86,6 +90,8 @@ composite는 정상이고, 호출 대상 서비스가 안 떠 있다는 뜻이�
 
 ## 2. 자동화 테스트 (84쪽)
 curl로 손으로 확인하던 것을 코드로 자동 확인한다. `./gradlew build` 때마다 실행되어, 코드가 망가지면 바로 알려 준다.
+
+> **시간이 부족하면 이 2절은 건너뛰어도 된다.** 서비스 실행(1절)과 `test-em-all.bash`(3절)는 이 파일과 상관없이 동작하고, `spring init`이 만든 기본 테스트(`contextLoads()`)가 남아 있어서 `./gradlew build`도 통과한다. 확인할 내용(정상·404·422)은 1절의 브라우저 확인과 3절의 `test-em-all.bash`가 똑같이 확인한다.
 
 파일: `microservices/product-composite-service/src/test/java/se/magnus/microservices/composite/product/ProductCompositeServiceApplicationTests.java`
 

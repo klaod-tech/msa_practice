@@ -15,12 +15,16 @@
 | composite ServiceImpl에서 `getRecommendationId()` 등 `cannot find symbol` | api의 Recommendation/Review가 비어 있음 | 데이터 클래스 먼저 작성 | 05 |
 | 테스트 `contextLoads()` 실패 (`No qualifying bean ... ServiceUtil`) | 컴포넌트 스캔 범위 밖 | `@ComponentScan("se.magnus")` | 03 |
 | 테스트 4개 모두 실패 (`No qualifying bean ... WebTestClient`) | Boot 4에서 WebTestClient 설정 분리 | `@AutoConfigureWebTestClient` | 07 |
+| `This method requires a body instead of a semicolon` | `public interface ...Service`를 `public class`로 침 | `class` → `interface` (인터페이스 메서드는 몸통 없이 `;`로 끝난다) | 02 |
+| `NOT_FOUND cannot be resolved` / `UNPROCESSABLE_CONTENT cannot be resolved` | `import static org.springframework.http.HttpStatus.…;` 누락. `Ctrl+.`가 static import는 못 찾음 | 두 줄을 직접 입력 | 04 |
+| `List cannot be resolved` | `import java.util.List;` 누락 | 직접 입력, 또는 `Ctrl+.`에서 **`java.util.List`** 선택(`java.awt.List` 아님) | 06 |
+| `se.magnus...` 클래스가 `Ctrl+.` 자동 import 목록에 안 나옴 | build.gradle의 `implementation project(':api')`/`(':util')` 누락 또는 VS Code가 아직 모름 | build.gradle 저장 → `Shift+Alt+U`(Reload Projects) → 다시 `Ctrl+.` | 05 |
 
 ## 실행
 | 증상 | 원인 | 해결 | 문서 |
 |---|---|---|---|
 | `no main manifest attribute, in ...-plain.jar` (그 서비스만 `Exit 1`) | `*.jar`가 plain jar를 먼저 잡음. `jar { enabled = false }`를 넣기 전에 빌드해서 생긴 plain jar가 남아 있어도 같다 | `jar { enabled = false }` 확인 + `./gradlew clean build`로 남은 plain jar 삭제 | 03, 07 |
-| `Error starting ApplicationContext` (`Port 7001 was already in use`) | 옛 프로세스가 포트를 잡고 있음 | `kill <PID>` → `ss -ltnp \| grep 7001`로 확인 후 실행 | 07 |
+| `Error starting ApplicationContext` (`Port 7001 was already in use`) | 옛 프로세스가 포트를 잡고 있음 | `ss -ltnp \| grep 7001`로 `pid=` 숫자 확인 → `kill 그숫자`(`<>` 없이) → 다시 `ss`로 비었는지 확인 후 실행 | 07 |
 | composite 호출 시 500 `Connection refused` | 호출 대상 서비스가 안 떠 있음 | 4개 모두 실행 | 07 |
 | composite 응답 값이 전부 null/0 | Jackson 3은 final 필드에 값을 넣지 않음 + `new RestTemplate()`은 Boot 설정을 안 씀 | RestTemplate에 JsonMapper 연결 + `allow-final-fields-as-mutators: true` | 06 |
 | `./test-em-all.bash: Permission denied` | 실행 권한 없음 | `chmod +x test-em-all.bash` | 07 |

@@ -7,14 +7,25 @@
 ## 0. 이미 Ubuntu-24.04를 쓰고 있는데 1장부터 다시 해 보고 싶을 때
 **기존 Ubuntu를 지우지 말고, 연습용 Ubuntu를 하나 더 설치한다.** 기존 것을 지우면(`wsl --unregister`) 그 안의 파일이 전부 사라지고 되돌릴 수 없다. 예: push 안 한 커밋, `auth0/env.bash`(GitHub에 없는 비밀값), 교재 소스, `/etc/hosts` 설정.
 
-PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인):
+PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인). **`wsl` 명령은 Windows PowerShell 명령이다. Ubuntu 터미널에서 치면 `wsl: command not found`가 난다.**
+
+전에 만든 연습용(예: `Ubuntu-exam`)이 있으면 먼저 지운다(그 안의 파일은 모두 사라진다):
+```powershell
+wsl -l -v                         # 설치된 Ubuntu 목록 확인
+wsl --unregister Ubuntu-exam      # 전에 만든 연습용만 (Ubuntu-24.04는 지우지 않는다)
+```
+새로 설치:
 ```powershell
 wsl --install Ubuntu-24.04 --name Ubuntu-test
 ```
-- 설치가 끝나면 새 사용자 이름과 비밀번호를 정한다. 시작 메뉴 또는 Windows Terminal에서 `Ubuntu-test`을 열고 아래 1절부터 진행한다.
-- 이 문서에서 `Ubuntu-24.04`, `leo`라고 적힌 곳은 `Ubuntu-test`, 새로 정한 사용자 이름으로 바꿔 읽는다.
+- 설치 중 `Create a default Unix user account:`에서 사용자 이름은 **`leo`**(소문자로 시작), 비밀번호는 기억하기 쉬운 것으로 정한다. `leo`로 하면 문서의 `/home/leo`, `default=leo`를 그대로 읽으면 된다. 비밀번호는 입력해도 화면에 안 보이는 게 정상이다(`sudo` 때마다 묻는다).
+- 설치가 끝나면 터미널이 `/mnt/c/WINDOWS/system32`(Windows 폴더)에서 시작한다. **먼저 `cd ~`로 홈(`/home/leo`)으로 간다.**
+- 다음부터는 시작 메뉴 또는 Windows Terminal에서 `Ubuntu-test`를 열고 아래 1절부터 진행한다.
+- 이 문서에서 `Ubuntu-24.04`라고 적힌 곳은 `Ubuntu-test`로 바꿔 읽는다.
 - **Docker Desktop**: Settings → Resources → WSL integration에서 `Ubuntu-test`도 켠다. 안 켜면 새 Ubuntu에서 `docker` 명령이 없다고 나온다.
-- **VS Code**: `code .`로 열면 왼쪽 아래가 `WSL: Ubuntu-test`이다. Java 확장도 이 Ubuntu에 **따로** 설치해야 한다(1절 VS Code의 "WSL: ...에 설치").
+- **VS Code**: `code .`로 열면 왼쪽 아래가 `WSL: Ubuntu-test`이다. 처음 연결할 때 VS Code가 이 Ubuntu에 서버와 확장을 설치하느라 몇 분 걸리고, 홈에 `.vscode-server`, `.redhat` 같은 숨김 폴더가 새로 생긴다(정상). Java 확장(`Extension Pack for Java`)이 "WSL: Ubuntu-test에 설치됨"으로 보이는지 확인하고, 없으면 설치한다(1절 VS Code).
+- **두 Ubuntu에 같은 `/home/leo/msa`가 있다.** `code 파일`은 그 명령을 친 터미널의 Ubuntu 파일을 연다. 작업 전에 VS Code 창 왼쪽 아래가 `WSL: Ubuntu-test`인지 확인한다(기존 `Ubuntu-24.04` 창에서 열면 기존 레포 파일이 열린다).
+- **Docker Desktop은 두 Ubuntu가 함께 쓴다.** 기존 Ubuntu에서 띄운 컨테이너나 minikube가 켜져 있으면 8080 등 포트가 겹친다. 연습 중에는 기존 쪽을 켜지 않는다(`docker ps`가 비어 있으면 된다).
 - 둘 다 켜 둬도 된다(메모리 24GB 설정 기준). 1~7장은 minikube를 쓰지 않는다.
 - 연습이 끝나서 필요 없으면 연습용만 지운다:
   ```powershell
@@ -118,6 +129,7 @@ spring --version  # Spring CLI v4.0.7
 apt로 Java 17을 먼저 설치했다가 지운 기록 → [troubleshooting.md](troubleshooting.md)
 
 ## 4. kubectl, minikube, istioctl (15장부터 사용)
+> **1~7장만 할 때는 이 절과 2절의 Helm을 건너뛴다.**
 ### kubectl
 ```bash
 curl -LO "https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl"
@@ -148,7 +160,7 @@ istioctl version --remote=false
 ```bash
 git version ; docker version -f json | jq -r .Client.Version ; java -version 2>&1 | grep "openjdk version" ; curl --version | grep "curl" ; jq --version ; spring --version ; siege --version 2>&1 | grep SIEGE ; helm version --short ; kubectl version --client ; minikube version | grep "minikube" ; istioctl version --remote=false
 ```
-결과가 [README.md](README.md)의 설치 결과 요약표와 같은지 확인한다.
+결과가 [README.md](README.md)의 설치 결과 요약표와 같은지 확인한다. 4절(과 Helm)을 건너뛰었으면 `helm`, `kubectl`, `minikube`, `istioctl` 부분은 `command not found`로 나와도 정상이다. `docker`가 안 나오면 0절의 Docker Desktop WSL integration을 켠다.
 
 ### 교재 소스코드 내려받기
 ```bash
