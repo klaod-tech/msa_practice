@@ -4,11 +4,35 @@
 > **이미 설치되어 있으면 건너뛰고 [02-project-folder.md](../chapter2/02-project-folder.md)부터 시작한다.** (`~/msa` 폴더만 새로 만드는 경우)
 > 막히면 [troubleshooting.md](troubleshooting.md).
 
+## 0. 이미 Ubuntu-24.04를 쓰고 있는데 1장부터 다시 해 보고 싶을 때
+**기존 Ubuntu를 지우지 말고, 연습용 Ubuntu를 하나 더 설치한다.** 기존 것을 지우면(`wsl --unregister`) 그 안의 파일이 전부 사라지고 되돌릴 수 없다. 예: push 안 한 커밋, `auth0/env.bash`(GitHub에 없는 비밀값), 교재 소스, `/etc/hosts` 설정.
+
+PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인):
+```powershell
+wsl --install Ubuntu-24.04 --name Ubuntu-exam
+```
+- 설치가 끝나면 새 사용자 이름과 비밀번호를 정한다. 시작 메뉴 또는 Windows Terminal에서 `Ubuntu-exam`을 열고 아래 1절부터 진행한다.
+- 이 문서에서 `Ubuntu-24.04`, `leo`라고 적힌 곳은 `Ubuntu-exam`, 새로 정한 사용자 이름으로 바꿔 읽는다.
+- **Docker Desktop**: Settings → Resources → WSL integration에서 `Ubuntu-exam`도 켠다. 안 켜면 새 Ubuntu에서 `docker` 명령이 없다고 나온다.
+- **VS Code**: `code .`로 열면 왼쪽 아래가 `WSL: Ubuntu-exam`이다. Java 확장도 이 Ubuntu에 **따로** 설치해야 한다(1절 VS Code의 "WSL: ...에 설치").
+- 둘 다 켜 둬도 된다(메모리 24GB 설정 기준). 1~7장은 minikube를 쓰지 않는다.
+- 연습이 끝나서 필요 없으면 연습용만 지운다:
+  ```powershell
+  wsl --unregister Ubuntu-exam
+  ```
+
+**그래도 기존 Ubuntu-24.04를 지우고 새로 깔 때**는 먼저 백업한다.
+1. `cd ~/msa && git push` (커밋을 GitHub에 올림)
+2. `auth0/env.bash`를 Windows 쪽 안전한 곳에 복사 (`cp ~/msa/auth0/env.bash /mnt/c/Users/<Windows 사용자>/`)
+3. 전체 백업: `mkdir C:\backup` 후 `wsl --export Ubuntu-24.04 C:\backup\ubuntu2404.tar` (나중에 `wsl --import`로 그대로 되살릴 수 있다)
+4. `wsl --unregister Ubuntu-24.04` → `wsl --install -d Ubuntu-24.04`
+
 ## 1. Windows 쪽 준비 (WSL2, Docker Desktop, VS Code)
 > 이 부분은 명령 기록이 남아 있지 않다. 지금 상태로 확인된 결과만 적는다.
 
 ### WSL2 + Ubuntu 24.04
-- 일반적으로는 PowerShell(관리자)에서 `wsl --install -d Ubuntu-24.04`를 실행한다.
+- 일반적으로는 PowerShell(관리자)에서 `wsl --install -d Ubuntu-24.04`를 실행한다. (이미 있으면 0절처럼 `--name`으로 하나 더)
+- `/etc/wsl.conf`의 `default=` 뒤는 설치할 때 정한 사용자 이름이다.
 - `/etc/wsl.conf` 내용:
   ```ini
   [boot]
@@ -19,7 +43,7 @@
   ```
 
 ### Docker Desktop
-- Windows에 설치하고 Settings → Resources → WSL integration에서 Ubuntu를 켠다.
+- Windows에 설치하고 Settings → Resources → WSL integration에서 Ubuntu를 켠다(연습용 Ubuntu를 추가했으면 그것도 켠다).
 - 그러면 WSL 안의 `docker` 명령이 `/mnt/wsl/docker-desktop/...`에 연결된다. **Ubuntu 안에 Docker를 따로 설치하지 않는다.**
 
 ### VS Code
