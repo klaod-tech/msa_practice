@@ -147,20 +147,33 @@ find microservices/product-service -type f -not -path "*/build/*"
 `-not -path "*/build/*"`는 교재에 없다. 빌드 후라서 `build/` 폴더의 파일을 목록에서 빼기 위해 붙였다.
 
 ## 6. (선택) GitHub 업로드
-> 새 폴더를 기존 레포(`msa_practice`)에 push하지 않는다. 기록이 달라서 거절되고, 강제로 밀면 기존 기록과 문서가 덮어써진다. 새 레포를 만들 때만 한다.
+> 새 폴더를 기존 레포(`msa_practice`)에 push하지 않는다. 기록이 달라서 거절되고, 강제로 밀면 기존 기록과 문서가 덮어써진다. GitHub에서 **새 레포를 먼저 만들고** 그 주소를 쓴다.
 
+### 처음 한 번 (git 시작 + 새 레포 연결)
 ```bash
 git init -b main
 git add .
 git status
-git commit -m "Chapter02: 기본 골격 마이크로서비스 생성"
-git remote add origin https://github.com/klaod-tech/msa_practice.git
+git commit -m "기본 골격 마이크로서비스 생성"
+git remote add origin https://github.com/<GitHub 아이디>/<새 레포 이름>.git
 git config --global credential.helper store
 git push -u origin main
 ```
-- 커밋 메시지는 `ChapterNN: 설명` 형식으로 쓴다.
+- `<GitHub 아이디>/<새 레포 이름>`은 GitHub에서 만든 새 레포 주소로 바꾼다(레포 화면의 `Code` 버튼에 나오는 HTTPS 주소).
 - 푸시할 때 비밀번호 대신 **Personal Access Token**을 입력한다 → [troubleshooting.md](troubleshooting.md)
 - `credential.helper store`로 토큰이 `~/.git-credentials`에 저장된다. 다음부터는 입력하지 않아도 된다.
+
+### 이후 커밋·푸시 (3장부터 매번)
+처음 연결을 한 뒤로는 세 줄이면 된다. `~/msa`(VS Code 터미널)에서:
+```bash
+git add .
+git commit -m "무엇을 했는지 한 줄"
+git push
+```
+- `git add .`: 바뀐 파일을 모두 커밋 대상에 올린다.
+- `git commit -m "..."`: 지금 상태를 기록한다. 메시지는 한 일을 짧게 적는다(예: `"product-service 구현"`, `"오류 처리 추가"`).
+- `git push`: GitHub에 올린다. 처음에 `-u origin main`을 해 두었으므로 뒤에 아무것도 안 붙여도 된다.
+- 올리기 전에 무엇이 바뀌었는지 보려면 `git status`.
 
 ---
 다음: [../chapter3/README.md](../chapter3/README.md) (3장: API 구현부터)
