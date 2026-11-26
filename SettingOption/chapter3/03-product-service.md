@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
 ```
 - 인터페이스(`ProductService`)는 api에, 구현(`ProductServiceImpl`)은 서비스 안에 둔다.
 - 생성자 매개변수는 생성자 안에서만 쓸 수 있으므로 `private final ServiceUtil serviceUtil;` 필드가 꼭 있어야 한다. 없으면 `cannot find symbol: variable serviceUtil`.
-- 교재 소스의 `ProductServiceImpl`은 오류 처리까지 끝난 최종 버전이라 `LOG`와 예외 `if`문이 있다. 지금 붙이면 예외 클래스가 없어서 오류가 난다.
+- 교재의 최종 `ProductServiceImpl`은 오류 처리까지 끝난 최종 버전이라 `LOG`와 예외 `if`문이 있다. 지금 붙이면 예외 클래스가 없어서 오류가 난다.
 
 ## 4. `application.properties` 삭제 → `application.yml` (새 파일, 전체)
 위치: `microservices/product-service/src/main/resources/`
@@ -141,7 +141,7 @@ logging:
 - `se.magnus` 밑줄은 로거 이름이라 무시해도 된다.
 
 ## 5. 빌드·실행·테스트 (70쪽 7~9단계)
-교재의 `cd $BOOK_HOME/...` 대신 **내 레포에서** 실행한다.
+**내 레포(`~/msa`)에서** 실행한다.
 **① 빌드하고 띄우기**
 ```bash
 cd ~/msa

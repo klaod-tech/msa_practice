@@ -32,7 +32,7 @@
 | CPU 수 결과 | 8 | 12 (PC마다 다름) | 02 |
 | `ubuntu` 이미지 버전 | 교재 시점 | `latest` = Ubuntu 26.04.1 LTS | 01 |
 | compose 이미지 이름 확인 | `docker images \| grep chapter04` | `docker images \| grep msa` (이름 = `<폴더>-<서비스>`) | 06 |
-| compose 실행 위치 | `cd $BOOK_HOME/Chapter04` | `cd ~/msa` | 06 |
+| compose 실행 위치 | 교재 예제 폴더 | `cd ~/msa` | 06 |
 
 ## 캡처·커밋 지점
 각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).

@@ -3,7 +3,7 @@
 > 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 > 모든 명령은 `~/msa`에서 실행한다.
 
-product-service부터 시작한다. 교재 소스: `$BOOK_HOME/Chapter04/microservices/product-service/`
+product-service부터 시작한다.
 
 ---
 
@@ -48,7 +48,7 @@ code microservices/product-service/Dockerfile
 ```
 아래 내용 전체 입력 (새 파일, 확장자 없음)
 
-교재 본문에 먼저 나오는 `FROM openjdk:24` 4줄짜리는 **원리 설명용 예시**라 쓰지 않는다. Docker Hub의 `openjdk` 공식 이미지는 더 이상 관리되지 않는다(deprecated). 교재 소스(`$BOOK_HOME/Chapter04/microservices/product-service/Dockerfile`)의 2단계 버전을 쓰고 ★ 표시한 곳을 바꾼다.
+교재 본문에 먼저 나오는 `FROM openjdk:24` 4줄짜리는 **원리 설명용 예시**라 쓰지 않는다. Docker Hub의 `openjdk` 공식 이미지는 더 이상 관리되지 않는다(deprecated). 교재의 2단계 버전을 Boot 4·Java 21에 맞춘 아래 코드를 쓴다(★ 표시가 교재와 다른 곳).
 
 ```dockerfile
 # ★ 변경 ① (교재: eclipse-temurin:24_36-jre-noble)

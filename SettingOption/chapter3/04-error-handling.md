@@ -14,15 +14,15 @@ curl /product/13
 ## 만드는 순서
 | 순서 | 파일 | 종류 | 방법 |
 |---|---|---|---|
-| 1 | api `exceptions/InvalidInputException.java` | 새 파일 | 교재 소스 그대로 |
-| 2 | api `exceptions/NotFoundException.java` | 새 파일 | 교재 소스 그대로 |
-| 3 | util `http/HttpErrorInfo.java` | 새 파일 | 교재 소스 그대로 (**롬복 쓰지 않음**) |
-| 4 | util `http/GlobalControllerExceptionHandler.java` | 새 파일 | 교재 소스 + 세 곳 변경 |
+| 1 | api `exceptions/InvalidInputException.java` | 새 파일 | 교재와 같음 |
+| 2 | api `exceptions/NotFoundException.java` | 새 파일 | 교재와 같음 |
+| 3 | util `http/HttpErrorInfo.java` | 새 파일 | 교재와 같음 (**롬복 쓰지 않음**) |
+| 4 | util `http/GlobalControllerExceptionHandler.java` | 새 파일 | 교재 + 세 곳 변경 |
 | 5 | product-service `ProductServiceImpl.java` | **기존 파일 수정** | import 2줄 + `if` 2줄 추가 |
 
 ---
 
-## 1~3. 예외 클래스, HttpErrorInfo (새 파일, 교재 소스 그대로)
+## 1~3. 예외 클래스, HttpErrorInfo (새 파일, 교재와 같음)
 ```bash
 mkdir -p api/src/main/java/se/magnus/api/exceptions
 ```
@@ -165,7 +165,7 @@ HttpErrorInfo에 클래스 단위로 `@Getter`, `@AllArgsConstructor`를 붙였�
 code util/src/main/java/se/magnus/util/http/GlobalControllerExceptionHandler.java
 ```
 아래 내용 전체 입력
-교재 소스와 비교하면 **`UNPROCESSABLE_ENTITY`가 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바뀌어 있다**(Spring 7.0.10에서 ENTITY는 deprecated).
+교재와 비교하면 **`UNPROCESSABLE_ENTITY`가 세 곳 모두 `UNPROCESSABLE_CONTENT`로 바뀌어 있다**(Spring 7.0.10에서 ENTITY는 deprecated).
 
 맨 위 `import static ...HttpStatus.NOT_FOUND;`, `...UNPROCESSABLE_CONTENT;` 두 줄은 **직접 입력한다.** `NOT_FOUND`처럼 클래스 이름 없이 쓰는 상수는 VS Code의 `Ctrl+.` 자동 import가 어느 클래스 것인지 찾지 못한다. 빠뜨리면 `NOT_FOUND cannot be resolved`가 난다.
 ```java

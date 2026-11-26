@@ -143,7 +143,7 @@ logging:
 ```
 `app:` 아래는 교재가 직접 정한 이름이라 VS Code가 "모르는 속성"으로 밑줄을 긋지만 정상이다. Integration이 `@Value("${app.product-service.host}")`로 읽는다.
 
-## 4. `services/ProductCompositeIntegration.java` (새 파일, 교재 소스 + Boot 4 수정)
+## 4. `services/ProductCompositeIntegration.java` (새 파일, 교재 + Boot 4 수정)
 ```bash
 mkdir -p microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services
 ```
@@ -316,7 +316,7 @@ Boot 4의 클래스패스에는 Jackson 3(`tools.jackson`)만 있고 Jackson 2(`
 
 고친 뒤에는 composite만 다시 빌드·실행하면 된다. 옛 composite를 먼저 꺼야 한다(포트 충돌) → [07](07-test.md)
 
-## 6. `services/ProductCompositeServiceImpl.java` (새 파일, 교재 소스 그대로)
+## 6. `services/ProductCompositeServiceImpl.java` (새 파일, 교재와 같음)
 ### `product-composite-service/.../services/ProductCompositeServiceImpl.java` (전체)
 ```bash
 code microservices/product-composite-service/src/main/java/se/magnus/microservices/composite/product/services/ProductCompositeServiceImpl.java

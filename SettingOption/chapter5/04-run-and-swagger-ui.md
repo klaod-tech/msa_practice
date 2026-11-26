@@ -4,7 +4,7 @@
 
 ## 1. 빌드와 구동
 ```bash
-cd ~/msa                                          # 교재: cd $BOOK_HOME/Chapter05
+cd ~/msa
 ./gradlew build && docker compose build && docker compose up -d
 ```
 - `&&`: 앞 명령이 **성공했을 때만** 다음 명령을 실행한다. 빌드가 실패하면 거기서 멈춘다.

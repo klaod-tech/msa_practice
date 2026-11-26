@@ -72,7 +72,7 @@ code api/build.gradle
 ```
 아래 내용 전체 입력
 
-교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services/api/build.gradle`)를 가져와 **Java 24 → 21, Boot 3.5.0 → 4.0.9**로 바꾸고 롬복 4줄을 추가했다.
+교재의 `api/build.gradle`에서 **Java 24 → 21, Boot 3.5.0 → 4.0.9**로 바꾸고 롬복 4줄을 추가했다.
 ```groovy
 plugins {
     id 'io.spring.dependency-management' version '1.1.7'
@@ -355,7 +355,7 @@ public class ServiceAddresses {
 
 ---
 
-## 6. 인터페이스 (새 파일, 교재 소스 그대로)
+## 6. 인터페이스 (새 파일, 교재와 같음)
 REST 매핑을 인터페이스에 붙이므로 구현 클래스에는 `@RestController`만 있으면 된다. `class`가 아니라 `interface`다.
 
 ### `api/.../core/product/ProductService.java` (전체)
@@ -454,8 +454,8 @@ public interface ProductCompositeService {
 
 ---
 
-## 7. `util/.../http/ServiceUtil.java` (새 파일, 교재 소스 그대로)
-교재 본문에는 코드가 없고 교재 소스에만 있다. 교재 소스와 같은 내용이다.
+## 7. `util/.../http/ServiceUtil.java` (새 파일, 교재와 같음)
+교재 본문에는 코드가 없는 파일이다. 아래 내용을 그대로 입력한다.
 ```bash
 code util/src/main/java/se/magnus/util/http/ServiceUtil.java
 ```

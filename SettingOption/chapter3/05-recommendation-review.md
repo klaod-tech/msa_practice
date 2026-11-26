@@ -2,12 +2,12 @@
 
 > 표기: 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`. 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다). `★ 참고:` = 교재와 다른 이유. 표시 없는 줄 = 이미 있는 줄. ★ 주석은 입력하지 않아도 된다.
 
-product-service([03](03-product-service.md))와 **똑같은 패턴**이다. 예외 클래스와 util이 이미 있으므로 ServiceImpl은 교재 소스를 그대로 쓴다.
+product-service([03](03-product-service.md))와 **똑같은 패턴**이다. 예외 클래스와 util이 이미 있으므로 ServiceImpl은 교재와 같은 코드다(아래 전체 코드).
 절마다 recommendation, review 파일을 차례로 만든다(review는 포트 `7004`).
 
 ## 0. 사전 확인: api 쪽 (02에서 만듦)
 - `api/.../core/recommendation/Recommendation.java` (롬복, 필드 6개)
-- `api/.../core/recommendation/RecommendationService.java` (교재 소스 그대로)
+- `api/.../core/recommendation/RecommendationService.java` (교재와 같음)
 
 비어 있으면 composite의 ServiceImpl에서 `getRecommendationId()` 등에 `cannot find symbol` 오류가 난다.
 
@@ -156,7 +156,7 @@ public class ReviewServiceApplication {
 
 빠뜨리면 빌드의 테스트 단계에서 `contextLoads() FAILED`(`No qualifying bean ... ServiceUtil`)가 난다. review에서 실제로 빠뜨렸었다.
 
-## 3. `services/RecommendationServiceImpl.java`, `ReviewServiceImpl.java` (새 파일, 교재 소스 그대로)
+## 3. `services/RecommendationServiceImpl.java`, `ReviewServiceImpl.java` (새 파일, 교재와 같음)
 ```bash
 mkdir -p microservices/recommendation-service/src/main/java/se/magnus/microservices/core/recommendation/services
 mkdir -p microservices/review-service/src/main/java/se/magnus/microservices/core/review/services
@@ -320,7 +320,7 @@ product의 yml을 복사해서 **이름과 포트를 바꾸지 않는 실수**�
 
 ---
 
-## 교재 소스의 특수 케이스 (테스트에 쓰임)
+## 특수 케이스 (테스트에 쓰임)
 | productId | recommendation | review |
 |---|---|---|
 | `< 1` | 422 (InvalidInputException) | 422 |

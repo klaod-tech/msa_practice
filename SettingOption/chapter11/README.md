@@ -37,7 +37,7 @@
 | 인가 서버 설정 클래스 패키지 | `org.springframework.security.oauth2.server.authorization.config.annotation.web...` | **`org.springframework.security.config.annotation.web...`** (Spring Security 7에 합쳐짐) | 01 |
 | 인가 서버 테스트의 `@AutoConfigureMockMvc` | `org.springframework.boot.test.autoconfigure.web.servlet` | `org.springframework.boot.webmvc.test.autoconfigure` + `spring-boot-starter-webmvc-test` | 01 |
 | 리소스 서버(JWT 검증) 의존성 | `spring-security-oauth2-resource-server`, `spring-security-oauth2-jose` | **`spring-boot-starter-oauth2-resource-server`** (없으면 `ReactiveJwtDecoder` 빈이 없어서 게이트웨이가 안 뜸) | 03, 04 |
-| 게이트웨이 인증서 `edge.p12` | 교재 소스에 있는 파일 | `keytool` 명령으로 직접 만든다(비밀번호 `password`, 별칭 `localhost`는 교재와 같음) | 03 |
+| 게이트웨이 인증서 `edge.p12` | 교재 예제에 미리 들어 있는 파일 | `keytool` 명령으로 직접 만든다(비밀번호 `password`, 별칭 `localhost`는 교재와 같음) | 03 |
 | Swagger UI authorization code 로그인 | PKCE 설정 없음 (SAS 1.x는 PKCE 선택) | **`usePkceWithAuthorizationCodeGrant: true`** 추가 (Spring Security 7은 PKCE 기본 필수, 없으면 `code_challenge` 오류) | 04 |
 | auth-server healthcheck `timeout` | `2s` | `10s` (6장 트러블슈팅) | 05 |
 | 헤더 라우팅 대상 | httpstat.us | httpbin 컨테이너 (10장부터) | 03 |

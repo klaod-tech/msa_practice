@@ -229,7 +229,7 @@ class ProductCompositeServiceApplicationTests {
 ---
 
 ## 3. `test-em-all.bash` (전체 시스템 테스트)
-1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다. 교재 소스와 같은 내용이다(영어 설명 주석만 뺐다).
+1번 수동 curl 확인을 스크립트로 자동화한 것이다. 레포 루트(`~/msa/test-em-all.bash`)에 둔다. 교재와 같은 내용이다(영어 설명 주석만 뺐다).
 ```bash
 code test-em-all.bash
 ```

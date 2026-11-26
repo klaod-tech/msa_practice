@@ -5,14 +5,13 @@
 
 > 참고 교재: 스프링 부트 3과 스프링 클라우드를 활용한 마이크로서비스 구축 (마그누스 라르손), 3장
 > 실습 환경: **Java 21 / Spring Boot 4.0.9 (Spring 7, Jackson 3) / Gradle 9.8.2**
-> 교재 소스(`$BOOK_HOME/Chapter03/2-basic-rest-services`)는 **Java 24 / Boot 3.5.0** 기준이라 그대로 쓰면 안 되는 부분이 있다.
+> 교재 코드는 **Java 24 / Boot 3.5.0** 기준이라 그대로 쓰면 안 되는 부분이 있다. 이 문서들은 Boot 4에 맞춘 **전체 코드**를 담고 있어서 문서만 보고 따라 하면 된다.
 
 ## 문서 읽는 법
 - **새 파일**은 만드는 명령부터 적었다.
   - 명령 블록을 위에서부터 그대로 입력하면 된다 (`mkdir -p` → `code 파일`)
   - `code`로 연 탭은 `Ctrl+S`로 저장해야 디스크에 파일이 생긴다
-  - 교재 소스를 그대로 쓰는 파일도 문서에 전체 코드가 있다. 교재 소스를 열어 보지 않고 문서만 보고 입력한다
-- 새 파일은 내용 전체를 보여 준다(교재 소스를 그대로 쓰는 파일 포함).
+- 새 파일은 내용 전체를 보여 준다.
 - **기존 파일 수정**은 넣을 위치의 **앞뒤 줄을 함께** 보여 준다.
   - 한 줄만 바뀌면 줄 끝에 `★ 추가` / `★ 변경 (전: 원래 줄)` / `★ 삭제: 지울 줄`
   - 여러 줄이면 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(`★ 전:` 줄 = 지우고 바꿀 원래 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(`★ 지움:` 줄을 지운다)
@@ -57,18 +56,6 @@
 - 데이터 클래스(Product, Recommendation, Review, composite의 ProductAggregate 등)는 **롬복**으로 작성했다. 단, 예외 클래스와 HttpErrorInfo는 롬복에 맞지 않아 교재 원본 그대로 두었다 → [04](04-error-handling.md)
 
 ---
-
-## (참고) 교재 소스를 가져올 때의 요령
-> 이 문서들은 코드를 전부 담고 있어서, 교재 소스를 받지 않았으면 이 절은 건너뛴다.
-
-- 교재 소스(`2-basic-rest-services`)는 **3장을 끝낸 최종 상태**다. 중간 단계에서 그대로 붙이면 아직 만들지 않은 클래스(예: `exceptions`)를 참조해서 오류가 난다.
-- 붙이기 전에 `import se.magnus...` 줄을 먼저 본다. 아직 없는 클래스를 참조하는 부분은 나중 단계로 미룬다.
-- 본문은 코드를 다 싣지 않고 "소스에서 확인하라"고 넘기는 경우가 많다(settings.gradle의 api/util 등록, `jar { enabled = false }`, ServiceUtil 등). 빠진 단계는 소스와 비교해서 찾는다.
-  ```bash
-  # 교재 소스를 받았을 때만
-  diff -rq $BOOK_HOME/Chapter03/2-basic-rest-services ~/msa -x build -x .gradle -x .git -x bin
-  ```
-- **본문과 소스가 다를 때는 소스를 따른다.** 예: 본문은 예외 클래스를 `se.magnus.util.exceptions`에 둔다고 하지만, 소스는 `se.magnus.api.exceptions`에 둔다.
 
 ## 새 서비스를 만들 때 체크리스트
 1. `build.gradle`: `jar { enabled = false }`, `implementation project(':api')`, `implementation project(':util')`

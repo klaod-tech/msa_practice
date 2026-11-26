@@ -1,7 +1,7 @@
 # 01. 인가 서버 (새 프로젝트 spring-cloud/authorization-server)
 
 > 표기: `★ 추가` / `★ 변경` / `★ 삭제` = 10장 코드 대비 바뀌는 줄, `교재와 다름 (...)` = Boot 4 / Spring Security 7 때문에 교재 11장과 다르게 쓰는 부분.
-> 교재 "로컬 인가 서버 추가" 절. 교재 소스는 Spring Authorization Server 예제를 바탕으로 해서 패키지가 `sample`이다(그대로 둔다).
+> 교재 "로컬 인가 서버 추가" 절. 교재 코드는 Spring Authorization Server 예제를 바탕으로 해서 패키지가 `sample`이다(그대로 둔다).
 
 ## 1. settings.gradle
 ```bash

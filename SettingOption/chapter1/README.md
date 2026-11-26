@@ -9,7 +9,7 @@
 ## 진행 순서
 | 순서 | 문서 | 내용 |
 |---|---|---|
-| 1 | [01-ubuntu-environment.md](01-ubuntu-environment.md) | WSL2 + Ubuntu 24.04, Docker Desktop, VS Code(WSL·Java 확장), apt 도구, Helm, SDKMAN → Java 21·Spring CLI, kubectl·minikube·istioctl, 교재 소스(`$BOOK_HOME`) |
+| 1 | [01-ubuntu-environment.md](01-ubuntu-environment.md) | WSL2 + Ubuntu 24.04, Docker Desktop, VS Code(WSL·Java 확장), apt 도구, Helm, SDKMAN → Java 21·Spring CLI, kubectl·minikube·istioctl |
 | - | [troubleshooting.md](troubleshooting.md) | 설치 중 시행착오 |
 
 ## 설치 결과 요약
@@ -28,7 +28,7 @@
 | minikube | v1.39.0 (Kubernetes 1.37.0) | 바이너리 다운로드 | 01 |
 | istioctl | 1.31.4 | Istio 다운로드 스크립트 | 01 |
 
-> 교재는 Spring Boot 3 / Java 17 기준(교재 소스는 Java 24 / Boot 3.5.0)이지만, 이 실습은 **Java 21 / Spring Boot 4.0.9**로 진행한다.
+> 교재는 Spring Boot 3 / Java 17 기준(교재 코드는 Java 24 / Boot 3.5.0)이지만, 이 실습은 **Java 21 / Spring Boot 4.0.9**로 진행한다.
 
 ## 캡처·커밋 지점
 각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).

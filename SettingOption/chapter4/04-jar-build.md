@@ -3,7 +3,7 @@
 > 모든 명령은 `~/msa`에서 실행한다.
 
 ## 1. jar 빌드
-교재는 `cd $BOOK_HOME/Chapter04` 후 실행하지만, 우리는 **내 레포**에서 한다.
+**내 레포(`~/msa`)**에서 한다.
 ```bash
 cd ~/msa
 ./gradlew :microservices:product-service:build

@@ -28,7 +28,7 @@ cp microservices/product-service/Dockerfile microservices/review-service/
 cp microservices/product-service/Dockerfile microservices/product-composite-service/
 ```
 - 4개 서비스 모두 Dockerfile 내용이 같다. 각 폴더의 `build/libs/*.jar`를 넣기 때문에 서비스 이름을 바꿀 곳이 없다.
-- **교재 소스의 Dockerfile을 복사하지 않는다.** 교재 것은 `24_36`, `layertools` 버전이다. 03에서 고친 product-service 것을 기준으로 한다.
+- 교재의 Dockerfile(`24_36`, `layertools` 버전)이 아니라 03에서 고친 product-service 것을 기준으로 한다.
 
 ---
 
@@ -194,7 +194,7 @@ composite에만 `ports`가 있는 이유: 외부(내 PC)에서 호출하는 건 
 
 ## 5. 빌드
 ```bash
-cd ~/msa                  # 교재: cd $BOOK_HOME/Chapter04
+cd ~/msa
 ./gradlew build
 docker-compose build
 ```

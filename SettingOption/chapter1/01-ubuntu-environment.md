@@ -17,7 +17,7 @@
 5. 이어서 아래 2절(apt 도구)부터 진행한다.
 
 ## 0-2. 이미 Ubuntu-24.04를 쓰고 있는데 1장부터 다시 해 보고 싶을 때
-**기존 Ubuntu를 지우지 말고, 연습용 Ubuntu를 하나 더 설치한다.** 기존 것을 지우면(`wsl --unregister`) 그 안의 파일이 전부 사라지고 되돌릴 수 없다. 예: push 안 한 커밋, `auth0/env.bash`(GitHub에 없는 비밀값), 교재 소스, `/etc/hosts` 설정.
+**기존 Ubuntu를 지우지 말고, 연습용 Ubuntu를 하나 더 설치한다.** 기존 것을 지우면(`wsl --unregister`) 그 안의 파일이 전부 사라지고 되돌릴 수 없다. 예: push 안 한 커밋, `auth0/env.bash`(GitHub에 없는 비밀값), `/etc/hosts` 설정.
 
 PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인). **`wsl` 명령은 Windows PowerShell 명령이다. Ubuntu 터미널에서 치면 `wsl: command not found`가 난다.**
 
@@ -215,28 +215,12 @@ sudo sysctl -w net.ipv4.ip_unprivileged_port_start=443
 
 **⑤ 메모리 주의** — minikube를 쓰는 동안에는 도커 컴포즈로 띄운 것을 내린다(`docker compose down`).
 
-## 5. 설치 버전 확인, 교재 소스 내려받기
+## 5. 설치 버전 확인
 ### 설치 버전 한 번에 확인
 ```bash
 git version ; docker version -f json | jq -r .Client.Version ; java -version 2>&1 | grep "openjdk version" ; curl --version | grep "curl" ; jq --version ; spring --version ; siege --version 2>&1 | grep SIEGE ; helm version --short ; kubectl version --client ; minikube version | grep "minikube" ; istioctl version --remote=false
 ```
 결과가 [README.md](README.md)의 설치 결과 요약표와 같은지 확인한다. 4절(과 Helm)을 건너뛰었으면 `helm`, `kubectl`, `minikube`, `istioctl` 부분은 `command not found`로 나와도 정상이다. `docker`가 안 나오면 0절의 Docker Desktop WSL integration을 켠다.
-
-### (선택) 교재 소스코드 내려받기
-> **SettingOption 문서만 따라 하면 필요 없다.** 문서에 코드가 전부 들어 있다. 교재 원본과 비교해 보고 싶을 때만 받는다.
-
-```bash
-echo 'export BOOK_HOME=~/spring-microservice' >> ~/.bashrc
-source ~/.bashrc
-echo $BOOK_HOME
-
-git clone https://github.com/wikibook/spring-microservice.git $BOOK_HOME
-cd $BOOK_HOME
-ls
-code .
-```
-- `$BOOK_HOME`은 교재 소스 경로다(문서의 "교재: `cd $BOOK_HOME/...`" 같은 설명에 나온다). 예: `$BOOK_HOME/Chapter03/2-basic-rest-services`
-- 교재 소스는 **Java 24 / Spring Boot 3.5.0** 기준이다. 실습 레포(`~/msa`)로 가져올 때는 버전을 맞춰서 바꾼다.
 
 ---
 다음: [02-project-folder.md](../chapter2/02-project-folder.md)
