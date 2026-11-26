@@ -300,6 +300,8 @@ echo "End, all tests OK:" `date`
 cd ~/msa
 ./gradlew build && docker compose build && docker compose up -d
 ```
+- `ports are not available: exposing port TCP 0.0.0.0:3306`이 나오면 Windows에 설치된 MySQL이 3306을 쓰고 있는 것이다 → [troubleshooting.md](troubleshooting.md)
+- 테스트 절(05의 5절, 06의 6절)을 건너뛰었으면 `./gradlew build` 부분을 `./gradlew build -x test`로 바꿔 친다(테스트 빼고 빌드).
 - 처음에는 `mongo:8.0.5`, `mysql:9.2.0` 이미지를 받아서 오래 걸린다.
 - 상태 확인: `docker compose ps` → `mongodb`, `mysql`이 `(healthy)`, 나머지가 `Up`이면 된다. MySQL은 healthy까지 시간이 좀 걸리고, 그동안 review는 시작을 기다린다.
 - 어느 DB에 붙었는지(05 Application의 로그 줄):
@@ -362,3 +364,5 @@ docker compose exec mongodb mongosh --quiet --eval "show dbs"
 docker compose down
 ```
 DB 컨테이너도 같이 지워지므로 **넣은 데이터도 사라진다**(볼륨을 따로 안 만들었기 때문). 다시 `up` 후 `./test-em-all.bash`를 돌리면 다시 들어간다.
+
+다음 장: [../chapter7/README.md](../chapter7/README.md)

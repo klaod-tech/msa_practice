@@ -337,3 +337,5 @@ VS Code에서 `Shift+Alt+U` 후:
 ./gradlew :spring-cloud:gateway:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 1개).
+
+다음: [02-composite-changes.md](02-composite-changes.md)

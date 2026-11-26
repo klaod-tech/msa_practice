@@ -86,11 +86,12 @@ ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 
 **② `layertools` → `tools ... extract --layers --launcher --destination layers`**
 - `layertools`는 Boot 3.3부터 deprecated다. Boot 4.0.9에서는 경고와 함께 아직 동작하지만 없어질 방식이라 새 방식으로 바꾼다(교수님 안내).
-- 확인: 옛 방식을 실행하면 **경고 메시지가 대체 명령을 직접 알려 준다.** 새 방식 옵션은 jar 내장 도움말로 본다.
+- (선택) 확인: 옛 방식을 실행하면 **경고 메시지가 대체 명령을 직접 알려 준다.** 새 방식 옵션은 jar 내장 도움말로 본다. 3장에서 빌드한 jar가 있어야 하고, 마지막 줄로 `~/msa`에 돌아온다.
   ```bash
   cd /tmp && cp ~/msa/microservices/product-service/build/libs/*.jar app.jar
   java -Djarmode=layertools -jar app.jar extract
   java -Djarmode=tools -jar app.jar help extract
+  cd ~/msa
   ```
 
 | 옵션 | 뜻 |
@@ -112,11 +113,13 @@ ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
                                     └── application/
   ```
 - ②만 바꾸고 ③을 안 바꾸면 COPY에서 `"/extracted/dependencies": not found` 오류가 난다.
-- 확인:
+- (선택) 확인:
   ```bash
   cd /tmp && java -Djarmode=tools -jar app.jar extract --layers --launcher --destination layers
-  ls layers            # application  dependencies  snapshot-dependencies  spring-boot-loader
+  ls layers
+  cd ~/msa
   ```
+  `ls layers`에 `application  dependencies  snapshot-dependencies  spring-boot-loader`가 나오면 된다.
 - 교재의 `/extracted//application/`(슬래시 2개)은 오타 같은 표기라 `/extracted/layers/application/`으로 정리했다.
 
 ### 구성

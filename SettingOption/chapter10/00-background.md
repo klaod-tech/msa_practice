@@ -55,3 +55,5 @@
 
 - 포트 번호가 8080 그대로라 **test-em-all.bash와 curl 명령은 거의 그대로** 쓴다. 받는 쪽이 composite에서 gateway로 바뀌었을 뿐이다.
 - `forward-headers-strategy`: 게이트웨이가 붙여 주는 `X-Forwarded-Host` 같은 헤더를 composite가 믿고 쓰게 한다. 그래야 Swagger UI가 만드는 요청 주소가 composite 안쪽 주소가 아니라 **게이트웨이 주소**가 된다.
+
+다음: [01-gateway-project.md](01-gateway-project.md)

@@ -75,3 +75,5 @@
 | `/encrypt`, `/decrypt` | 설정 서버가 제공하는 암호화/복호화 엔드포인트 (POST) |
 | failFast / retry | 설정을 못 받으면 시작하지 않기 / 그 전에 몇 번 다시 시도하기 |
 | `.env` | docker compose가 같은 폴더에서 자동으로 읽는 환경변수 파일 |
+
+다음: [01-config-server.md](01-config-server.md)

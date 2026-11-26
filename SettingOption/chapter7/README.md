@@ -66,3 +66,12 @@
 - 도커 없이 도는 테스트를 실행해 통과했다: `ReactorTests` 2개, composite 테스트 8개(`MessagingTests` 3, `IsSameEventTests` 1, `ProductCompositeServiceApplicationTests` 4), `MapperTests` 3개.
 - Spring Cloud Stream이 쓰는 JSON 변환기로 `Event`를 왕복 변환해 봤다. `allow-final-fields-as-mutators`가 없으면 모든 필드가 `null`, 있으면 정상이다.
 - 실습(2026-11-10): Testcontainers를 쓰는 핵심 서비스 테스트(Persistence, ApplicationTests), docker compose 구동과 `test-em-all.bash`를 RabbitMQ, 파티션, Kafka 세 구성 모두에서 끝까지 통과했다.
+
+## 캡처·커밋 지점
+각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).
+
+| 시점(문서·절) | 브라우저 주소 | 터미널에서 보일 결과 | 커밋 메시지 예시 |
+|---|---|---|---|
+| 02 확인 | (없음) | `ReactorTests` → `BUILD SUCCESSFUL` | `리액터 테스트` |
+| 07 6·7절 | http://localhost:8080/actuator/health, http://localhost:15672 (guest/guest, Queues 탭) | `All messages are now processed!`, `End, all tests OK` | `리액티브·RabbitMQ` |
+| 07 8·9절 | (Kafka는 브라우저 없음) | 파티션·Kafka 각각 `End, all tests OK` | `파티션·Kafka (7장 완료)` |

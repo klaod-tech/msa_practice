@@ -674,3 +674,5 @@ docker compose up -d --scale review=2 --scale eureka=1 --scale product=2
 ```bash
 docker compose down
 ```
+
+다음 장: [../chapter10/README.md](../chapter10/README.md)

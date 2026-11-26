@@ -149,3 +149,5 @@ class GlobalControllerExceptionHandler {
 ./gradlew build
 ```
 api, util, composite가 모두 바뀌었으므로 전체 빌드로 확인한다.
+
+다음: [04-run-and-swagger-ui.md](04-run-and-swagger-ui.md)

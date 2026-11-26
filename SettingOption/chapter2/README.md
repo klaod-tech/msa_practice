@@ -25,3 +25,10 @@
 | 실습 레포 | `~/msa` → https://github.com/klaod-tech/msa_practice |
 
 > 교재는 Spring Boot 3 / Java 17 기준(교재 소스는 Java 24 / Boot 3.5.0)이지만, 이 실습은 **Java 21 / Spring Boot 4.0.9**로 진행한다.
+
+## 캡처·커밋 지점
+각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).
+
+| 시점(문서·절) | 브라우저 주소 | 터미널에서 보일 결과 | 커밋 메시지 예시 |
+|---|---|---|---|
+| 02 5절 전체 빌드 → 5-1 첫 커밋 | (없음) | `BUILD SUCCESSFUL`, `tree -I build`, `git log --oneline` | `기본 골격 마이크로서비스 생성` |

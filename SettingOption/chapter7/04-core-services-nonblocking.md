@@ -577,3 +577,5 @@ public class ReviewServiceImpl implements ReviewService {
 ./gradlew :microservices:product-service:compileJava :microservices:recommendation-service:compileJava :microservices:review-service:compileJava
 ```
 `BUILD SUCCESSFUL`이면 된다. 테스트 코드는 05에서 바꾸므로 `build`는 아직 안 한다(지금 하면 옛 테스트가 컴파일 실패).
+
+다음: [05-core-event-consumers.md](05-core-event-consumers.md)

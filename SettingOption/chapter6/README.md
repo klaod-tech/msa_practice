@@ -61,3 +61,11 @@ composite는 영속성 계층 대신 **통합 계층**(`ProductCompositeIntegrat
 ## 검증한 것 / 안 한 것
 - 교재 6장 코드에 위 변경(Lombok 엔티티 포함)을 적용한 복사본에서 **모든 프로젝트의 main/test 컴파일**과 **MapperTests 3개 실행**을 통과했다.
 - Testcontainers를 쓰는 테스트(Persistence, ApplicationTests)와 docker compose 구동은 실습 과정이라 직접 돌리지 않았다. 실패하면 troubleshooting.md에 추가한다.
+
+## 캡처·커밋 지점
+각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).
+
+| 시점(문서·절) | 브라우저 주소 | 터미널에서 보일 결과 | 커밋 메시지 예시 |
+|---|---|---|---|
+| 03 영속성 테스트 | (선택) `build/reports/tests/test/index.html` | `BUILD SUCCESSFUL` | `영속성 계층·테스트` |
+| 07 4절 테스트 + 5절 DB | http://localhost:8080/product-composite/1, http://localhost:8080/actuator/health | `End, all tests OK`, `mongosh`·`mysql` 조회 결과 | `MongoDB·MySQL 영속성 (6장 완료)` |

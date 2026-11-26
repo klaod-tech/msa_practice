@@ -4,7 +4,19 @@
 > **이미 설치되어 있으면 건너뛰고 [02-project-folder.md](../chapter2/02-project-folder.md)부터 시작한다.** (`~/msa` 폴더만 새로 만드는 경우)
 > 막히면 [troubleshooting.md](troubleshooting.md).
 
-## 0. 이미 Ubuntu-24.04를 쓰고 있는데 1장부터 다시 해 보고 싶을 때
+## 0-1. WSL이 처음인 새 PC (아무것도 없는 상태)
+순서대로 한다. 이미 WSL·Docker Desktop·VS Code가 있으면 0-2로 간다.
+1. **WSL 켜기** — PowerShell(관리자):
+   ```powershell
+   wsl --install --no-distribution
+   ```
+   끝나면 **PC를 재부팅**하고, 다시 PowerShell(관리자)에서 `wsl --update`.
+2. **Ubuntu 설치** — 아래 0-2의 `wsl --install Ubuntu-24.04 --name Ubuntu-test` (사용자 `leo`).
+3. **Docker Desktop** — https://www.docker.com/products/docker-desktop/ 에서 Windows용을 받아 설치 → 실행 → Settings → Resources → WSL integration에서 `Ubuntu-test` 켜기 → Apply & restart. 왼쪽 아래 `Engine running`이면 된다.
+4. **VS Code** — https://code.visualstudio.com/ 에서 설치 → 확장 탭에서 `WSL`(Microsoft) 설치 → Ubuntu 터미널에서 `code .` → 확장 탭에서 `Extension Pack for Java`를 "WSL: Ubuntu-test에 설치".
+5. 이어서 아래 2절(apt 도구)부터 진행한다.
+
+## 0-2. 이미 Ubuntu-24.04를 쓰고 있는데 1장부터 다시 해 보고 싶을 때
 **기존 Ubuntu를 지우지 말고, 연습용 Ubuntu를 하나 더 설치한다.** 기존 것을 지우면(`wsl --unregister`) 그 안의 파일이 전부 사라지고 되돌릴 수 없다. 예: push 안 한 커밋, `auth0/env.bash`(GitHub에 없는 비밀값), 교재 소스, `/etc/hosts` 설정.
 
 PowerShell(관리자)에서 다른 이름으로 설치한다 (WSL 2.4 이상, `wsl --version`으로 확인). **`wsl` 명령은 Windows PowerShell 명령이다. Ubuntu 터미널에서 치면 `wsl: command not found`가 난다.**
@@ -39,12 +51,12 @@ wsl --install Ubuntu-24.04 --name Ubuntu-test
 4. `wsl --unregister Ubuntu-24.04` → `wsl --install -d Ubuntu-24.04`
 
 ## 1. Windows 쪽 준비 (WSL2, Docker Desktop, VS Code)
-> 이 부분은 명령 기록이 남아 있지 않다. 지금 상태로 확인된 결과만 적는다.
+> 새 PC라면 설치 순서와 받는 곳은 0-1에 있다. 여기서는 설치 뒤 확인할 것만 적는다.
 
 ### WSL2 + Ubuntu 24.04
 - 일반적으로는 PowerShell(관리자)에서 `wsl --install -d Ubuntu-24.04`를 실행한다. (이미 있으면 0절처럼 `--name`으로 하나 더)
-- `/etc/wsl.conf`의 `default=` 뒤는 설치할 때 정한 사용자 이름이다.
-- `/etc/wsl.conf` 내용:
+- `/etc/wsl.conf`는 설치할 때 자동으로 만들어진다. **새로 만들지 않고 `cat /etc/wsl.conf`로 확인만** 한다. `default=` 뒤는 설치할 때 정한 사용자 이름이다.
+- 보통 이런 내용이다:
   ```ini
   [boot]
   systemd=true
@@ -54,13 +66,13 @@ wsl --install Ubuntu-24.04 --name Ubuntu-test
   ```
 
 ### Docker Desktop
-- Windows에 설치하고 Settings → Resources → WSL integration에서 Ubuntu를 켠다(연습용 Ubuntu를 추가했으면 그것도 켠다).
+- Windows에 설치하고 Settings → Resources → WSL integration에서 Ubuntu를 켠다(`Ubuntu-24.04`, 연습용이면 `Ubuntu-test`).
 - 그러면 WSL 안의 `docker` 명령이 `/mnt/wsl/docker-desktop/...`에 연결된다. **Ubuntu 안에 Docker를 따로 설치하지 않는다.**
 
 ### VS Code
 - Windows에 설치하고 WSL 확장(Remote - WSL)을 추가한다.
 - Ubuntu 터미널에서 `code .`를 실행하면 VS Code가 WSL에 연결된 상태로 열린다.
-- **확장은 WSL 쪽에 따로 설치해야 동작한다.** Windows에 Java 확장이 있어도 WSL에 없으면 `.java` 파일에서 단어 기반 자동 완성만 동작한다. 확장 탭에서 `Extension Pack for Java`를 찾아 "WSL: Ubuntu-24.04에 설치"를 누른다.
+- **확장은 WSL 쪽에 따로 설치해야 동작한다.** Windows에 Java 확장이 있어도 WSL에 없으면 `.java` 파일에서 단어 기반 자동 완성만 동작한다. 확장 탭에서 `Extension Pack for Java`를 찾아 "WSL: Ubuntu-24.04에 설치"(연습용이면 `Ubuntu-test`)를 누른다.
 
 ### 확인
 ```bash
@@ -79,7 +91,7 @@ sudo apt install -y jq zip unzip siege
 - `zip`, `unzip`: SDKMAN 설치에 필요하다.
 - `siege`: 부하 테스트 도구다.
 
-### Helm 설치 (공식 스크립트)
+### Helm 설치 (공식 스크립트, 16장부터 사용 — 1~7장만이면 건너뜀)
 ```bash
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
@@ -210,7 +222,9 @@ git version ; docker version -f json | jq -r .Client.Version ; java -version 2>&
 ```
 결과가 [README.md](README.md)의 설치 결과 요약표와 같은지 확인한다. 4절(과 Helm)을 건너뛰었으면 `helm`, `kubectl`, `minikube`, `istioctl` 부분은 `command not found`로 나와도 정상이다. `docker`가 안 나오면 0절의 Docker Desktop WSL integration을 켠다.
 
-### 교재 소스코드 내려받기
+### (선택) 교재 소스코드 내려받기
+> **SettingOption 문서만 따라 하면 필요 없다.** 문서에 코드가 전부 들어 있다. 교재 원본과 비교해 보고 싶을 때만 받는다.
+
 ```bash
 echo 'export BOOK_HOME=~/spring-microservice' >> ~/.bashrc
 source ~/.bashrc
@@ -221,7 +235,7 @@ cd $BOOK_HOME
 ls
 code .
 ```
-- `$BOOK_HOME`은 이후 모든 장에서 교재 소스 경로로 쓴다. 예: `$BOOK_HOME/Chapter03/2-basic-rest-services`
+- `$BOOK_HOME`은 교재 소스 경로다(문서의 "교재: `cd $BOOK_HOME/...`" 같은 설명에 나온다). 예: `$BOOK_HOME/Chapter03/2-basic-rest-services`
 - 교재 소스는 **Java 24 / Spring Boot 3.5.0** 기준이다. 실습 레포(`~/msa`)로 가져올 때는 버전을 맞춰서 바꾼다.
 
 ---

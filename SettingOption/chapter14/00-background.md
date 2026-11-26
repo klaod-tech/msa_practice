@@ -63,3 +63,5 @@
 | Observation | Micrometer가 "어떤 작업을 관찰"하는 단위. 여기서 span과 메트릭이 만들어진다 |
 | Zipkin | span을 모아 저장하고 화면으로 보여 주는 서버 |
 | MDC | 로그에 붙는 스레드별 값. traceId가 여기 들어가서 로그 줄에 찍힌다 |
+
+다음: [01-dependencies-and-logging.md](01-dependencies-and-logging.md)

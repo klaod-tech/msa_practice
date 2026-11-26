@@ -120,3 +120,5 @@ curl -s https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.0.3/spr
    ./gradlew build
    ```
    `BUILD SUCCESSFUL`이면 된다. 버전을 잘못 쓰면 `Could not find org.springdoc:...` 오류가 난다.
+
+다음: [02-openapi-config.md](02-openapi-config.md)

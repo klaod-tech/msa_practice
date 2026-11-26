@@ -230,3 +230,5 @@ VS Code에서 `Shift+Alt+U` 후:
 ./gradlew :spring-cloud:eureka-server:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 3개).
+
+다음: [02-eureka-clients.md](02-eureka-clients.md)

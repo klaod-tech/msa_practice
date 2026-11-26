@@ -70,3 +70,5 @@ cd ~/msa
 
 ## 6. 교재와 다른 핵심 (Boot 4)
 교재는 Boot 3.5 / Java 24다. 3장에서 바꾼 것들(`spring.web.error.include-message`, `UNPROCESSABLE_CONTENT`, Jackson 3 `tools.jackson`, `@AutoConfigureWebTestClient` 등)은 이후 장에서도 **계속 유지**된다. 전체 목록은 [README.md](README.md)의 표.
+
+다음: [01-skeleton.md](01-skeleton.md)

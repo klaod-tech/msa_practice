@@ -231,3 +231,4 @@ export READER_CLIENT_SECRET=...
 | `429 Too Many Requests` | Auth0 무료 요금제 호출 제한. 잠시 뒤 다시 실행 (이미 만든 것은 건너뜀) |
 | 사용자 생성 응답에 `PasswordStrengthError` | `USER_PASSWORD`를 더 복잡하게 바꾸고 다시 실행 |
 
+다음 장: [../chapter12/README.md](../chapter12/README.md)

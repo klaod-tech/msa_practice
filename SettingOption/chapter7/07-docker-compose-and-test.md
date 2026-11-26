@@ -635,6 +635,7 @@ echo "End, all tests OK:" `date`
 cd ~/msa
 ./gradlew build && docker compose build && docker compose up -d
 ```
+- 테스트 절(05의 5절, 06의 7절)을 건너뛰었으면 `./gradlew build` 부분을 `./gradlew build -x test`로 바꿔 친다.
 - 처음에는 `rabbitmq:4.0.7-management` 이미지를 받아서 오래 걸린다.
 - `docker compose ps` → `mongodb`, `mysql`, `rabbitmq`가 `(healthy)`, 나머지가 `Up`이면 된다.
 
@@ -744,3 +745,5 @@ docker compose down
 unset COMPOSE_FILE
 ```
 > `unset COMPOSE_FILE`을 잊으면 다음 `docker compose ...`가 계속 그 파일을 쓴다.
+
+다음 장: [../chapter9/README.md](../chapter9/README.md)

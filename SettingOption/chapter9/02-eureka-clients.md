@@ -1566,3 +1566,5 @@ VS Code에서 `Shift+Alt+U` 후 핵심 서비스 3개:
 ./gradlew :microservices:product-service:compileJava :microservices:recommendation-service:compileJava :microservices:review-service:compileJava
 ```
 `BUILD SUCCESSFUL`이면 된다. composite는 03 끝에서 확인한다(yml에서 `app.*-service`를 지웠으니 지금 composite를 띄우면 `@Value` 값이 없어서 실패한다).
+
+다음: [03-composite-load-balancing.md](03-composite-load-balancing.md)

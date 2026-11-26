@@ -147,6 +147,19 @@ find microservices/product-service -type f -not -path "*/build/*"
 ```
 `-not -path "*/build/*"`는 교재에 없다. 빌드 후라서 `build/` 폴더의 파일을 목록에서 빼기 위해 붙였다.
 
+## 5-1. 로컬 git 시작과 첫 커밋 (필수)
+시험·실습 중간중간 커밋하려면 git부터 켠다. GitHub에 올리지 않아도 커밋은 된다.
+```bash
+cd ~/msa
+git config --global user.name "<이름>"
+git config --global user.email "<이메일>"
+git init -b main
+git add .
+git commit -m "기본 골격 마이크로서비스 생성"
+```
+- `git config` 두 줄은 이 Ubuntu에서 처음 한 번만 한다. 안 하면 `git commit`이 `Please tell me who you are`로 멈춘다.
+- 이후 장에서는 매번 `git add .` → `git commit -m "한 일"`만 하면 된다. GitHub에 올리려면 아래 6절.
+
 ## 6. (선택) GitHub 업로드
 > 새 폴더를 기존 레포(`msa_practice`)에 push하지 않는다. 기록이 달라서 거절되고, 강제로 밀면 기존 기록과 문서가 덮어써진다. GitHub에서 **새 레포를 먼저 만들고** 그 주소를 쓴다.
 
@@ -173,7 +186,9 @@ Password for 'https://<GitHub 아이디>@github.com':   ← 토큰(ghp_...) 붙�
 - 아래 `credential.helper store` 덕분에 한 번 넣으면 `~/.git-credentials`에 저장되어 다음부터 묻지 않는다. 새로 설치한 Ubuntu(예: 연습용)에서는 처음 한 번 다시 넣는다.
 - 토큰은 비밀번호와 같다. 남에게 보여 주거나 채팅·문서에 붙여 넣지 않는다.
 
-### 처음 한 번 (git 시작 + 새 레포 연결)
+### 처음 한 번 (새 레포 연결)
+5-1을 이미 했으면 아래에서 `git config`, `git init`, `git add`, `git commit` 줄은 건너뛰고 `git remote add`부터 친다.
+
 ```bash
 git config --global user.name "<GitHub 아이디>"
 git config --global user.email "<GitHub에 등록한 이메일>"
@@ -198,7 +213,7 @@ git push
 ```
 - `git add .`: 바뀐 파일을 모두 커밋 대상에 올린다.
 - `git commit -m "..."`: 지금 상태를 기록한다. 메시지는 한 일을 짧게 적는다(예: `"product-service 구현"`, `"오류 처리 추가"`).
-- `git push`: GitHub에 올린다. 처음에 `-u origin main`을 해 두었으므로 뒤에 아무것도 안 붙여도 된다.
+- `git push`: GitHub에 올린다. 처음에 `-u origin main`을 해 두었으므로 뒤에 아무것도 안 붙여도 된다. **GitHub 레포를 연결하지 않았으면(6절을 안 했으면) `git push`는 빼고** add·commit만 한다.
 - 올리기 전에 무엇이 바뀌었는지 보려면 `git status`.
 
 ---

@@ -559,3 +559,5 @@ composite와 gateway의 yml은 바뀌는 곳이 더 있어서 03, 04에서 전�
 ./gradlew :spring-cloud:eureka-server:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 3개).
+
+다음: [03-gateway-https-security.md](03-gateway-https-security.md)

@@ -914,3 +914,5 @@ class MessagingTests {
 ./gradlew :microservices:product-composite-service:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 8개).
+
+다음: [05-docker-compose-and-test.md](05-docker-compose-and-test.md)

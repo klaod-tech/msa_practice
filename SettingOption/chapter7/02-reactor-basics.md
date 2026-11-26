@@ -81,3 +81,5 @@ class ReactorTests {
 ... INFO reactor.Flux.MapFuseable.1 -- | onComplete()
 ```
 (테스트가 2개라 같은 묶음이 `.2`로 한 번 더 나온다.)
+
+다음: [03-reactive-persistence.md](03-reactive-persistence.md)

@@ -67,3 +67,5 @@ OpenID Connect(OIDC)는 OAuth 2.0 위에 "사용자가 누구인지"(ID 토큰)�
 | 403 Forbidden | 누구인지는 알지만 권한이 없음 (scope 부족) |
 | HTTP 기본 인증 | 요청마다 `아이디:비밀번호`를 보냄. 간단하지만 HTTPS와 함께 써야 안전 |
 | keystore (`edge.p12`) | HTTPS 서버의 인증서와 개인키를 담은 파일 |
+
+다음: [01-authorization-server.md](01-authorization-server.md)

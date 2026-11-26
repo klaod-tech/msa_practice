@@ -45,3 +45,5 @@
 | `@Operation`, `@ApiResponses` | 메서드 하나(API 하나)의 설명과 가능한 응답 코드 |
 
 10장부터는 Swagger UI도 게이트웨이를 거쳐 같은 주소(`localhost:8080/openapi/...`)로 연다.
+
+다음: [01-springdoc-dependency.md](01-springdoc-dependency.md)

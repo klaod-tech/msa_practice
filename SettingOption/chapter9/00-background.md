@@ -66,3 +66,5 @@ app:
 | 서비스 레지스트리 | 이름 → 인스턴스 목록을 들고 있는 곳 (= Eureka 서버) |
 | 인스턴스 | 같은 서비스의 실행 중인 복사본 하나 (컨테이너 하나) |
 | 클라이언트 측 로드 밸런싱 | 부르는 쪽(composite)이 목록에서 직접 하나를 고르는 방식 (Spring Cloud LoadBalancer) |
+
+다음: [01-eureka-server.md](01-eureka-server.md)

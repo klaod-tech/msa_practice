@@ -218,3 +218,5 @@ public interface ReviewRepository extends CrudRepository<ReviewEntity, Integer> 
 ./gradlew :microservices:product-service:compileJava :microservices:recommendation-service:compileJava :microservices:review-service:compileJava
 ```
 `BUILD SUCCESSFUL`이면 된다.
+
+다음: [03-persistence-tests.md](03-persistence-tests.md)

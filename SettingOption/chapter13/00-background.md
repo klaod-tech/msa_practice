@@ -69,3 +69,5 @@
 | fail fast | 오래 기다렸다 실패하는 대신 바로 실패(또는 대체 응답) |
 | 슬라이딩 윈도 | 판단에 쓰는 "최근 N번 호출" 묶음 (여기서는 5번) |
 | Resilience4j | 서킷 브레이커, 재시도, 타임아웃 등을 제공하는 라이브러리 |
+
+다음: [01-product-delay-fault.md](01-product-delay-fault.md)

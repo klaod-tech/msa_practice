@@ -45,6 +45,8 @@ Netty started on port 8080                      ← jar 안 yml의 docker 설정
 ```
 이 명령은 컨테이너가 실행되는 동안 로그를 계속 출력하면서 **터미널 하나를 점유한다.** 프롬프트(`leo@301B-03:...$`)가 돌아오지 않아서 이 터미널에는 다른 명령을 입력할 수 없다. 그래서 호출은 **다른 터미널(터미널 2)**에서 한다.
 
+> **터미널 2 여는 법:** VS Code 아래 터미널 패널 오른쪽 위의 `+` 버튼(또는 ``Ctrl+Shift+` ``). 새 터미널은 `~/msa`에서 열린다. 터미널 1은 `docker build` 때문에 `microservices/product-service` 폴더에 있다. 터미널 사이 이동은 패널 오른쪽 목록에서 고른다.
+
 **터미널 2**
 ```bash
 curl localhost:8080/product/3

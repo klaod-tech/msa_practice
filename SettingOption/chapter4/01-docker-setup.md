@@ -23,7 +23,7 @@ Windows
 1. Windows에서 **Docker Desktop** 실행
 2. 오른쪽 위 ⚙(Settings) → **Resources** → **WSL integration**
 3. **Enable integration with my default WSL distro** 체크
-4. 아래 목록에서 **Ubuntu-24.04** 스위치 켜기
+4. 아래 목록에서 **Ubuntu-24.04**(연습용이면 **Ubuntu-test**) 스위치 켜기
 5. **Apply & restart**
 
 ## 2. 연동 확인
@@ -41,7 +41,7 @@ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 
 참고: 이 PC의 상태
 ```bash
-wsl.exe -l -v        # Ubuntu-24.04, docker-desktop 둘 다 Running / VERSION 2
+wsl.exe -l -v        # 쓰는 Ubuntu와 docker-desktop이 Running / VERSION 2
 groups               # ... docker  ← sudo 없이 docker 명령 가능
 ```
 

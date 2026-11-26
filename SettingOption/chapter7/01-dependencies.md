@@ -400,3 +400,5 @@ spring-cloud-stream-binder-rabbit:5.0.4
 spring-cloud-stream:5.0.4
 ```
 > 이 시점에 `./gradlew build`는 아직 하지 않는다. 코드는 03~06에서 바뀐다.
+
+다음: [02-reactor-basics.md](02-reactor-basics.md)

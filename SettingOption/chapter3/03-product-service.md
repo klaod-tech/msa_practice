@@ -142,12 +142,17 @@ logging:
 
 ## 5. 빌드·실행·테스트 (70쪽 7~9단계)
 교재의 `cd $BOOK_HOME/...` 대신 **내 레포에서** 실행한다.
+**① 빌드하고 띄우기**
 ```bash
 cd ~/msa
-./gradlew clean build                                         # BUILD SUCCESSFUL
-java -jar microservices/product-service/build/libs/*.jar &    # "Started ProductServiceApplication" 확인
+./gradlew clean build
+java -jar microservices/product-service/build/libs/*.jar &
+```
+`BUILD SUCCESSFUL` 뒤에 `Started ProductServiceApplication`이 나올 때까지 기다린다(로그가 멈추면 Enter를 눌러 프롬프트를 되찾는다).
+
+**② 호출** (서비스가 뜬 뒤에)
+```bash
 curl http://localhost:7002/product/123
-kill $(jobs -p)                                               # 서비스를 띄운 그 터미널에서
 ```
 
 **브라우저로 확인** (주소창에 붙여 넣기)
@@ -155,7 +160,12 @@ kill $(jobs -p)                                               # 서비스를 띄
 | 서비스 | 포트 | 주소 | 나와야 하는 것 |
 |---|---|---|---|
 | product | 7002 | http://localhost:7002/product/123 | `productId` 123, `name` `name-123`, `weight` 123 |
-- `kill` 하기 **전에** 연다(서비스가 떠 있어야 한다). 주소 끝을 비우면(`localhost:7002/`) Whitelabel 404가 나오는데 정상이다.
+- 서비스가 떠 있는 동안 연다. 주소 끝을 비우면(`localhost:7002/`) Whitelabel 404가 나오는데 정상이다.
+
+**③ 끄기** (브라우저 확인·캡처가 끝난 뒤, 서비스를 띄운 그 터미널에서)
+```bash
+kill $(jobs -p)
+```
 
 실제 응답:
 ```json

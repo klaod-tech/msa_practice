@@ -244,3 +244,5 @@ Boot 4는 자동 설정을 기술별 모듈로 쪼갰다. `@DataMongoTest`는 `s
    ./gradlew :microservices:product-service:compileJava :microservices:recommendation-service:compileJava :microservices:review-service:compileJava
    ```
    `BUILD SUCCESSFUL`이면 된다. (아직 코드에서 새 라이브러리를 안 써서 컴파일은 그대로 된다)
+
+다음: [02-persistence-layer.md](02-persistence-layer.md)

@@ -1248,3 +1248,7 @@ class ReviewServiceApplicationTests extends MySqlTestBase {
 ./gradlew :microservices:review-service:build
 ```
 `BUILD SUCCESSFUL`이면 된다. 03의 PersistenceTests도 여기서 같이 돈다.
+
+> 테스트 절을 건너뛰었으면 `build` 대신 테스트를 빼고 빌드한다: `./gradlew build -x test` (서비스별이면 `./gradlew :microservices:...:build -x test`). 건너뛴 상태에서 그냥 `build`를 하면 예전 테스트가 DB 연결이나 컴파일에서 실패한다.
+
+다음: [06-composite-service.md](06-composite-service.md)

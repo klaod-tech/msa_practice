@@ -436,3 +436,5 @@ class MapperTests {
 cat microservices/recommendation-service/build/generated/sources/annotationProcessor/java/main/se/magnus/microservices/core/recommendation/services/RecommendationMapperImpl.java
 ```
 `setRating( api.getRate() )` 같은 줄이 보이면 `@Mapping`이 적용된 것이다.
+
+다음: [05-core-services.md](05-core-services.md)

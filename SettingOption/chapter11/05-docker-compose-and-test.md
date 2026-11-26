@@ -771,3 +771,5 @@ curl -k https://u:p@localhost:8443/eureka/api/apps -H "accept:application/json" 
 docker compose down
 ```
 인가 서버는 시작할 때마다 서명 키를 새로 만든다. 다시 올리면 **예전 토큰은 못 쓴다**(새로 받는다).
+
+다음: [06-auth0.md](06-auth0.md)

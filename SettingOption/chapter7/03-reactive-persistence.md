@@ -676,3 +676,5 @@ review의 PersistenceTests는 그대로 둔다(JPA, 블로킹).
 
 ## 확인
 04 끝에서 컴파일, 05 끝에서 테스트까지 한 번에 확인한다.
+
+다음: [04-core-services-nonblocking.md](04-core-services-nonblocking.md)

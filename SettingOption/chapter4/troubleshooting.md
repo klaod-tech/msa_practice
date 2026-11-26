@@ -3,7 +3,7 @@
 ## Docker 연동
 | 증상 | 원인 | 해결 | 문서 |
 |---|---|---|---|
-| `docker: command not found` (Ubuntu 터미널) | WSL integration에서 Ubuntu가 꺼져 있음 | Docker Desktop → Settings → Resources → WSL integration → Ubuntu-24.04 켜기 → Apply & restart | 01 |
+| `docker: command not found` (Ubuntu 터미널) | WSL integration에서 Ubuntu가 꺼져 있음 | Docker Desktop → Settings → Resources → WSL integration → Ubuntu-24.04(연습용이면 Ubuntu-test) 켜기 → Apply & restart | 01 |
 | `Cannot connect to the Docker daemon at unix:///var/run/docker.sock` | Docker Desktop이 꺼져 있음 | Windows에서 Docker Desktop 실행, `Engine running` 확인 후 다시 시도 | 01 |
 | `permission denied ... docker.sock` | 사용자가 docker 그룹에 없음 | `groups`에 `docker`가 있는지 확인. 없으면 Docker Desktop 재시작 또는 `sudo usermod -aG docker $USER` 후 터미널 재시작 | 01 |
 | 명령은 쳤는데 Windows 쪽에서 실행됨 | PowerShell이나 Docker Desktop의 `>_` 터미널에서 입력 | 프롬프트가 `leo@301B-03:~$`인 Ubuntu 터미널에서 입력 | 01 |

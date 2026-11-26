@@ -334,18 +334,29 @@ chmod +x test-em-all.bash
 | `/product-composite/invalidProductId` | 400, `"Type mismatch."` |
 
 ### 실행
+**① 빌드하고 4개 띄우기**
 ```bash
 cd ~/msa
-chmod +x test-em-all.bash        # 처음 한 번 (없으면 Permission denied)
+chmod +x test-em-all.bash
 ./gradlew clean build
 java -jar microservices/product-composite-service/build/libs/*.jar &
 java -jar microservices/product-service/build/libs/*.jar &
 java -jar microservices/recommendation-service/build/libs/*.jar &
 java -jar microservices/review-service/build/libs/*.jar &
-# Started ... 4번 확인 후
+```
+`Started ...Application`이 **4번** 나올 때까지 기다린다(`ss -ltnp | grep 700`에 4줄이면 다 뜬 것).
+
+**② 테스트** (4개가 다 뜬 뒤에)
+```bash
 ./test-em-all.bash
+```
+
+**③ 끄기** (결과 확인·캡처가 끝난 뒤)
+```bash
 kill $(jobs -p)
 ```
 다른 호스트·포트로 실행하려면 `HOST=localhost PORT=7001 ./test-em-all.bash`처럼 앞에 붙인다.
 
 결과: 마지막 줄 `End, all tests OK: Mon Nov 2 14:04:47 KST 2026` → **3장 완료**
+
+다음 장: [../chapter4/README.md](../chapter4/README.md)

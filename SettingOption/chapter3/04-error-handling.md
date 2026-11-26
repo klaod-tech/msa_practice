@@ -260,14 +260,20 @@ public class ProductServiceImpl implements ProductService {
 ---
 
 ## 확인
+**① 빌드하고 띄우기**
 ```bash
 cd ~/msa
 ./gradlew build
 java -jar microservices/product-service/build/libs/*.jar &
-curl -i localhost:7002/product/0     # 422 Unprocessable Content
-curl -i localhost:7002/product/13    # 404 Not Found
-kill $(jobs -p)
 ```
+`Started ProductServiceApplication`이 나올 때까지 기다린다.
+
+**② 호출** (서비스가 뜬 뒤에)
+```bash
+curl -i localhost:7002/product/0
+curl -i localhost:7002/product/13
+```
+첫 번째는 `HTTP/1.1 422 Unprocessable Content`, 두 번째는 `HTTP/1.1 404 Not Found`.
 응답 본문에 `timestamp, path, status, error, message`가 나오면 성공이다. `message`가 보이면 `spring.web.error.include-message` 설정도 동작하는 것이다.
 
 **브라우저로 확인** (주소창에 붙여 넣기)
@@ -277,7 +283,12 @@ kill $(jobs -p)
 | product | 7002 | http://localhost:7002/product/1 | 정상 응답 (`productId` 1) |
 | product | 7002 | http://localhost:7002/product/0 | **422**: `"error":"Unprocessable Content"`, `"message":"Invalid productId: 0"` |
 | product | 7002 | http://localhost:7002/product/13 | **404**: `"error":"Not Found"`, `"message":"No product found for productId: 13"` |
-- 브라우저는 상태 코드를 화면에 따로 보여 주지 않는다. 본문의 `status`/`error`로 확인한다. `kill` 하기 전에 연다.
+- 브라우저는 상태 코드를 화면에 따로 보여 주지 않는다. 본문의 `status`/`error`로 확인한다. 서비스가 떠 있는 동안 연다.
+
+**③ 끄기** (확인·캡처가 끝난 뒤, 서비스를 띄운 그 터미널에서)
+```bash
+kill $(jobs -p)
+```
 
 
 다음: [05-recommendation-review.md](05-recommendation-review.md)

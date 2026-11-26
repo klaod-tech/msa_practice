@@ -365,3 +365,5 @@ spring.cloud.stream.kafka.binder.replication-factor: 1
 ./gradlew :microservices:product-composite-service:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 8개). `HealthCheckConfiguration`을 지우지 않았으면 Integration에 메서드가 없어서 컴파일 오류가 난다.
+
+다음: [03-docker-compose-and-test.md](03-docker-compose-and-test.md)

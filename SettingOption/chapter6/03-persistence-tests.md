@@ -512,3 +512,5 @@ Docker Desktop이 켜져 있는지 먼저 확인한다(`docker ps`가 오류 없
 - 처음 실행은 `mongo:8.0.5`, `mysql:9.2.0` 이미지를 내려받아서 오래 걸린다. MySQL은 뜨는 데 특히 오래 걸린다(그래서 `withStartupTimeoutSeconds(300)`).
 - 테스트가 도는 동안 다른 터미널에서 `docker ps`를 치면 테스트용 컨테이너(그리고 `testcontainers/ryuk` 청소용 컨테이너)가 보인다. 끝나면 사라진다.
 - `BUILD SUCCESSFUL`이면 통과. 결과 보고서: `microservices/<서비스>/build/reports/tests/test/index.html`
+
+다음: [04-api-models-and-mappers.md](04-api-models-and-mappers.md)

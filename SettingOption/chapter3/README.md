@@ -58,11 +58,14 @@
 
 ---
 
-## 교재 소스를 가져올 때의 요령
+## (참고) 교재 소스를 가져올 때의 요령
+> 이 문서들은 코드를 전부 담고 있어서, 교재 소스를 받지 않았으면 이 절은 건너뛴다.
+
 - 교재 소스(`2-basic-rest-services`)는 **3장을 끝낸 최종 상태**다. 중간 단계에서 그대로 붙이면 아직 만들지 않은 클래스(예: `exceptions`)를 참조해서 오류가 난다.
 - 붙이기 전에 `import se.magnus...` 줄을 먼저 본다. 아직 없는 클래스를 참조하는 부분은 나중 단계로 미룬다.
 - 본문은 코드를 다 싣지 않고 "소스에서 확인하라"고 넘기는 경우가 많다(settings.gradle의 api/util 등록, `jar { enabled = false }`, ServiceUtil 등). 빠진 단계는 소스와 비교해서 찾는다.
   ```bash
+  # 교재 소스를 받았을 때만
   diff -rq $BOOK_HOME/Chapter03/2-basic-rest-services ~/msa -x build -x .gradle -x .git -x bin
   ```
 - **본문과 소스가 다를 때는 소스를 따른다.** 예: 본문은 예외 클래스를 `se.magnus.util.exceptions`에 둔다고 하지만, 소스는 `se.magnus.api.exceptions`에 둔다.
@@ -74,3 +77,13 @@
 4. `application.properties` 삭제 → `src/main/resources/application.yml` (서비스 이름, 포트, `spring.web.error.include-message: always`)
 
 서비스별 포트: composite **7001** / product **7002** / recommendation **7003** / review **7004**
+
+## 캡처·커밋 지점
+각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).
+
+| 시점(문서·절) | 브라우저 주소 | 터미널에서 보일 결과 | 커밋 메시지 예시 |
+|---|---|---|---|
+| 03 5절 ② 호출 | http://localhost:7002/product/123 | `Started ProductServiceApplication`, curl JSON | `product-service 구현` |
+| 04 확인 ② | http://localhost:7002/product/13 (404), http://localhost:7002/product/0 (422) | `curl -i` → `404`, `422` | `오류 처리 추가` |
+| 07 1절 (4개 실행 중) | http://localhost:7001/product-composite/1 | `ss -ltnp \| grep 700`에 4줄 | `recommendation·review·composite 구현` |
+| 07 3절 ② 테스트 | (1절 화면 사용) | `End, all tests OK` | `테스트 추가 (3장 완료)` |

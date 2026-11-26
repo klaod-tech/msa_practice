@@ -50,3 +50,5 @@
 | 멱등(idempotent) | 같은 요청을 여러 번 해도 결과가 같음. DELETE는 없어도 200 |
 | Testcontainers | 테스트할 때 진짜 DB를 도커 컨테이너로 띄웠다가 끝나면 지우는 라이브러리 |
 | 컬렉션 / 테이블 | MongoDB의 저장 단위 / MySQL의 저장 단위 |
+
+다음: [01-dependencies.md](01-dependencies.md)

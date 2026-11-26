@@ -317,3 +317,5 @@ app:
 ./gradlew :spring-cloud:gateway:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 1개).
+
+다음: [04-composite-security.md](04-composite-security.md)

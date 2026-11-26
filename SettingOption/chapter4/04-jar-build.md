@@ -5,6 +5,7 @@
 ## 1. jar 빌드
 교재는 `cd $BOOK_HOME/Chapter04` 후 실행하지만, 우리는 **내 레포**에서 한다.
 ```bash
+cd ~/msa
 ./gradlew :microservices:product-service:build
 ```
 - **jar 빌드는 `~/msa`(루트)에서** 한다. `gradlew`가 루트에만 있고(3장에서 래퍼를 루트로 모음), `:microservices:product-service:build`도 루트 settings.gradle 기준 이름이라 폴더를 옮기지 않아도 product-service만 빌드된다. product-service 폴더 안에서 `./gradlew`를 치면 `No such file or directory`가 난다.

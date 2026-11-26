@@ -327,3 +327,5 @@ public class ProductCompositeIntegration implements ProductService, Recommendati
 ./gradlew build
 ```
 (핵심 서비스 테스트는 Testcontainers라 도커가 켜져 있어야 한다.)
+
+다음: [04-docker-compose-and-test.md](04-docker-compose-and-test.md)

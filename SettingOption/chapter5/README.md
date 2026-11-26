@@ -30,3 +30,10 @@ product-composite-service가 외부에 노출하는 API(`/product-composite/{pro
 | springdoc-openapi 버전 | `2.8.6` (Spring Boot 3.4.4 기준) | `3.0.3` (Spring Boot 4.0.x 기준) | 01 |
 | composite application.yml | 교재 5장 파일 그대로 | Boot 4 두 줄 유지 (`spring.web.error.include-message`, `spring.jackson.mapper.allow-final-fields-as-mutators`) | 02 |
 | GlobalControllerExceptionHandler | `UNPROCESSABLE_ENTITY` | `UNPROCESSABLE_CONTENT` 유지 (교재 파일 통째 복사 주의) | 03 |
+
+## 캡처·커밋 지점
+각 시점에서 **브라우저 화면**과 **터미널 화면**을 캡처하고 커밋한다(`git add .` → `git commit -m "..."`, 2장 02의 5-1).
+
+| 시점(문서·절) | 브라우저 주소 | 터미널에서 보일 결과 | 커밋 메시지 예시 |
+|---|---|---|---|
+| 04 4절 Swagger UI | http://localhost:8080/openapi/swagger-ui.html (Try it out → 200) | test-em-all의 Swagger 테스트 `Test OK`, `End, all tests OK` | `OpenAPI·Swagger UI (5장 완료)` |

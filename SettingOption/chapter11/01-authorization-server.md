@@ -620,3 +620,5 @@ VS Code에서 `Shift+Alt+U` 후:
 ./gradlew :spring-cloud:authorization-server:build
 ```
 `BUILD SUCCESSFUL`이면 된다(테스트 4개).
+
+다음: [02-eureka-basic-auth.md](02-eureka-basic-auth.md)

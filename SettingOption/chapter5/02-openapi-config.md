@@ -14,7 +14,7 @@ code microservices/product-composite-service/src/main/java/se/magnus/microservic
 ```
 전체를 아래로 교체
 
-교재 5장 소스 + 4장에서 Boot 4 때문에 바꾼 RestTemplate 빈(JsonMapper 버전)을 합친 것이다.
+교재 5장 소스 + 3장 06에서 Boot 4 때문에 바꾼 RestTemplate 빈(JsonMapper 버전)을 합친 것이다.
 ```java
 package se.magnus.microservices.composite.product;
 
@@ -91,7 +91,7 @@ public class ProductCompositeServiceApplication {
 |---|---|
 | `@Value` 필드 11개 | application.yml의 `api.common.*` 값을 읽어 온다. 문구를 코드에 하드코딩하지 않기 위해서다 |
 | `getOpenApiDocumentation()` | 그 값들로 `OpenAPI` 객체를 만들어 빈으로 등록한다. springdoc이 이 빈을 문서의 **공통 정보**(Info, Contact, License, 외부 문서)로 쓴다 |
-| `restTemplate(JsonMapper)` | 4장 Boot 4 대응 그대로 (`new RestTemplate()` 아님) |
+| `restTemplate(JsonMapper)` | 3장 06의 Boot 4 대응 그대로 (`new RestTemplate()` 아님) |
 
 ### 처음 작성할 때 실제로 틀렸던 곳
 | 틀린 것 | 맞는 것 | 이유 |
@@ -166,7 +166,7 @@ api:
 
 server.port: 7001
 spring.web.error.include-message: always  # ★ 참고: Boot 4 (교재: server.error.include-message)
-spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 참고: Boot 4 (교재에 없음, 4장 06에서 추가)
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # ★ 참고: Boot 4 (교재에 없음, 3장 06에서 추가)
 
 app:
   product-service:
@@ -208,7 +208,7 @@ app:
 | 줄 | 없으면 |
 |---|---|
 | `spring.web.error.include-message: always` (교재: `server.error.include-message`) | Boot 4에서 옛 이름은 조용히 무시 → 오류 응답의 `message`가 빈다 |
-| `spring.jackson.mapper.allow-final-fields-as-mutators: true` | composite 응답 값이 **전부 null/0** (4장 06의 Jackson 3 final 필드 문제), 404·422 `message`도 전달 안 됨 |
+| `spring.jackson.mapper.allow-final-fields-as-mutators: true` | composite 응답 값이 **전부 null/0** (3장 06의 Jackson 3 final 필드 문제), 404·422 `message`도 전달 안 됨 |
 
 앞으로 교재 파일을 통째로 가져올 때는 **이전 장에서 Boot 4 때문에 바꾼 곳이 덮어써지지 않는지** 확인한다.
 
@@ -225,3 +225,5 @@ app:
 ./gradlew :microservices:product-composite-service:compileJava
 ```
 `BUILD SUCCESSFUL`이면 된다. 실행해서 Swagger UI를 보는 건 인터페이스 애너테이션(다음 단계)까지 한 뒤에 한다.
+
+다음: [03-api-annotations.md](03-api-annotations.md)

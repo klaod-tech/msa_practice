@@ -22,6 +22,7 @@
 
 03에서 만든 product-service의 Dockerfile을 그대로 복사한다.
 ```bash
+cd ~/msa
 cp microservices/product-service/Dockerfile microservices/recommendation-service/
 cp microservices/product-service/Dockerfile microservices/review-service/
 cp microservices/product-service/Dockerfile microservices/product-composite-service/
@@ -38,7 +39,7 @@ cp microservices/product-service/Dockerfile microservices/product-composite-serv
 ```bash
 code microservices/recommendation-service/src/main/resources/application.yml
 ```
-**맨 끝에** 4줄 추가
+**맨 끝에** 추가 (`★ 추가 시작` ~ `★ 추가 끝` 사이)
 ```yaml
 spring.application.name: recommendation-service
 server.port: 7003
@@ -61,7 +62,7 @@ server.port: 8080
 ```bash
 code microservices/review-service/src/main/resources/application.yml
 ```
-**맨 끝에** 4줄 추가
+**맨 끝에** 추가 (`★ 추가 시작` ~ `★ 추가 끝` 사이)
 ```yaml
 spring.application.name: review-service
 server.port: 7004
@@ -224,7 +225,7 @@ docker compose logs -f
 - `logs -f`: 4개 컨테이너의 로그를 한 화면에 섞어서 보여 준다. 줄 앞의 `product-1 |`, `review-1 |`로 어느 컨테이너 로그인지 구분한다. **터미널 하나를 점유**하므로, 4개 모두 `Started ...Application`이 나오면 다른 터미널로 간다. `Ctrl+C`는 로그 보기만 멈춘다(컨테이너는 계속 떠 있다).
 
 ## 8. 테스트
-**다른 터미널**에서 (교재 값 그대로)
+**다른 터미널**에서 (교재 값 그대로. 새 터미널은 터미널 패널의 `+` 버튼, `~/msa`에서 열린다)
 ```bash
 curl localhost:8080/product-composite/123 -s | jq .
 ```

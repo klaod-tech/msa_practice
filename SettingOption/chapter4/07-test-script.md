@@ -355,3 +355,5 @@ cd ~/msa
 - `Wait for: ... Give up`이 나오면 100번(약 5분) 기다려도 서비스가 응답하지 않은 것이다 → `docker compose logs`로 시작 실패 원인을 본다.
 
 결과: `./test-em-all.bash start stop` → 마지막 줄 `End, all tests OK` 확인 → **4장 완료**
+
+다음 장: [../chapter5/README.md](../chapter5/README.md)
