@@ -15,6 +15,8 @@
   - 표시 주석(`★`로 시작하는 줄)은 안내용이라 치지 않아도 된다
 - 1~14장(SettingOption)을 따라 한 코드에서 이어진다. 우리 코드의 Lombok 데이터 클래스·엔티티는 그대로 쓴다.
 
+> **2부(9~14장)를 하지 않고 여기서 시작한다면:** [01-api-util.md](01-api-util.md) 맨 위 "0. (2부 코드가 없는 시점에서 진행)"부터 한다. 14장 코드를 받아서 시작한다.
+
 ## 무엇을 하나
 두 가지를 한다.
 1. **3부 준비: 설정 파일을 3부 기준으로 맞추기.** 16장부터는 쿠버네티스·헬름 파일이 이 기준의 compose, Dockerfile, build.gradle, config-repo, test-em-all을 그대로 이어받는다. 그래서 이 장에서 이 파일들을 한 번 맞춰 둔다. 우리 코드의 Lombok 데이터 클래스(`Product`, `Recommendation`, `Review`, `ProductAggregate`, 요약 클래스, `ServiceAddresses`)와 엔티티 3개, Lombok 의존성, `allow-final-fields-as-mutators` 설정은 **그대로 유지**한다.

@@ -3,6 +3,50 @@
 > 시작: 14장까지 따라 한 상태 / 결과: 15장 코드(우리 Lombok 데이터 클래스 유지, 교재 영어 주석은 뺌).
 > 표기: 한 줄은 줄 끝 `★ 추가` / `★ 변경 (전: ...)`, 여러 줄은 `★ 추가 시작 (N줄)` ~ `★ 추가 끝`, `★ 변경 시작` ~ `★ 변경 끝`(안의 `★ 전:`은 지울 옛 코드), `★ 삭제 시작` ~ `★ 삭제 끝`(안의 `★ 지움:` 줄을 지운다). `★` 줄은 안내용이라 치지 않아도 된다. Ctrl+F로 `★`를 찾으면 바뀐 곳만 볼 수 있다.
 
+## 0. (2부 코드가 없는 시점에서 진행) 14장 코드 받아서 시작하기
+> **2부(9~14장)를 하지 않고 3부부터 시작할 때만** 한다. 1~14장을 직접 따라 왔으면 건너뛰고 바로 아래 1-1부터 한다.
+
+3부는 2부에서 만든 시스템(gateway, 인가 서버, 설정 서버, Eureka 등)을 쿠버네티스에 올리는 과정이라 **14장 끝 상태의 코드가 있어야** 한다. 그 코드를 이 레포의 [`start-ch14/`](start-ch14/) 폴더에 넣어 두었다(SettingOption 1~14장 문서를 그대로 따라 한 결과, 빌드·test-em-all 통과 확인).
+
+준비: 1장(도구 설치, 3부를 하려면 4절까지)과 2장 0~2절(Ubuntu 터미널, VS Code)을 해 둔다. `~/msa` 폴더는 만들지 않아도 된다(아래에서 만든다).
+
+Ubuntu 터미널에서:
+```bash
+cd ~
+git clone https://github.com/klaod-tech/msa_practice.git msa-repo
+mkdir -p ~/msa
+cp -r ~/msa-repo/SettingOption/chapter15/start-ch14/. ~/msa/
+cd ~/msa
+chmod +x gradlew test-em-all.bash
+ls
+```
+- `ls`에 `api`, `util`, `microservices`, `spring-cloud`, `config-repo`, `docker-compose.yml`, `test-em-all.bash`가 보이면 된다.
+- 레포가 비공개(private)면 `git clone` 때 GitHub 아이디와 토큰(비밀번호 칸)을 묻는다 → [2장 6절](../chapter2/02-project-folder.md)의 토큰 만들기.
+- `~/msa`가 이미 있으면(다른 실습 코드가 들어 있으면) 다른 이름(예: `~/msa3`)으로 만들고, 이 장부터 문서의 `~/msa`를 그 이름으로 바꿔 읽는다.
+
+14장 상태가 제대로 도는지 확인(선택, Docker Desktop이 켜져 있어야 함):
+```bash
+cd ~/msa
+code .
+./gradlew build -x test
+docker compose build
+./test-em-all.bash start stop
+```
+마지막 줄 `End, all tests OK`면 14장 상태가 맞다. 처음에는 이미지를 받느라 오래 걸린다.
+
+로컬 커밋을 쓰려면(캡처·커밋 연습) git을 새로 시작한다:
+```bash
+cd ~/msa
+git init -b main
+git add .
+git commit -m "14장 코드에서 시작"
+```
+`git config`를 안 했으면 먼저 [2장 02의 5-1](../chapter2/02-project-folder.md)의 `git config` 두 줄을 친다.
+
+이제 아래 1-1부터 15장을 진행한다.
+
+---
+
 3부 코드와 맞추는 단계다. **Lombok 데이터 클래스(`Product.java` 등)는 건드리지 않는다.**
 - `api/build.gradle`: Lombok 줄은 그대로 두고 나머지를 맞춘다.
 - 프로젝트마다 `settings.gradle`, `.gitignore`가 새로 생긴다(각 프로젝트를 따로 열어도 빌드되게 하는 파일. 루트 빌드에는 영향 없음).

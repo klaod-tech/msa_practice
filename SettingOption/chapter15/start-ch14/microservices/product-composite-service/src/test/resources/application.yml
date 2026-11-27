@@ -1,0 +1,25 @@
+spring.jackson.mapper.allow-final-fields-as-mutators: true  # 교재와 다름 (Jackson 3, 7장부터)
+
+api:
+
+  common:
+    version:
+    title:
+    description:
+    termsOfService:
+    license:
+    licenseUrl:
+    externalDocDesc:
+    externalDocUrl:
+    contact:
+      name:
+      url:
+      email:
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings:
+    products-out-0.destination: products
+    recommendations-out-0.destination: recommendations
+    reviews-out-0.destination: reviews
